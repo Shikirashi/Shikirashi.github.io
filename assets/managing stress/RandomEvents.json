@@ -1,0 +1,180 @@
+{
+    "c2array": true,
+    "size": [
+        10,
+        5,
+        1
+    ],
+    "data": [
+        [
+            [
+                "Event Name"
+            ],
+            [
+                "Play outside"
+            ],
+            [
+                "Quiet library"
+            ],
+            [
+                "Parents fighting"
+            ],
+            [
+                "Friend crying"
+            ]
+        ],
+        [
+            [
+                "Event prompt"
+            ],
+            [
+                "Panda's friend came over and invites Panda to play outside, what should he do?"
+            ],
+            [
+                "Panda came across a quiet library, what should he do?"
+            ],
+            [
+                "Panda's parents are fighting about something, what should he do?"
+            ],
+            [
+                "Panda's friend is crying, what should he do?"
+            ]
+        ],
+        [
+            [
+                "Choice 1"
+            ],
+            [
+                "Study"
+            ],
+            [
+                "Study"
+            ],
+            [
+                "Study"
+            ],
+            [
+                "Help"
+            ]
+        ],
+        [
+            [
+                "Choice 2"
+            ],
+            [
+                "Play"
+            ],
+            [
+                "Sleep"
+            ],
+            [
+                "Talk"
+            ],
+            [
+                "Ignore"
+            ]
+        ],
+        [
+            [
+                "Choice 1 affect stress"
+            ],
+            [
+                20
+            ],
+            [
+                10
+            ],
+            [
+                20
+            ],
+            [
+                -15
+            ]
+        ],
+        [
+            [
+                "Choice 1 affect study"
+            ],
+            [
+                5
+            ],
+            [
+                15
+            ],
+            [
+                -5
+            ],
+            [
+                10
+            ]
+        ],
+        [
+            [
+                "Choice 1 outcome"
+            ],
+            [
+                "Panda stayed home to study"
+            ],
+            [
+                "Panda studied better in a quiet library"
+            ],
+            [
+                "Panda could not focus because he was worried about his parents"
+            ],
+            [
+                "Panda's friend was stressed about the exam too. They studied together"
+            ]
+        ],
+        [
+            [
+                "Choice 2 affect stress"
+            ],
+            [
+                -10
+            ],
+            [
+                -15
+            ],
+            [
+                5
+            ],
+            [
+                20
+            ]
+        ],
+        [
+            [
+                "Choice 2 affect study"
+            ],
+            [
+                0
+            ],
+            [
+                0
+            ],
+            [
+                10
+            ],
+            [
+                0
+            ]
+        ],
+        [
+            [
+                "Choice 2 outcome"
+            ],
+            [
+                "Panda played outside"
+            ],
+            [
+                "Panda slept better in a quiet library"
+            ],
+            [
+                "Panda talked to his parents and they were able to make peace. They helped out with his study"
+            ],
+            [
+                "Panda ignored his crying friend. Panda regrets what he did"
+            ]
+        ]
+    ]
+}

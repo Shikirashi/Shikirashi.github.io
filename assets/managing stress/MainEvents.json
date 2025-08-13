@@ -1,0 +1,150 @@
+{
+    "c2array": true,
+    "size": [
+        10,
+        4,
+        1
+    ],
+    "data": [
+        [
+            [
+                "Event Name"
+            ],
+            [
+                "School"
+            ],
+            [
+                "Home"
+            ],
+            [
+                "Room"
+            ]
+        ],
+        [
+            [
+                "Event prompt"
+            ],
+            [
+                "Panda is at school, how should he study?"
+            ],
+            [
+                "Panda came home from school, what should he do?"
+            ],
+            [
+                "Panda just had dinner, he is now in his room, what should he do?"
+            ]
+        ],
+        [
+            [
+                "Choice 1"
+            ],
+            [
+                "Focus"
+            ],
+            [
+                "Study"
+            ],
+            [
+                "Study"
+            ]
+        ],
+        [
+            [
+                "Choice 2"
+            ],
+            [
+                "Normal"
+            ],
+            [
+                "Relax"
+            ],
+            [
+                "Sleep"
+            ]
+        ],
+        [
+            [
+                "Choice 1 affect stress"
+            ],
+            [
+                20
+            ],
+            [
+                15
+            ],
+            [
+                5
+            ]
+        ],
+        [
+            [
+                "Choice 1 affect study"
+            ],
+            [
+                15
+            ],
+            [
+                5
+            ],
+            [
+                10
+            ]
+        ],
+        [
+            [
+                "Choice 1 outcome"
+            ],
+            [
+                "Panda focused to study better in class"
+            ],
+            [
+                "Panda studied in the afternoon"
+            ],
+            [
+                "Panda chose to study before going to bed, good night"
+            ]
+        ],
+        [
+            [
+                "Choice 2 affect stress"
+            ],
+            [
+                -5
+            ],
+            [
+                -5
+            ],
+            [
+                -15
+            ]
+        ],
+        [
+            [
+                "Choice 2 affect study"
+            ],
+            [
+                5
+            ],
+            [
+                0
+            ],
+            [
+                0
+            ]
+        ],
+        [
+            [
+                "Choice 2 outcome"
+            ],
+            [
+                "Panda chose to take it easy"
+            ],
+            [
+                "Panda chose to relax at home"
+            ],
+            [
+                "Panda went to bed, good night"
+            ]
+        ]
+    ]
+}
