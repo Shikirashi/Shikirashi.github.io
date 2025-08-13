@@ -1,7 +1,7 @@
 {
 	"name": "Managing Stress",
 	"short_name": "Managing Stress",
-	"description": "",
+	"description": "Game about managing stress",
 	"start_url": "index.html",
 	"display": "fullscreen",
 	"orientation": "landscape",
