@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Scrying Orb — Dungeon Streaming Prototype v20.2</title>
+<title>Scrying Orb: Dungeon Streaming Prototype v21</title>
 <style>
   :root {
     --bg: #0f1116;
@@ -1009,7 +1009,7 @@
       linear-gradient(180deg,rgba(35,43,55,.32),rgba(13,17,23,.12));
   }
   .vn-visual::before {
-    content:'EXPLORER\'S GUILD — REGISTRATION HALL'; position:absolute; left:50%; top:12%; transform:translateX(-50%);
+    content:'EXPLORER\'S GUILD: REGISTRATION HALL'; position:absolute; left:50%; top:12%; transform:translateX(-50%);
     color:#778296; font-size:clamp(18px,2.4vw,34px); font-weight:1000; letter-spacing:.12em; text-align:center; white-space:nowrap;
   }
   .vn-portrait {
@@ -1585,6 +1585,23 @@
     body.news-active .stream-shell:not(.hidden){height:calc(100vh - 30px)}
   }
 
+
+
+  /* ===== v21: living rankings, concrete specialist records, text style cleanup ===== */
+  .v21-board-card { position:relative; }
+  .v21-board-card .v21-board-open { margin-top:9px; width:100%; }
+  .v21-day-chip { display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);border-radius:999px;padding:4px 9px;font-size:11px;color:var(--muted);background:#090b0f;margin-left:8px; }
+  .v21-live-dot { width:7px;height:7px;border-radius:50%;background:#64d98b;box-shadow:0 0 8px rgba(100,217,139,.55); }
+  .v21-board-list { display:grid; gap:6px; margin-top:12px; max-height:58vh; overflow:auto; }
+  .v21-board-row { display:grid;grid-template-columns:58px minmax(150px,1fr) minmax(150px,auto);gap:10px;align-items:center;border:1px solid var(--line);border-radius:7px;padding:9px 10px;background:#0b0e13; }
+  .v21-board-row.player { border-color:var(--accent);background:#111827; }
+  .v21-board-row .rank { font-weight:1000;color:var(--muted); }
+  .v21-board-row .name { font-weight:900; }
+  .v21-board-row .record { color:#dbe2ed;text-align:right;font-variant-numeric:tabular-nums; }
+  .v21-board-foot { margin-top:10px;color:var(--muted);font-size:12px; }
+  .v21-live-leader { color:#b7f7ca; }
+  .v21-top-note { color:var(--muted);font-size:11px;margin-top:7px; }
+
 </style>
 </head>
 <body>
@@ -1778,7 +1795,7 @@
 <div class="game-screen story-screen" id="storyScreen">
   <div class="vn-shell">
     <header class="vn-header">
-      <div><div class="vn-kicker" id="vnKicker">Day 1 · Explorer's Guild Registration</div><div class="vn-location" id="vnLocation">Explorer's Guild — Registration Hall</div></div>
+      <div><div class="vn-kicker" id="vnKicker">Day 1 · Explorer's Guild Registration</div><div class="vn-location" id="vnLocation">Explorer's Guild: Registration Hall</div></div>
       <div class="vn-balance" id="vnBalance">Savings <b id="vnMoney">10,000</b> money</div>
     </header>
     <main class="vn-visual">
@@ -1799,7 +1816,7 @@
 <div class="game-screen hub-screen" id="hubScreen">
   <div class="hub-shell">
     <header class="hub-header">
-      <div><div class="hub-title">Scrying Orb<sup>TM</sup> <span class="hub-title-divider">|</span> The Dungeon Streaming Service</div><div class="hub-sub">Prototype Hub · v20.2</div></div>
+      <div><div class="hub-title">Scrying Orb<sup>TM</sup> <span class="hub-title-divider">|</span> The Dungeon Streaming Service</div><div class="hub-sub">Prototype Hub · v21</div></div>
       <div class="hub-resources">
         <span>Money <b id="hubMoney">0</b></span>
         <span>Popularity <b id="hubPopularity">0</b></span>
@@ -2652,7 +2669,7 @@ Genres: ${lines}`;
       $('enemyHpFill').style.width = `${100 * game.enemy.hp / game.enemy.maxHp}%`;
     } else {
       // Non-combat nodes can be visited before the first fight, so an enemy may not exist yet.
-      $('enemyHpText').textContent = '—';
+      $('enemyHpText').textContent = '-';
       $('enemyHpFill').style.width = '0%';
     }
   }
@@ -2822,7 +2839,7 @@ Genres: ${lines}`;
       } else if(kind==='saw'){
         area.innerHTML='<div><div style="text-align:center;font-size:26px;font-weight:1000;margin-bottom:12px" id="sawCount">0 / 8</div><div class="saw-buttons"><button id="sawLeft">← PULL</button><button id="sawRight">PUSH →</button></div></div>';
         let expected='L',count=0,mistakes=0;const started=performance.now();
-        const press=side=>{if(done)return;if(side===expected){count++;expected=expected==='L'?'R':'L';$('sawCount').textContent=`${count} / 8`;if(count>=8){const elapsed=performance.now()-started;finish(clamp(15+Math.round((3000-Math.min(3000,elapsed))/600)-mistakes*2,1,20));}}else{mistakes++;readout.textContent='Wrong direction — alternate left/right.';}};$('sawLeft').onclick=()=>press('L');$('sawRight').onclick=()=>press('R');onKey(e=>{if(e.key==='ArrowLeft')press('L');if(e.key==='ArrowRight')press('R');});timeout(5000,()=>clamp(1+count*2-mistakes,1,17));
+        const press=side=>{if(done)return;if(side===expected){count++;expected=expected==='L'?'R':'L';$('sawCount').textContent=`${count} / 8`;if(count>=8){const elapsed=performance.now()-started;finish(clamp(15+Math.round((3000-Math.min(3000,elapsed))/600)-mistakes*2,1,20));}}else{mistakes++;readout.textContent='Wrong direction: alternate left/right.';}};$('sawLeft').onclick=()=>press('L');$('sawRight').onclick=()=>press('R');onKey(e=>{if(e.key==='ArrowLeft')press('L');if(e.key==='ArrowRight')press('R');});timeout(5000,()=>clamp(1+count*2-mistakes,1,17));
       } else if(kind==='balance'){
         area.innerHTML='<div><div class="skill-track"><div class="skill-sweet"></div><div class="balance-needle" id="balanceNeedle"></div></div><div class="balance-buttons"><button id="balanceLeft">← LEFT</button><button id="balanceRight">RIGHT →</button></div></div>';
         let pos=0,velocity=(Math.random()-.5)*.7,totalAbs=0,samples=0;const needle=$('balanceNeedle');
@@ -2838,7 +2855,7 @@ Genres: ${lines}`;
   function runMoveSkillCheck(move){
     const label=SKILL_LABELS[move.skillCheck]||'Skill Check';
     const instructions={accuracy:'Stop the marker in the center band.',charge:'Release near the golden high-power zone.',tracking:'Click the moving target three times as quickly as you can.',rhythm:'Hit three beats as the marker crosses the center.',direction:'React to four directional prompts.',saw:'Alternate left and right quickly without breaking rhythm.',balance:'Use left/right to keep the needle near the center.'};
-    return runSkillCheck(move.skillCheck,`${move.name} — ${label}`,instructions[move.skillCheck]||'Earn a roll from 1–20.');
+    return runSkillCheck(move.skillCheck,`${move.name}: ${label}`,instructions[move.skillCheck]||'Earn a roll from 1–20.');
   }
 
   function runDefenseSkillCheck(enemyMove){
@@ -3269,7 +3286,7 @@ Genres: ${lines}`;
   function moveTooltipHtml(move){
     const mechanics = move.special==='analyze'
       ? `<div class="tooltip-line"><b>Clash:</b> None</div><div class="tooltip-line"><b>Damage:</b> 0</div><div class="tooltip-line"><b>Effect:</b> Reveal exact enemy stats. Consumes your turn.</div>`
-      : `<div class="tooltip-line"><b>Clash:</b> ${move.attackStat} × ${move.powerFactor.toFixed(2)} × earned roll vs ${move.defenseStat}</div><div class="tooltip-line"><b>Skill Check:</b> ${SKILL_LABELS[move.skillCheck]||'—'}</div><div class="tooltip-line"><b>Base Damage:</b> ${move.baseDamage}</div>${move.id==='guardbreak'?'<div class="tooltip-line"><b>On Hit:</b> Enemy DEF −2 for the next 2 player attacks.</div>':''}`;
+      : `<div class="tooltip-line"><b>Clash:</b> ${move.attackStat} × ${move.powerFactor.toFixed(2)} × earned roll vs ${move.defenseStat}</div><div class="tooltip-line"><b>Skill Check:</b> ${SKILL_LABELS[move.skillCheck]||'-'}</div><div class="tooltip-line"><b>Base Damage:</b> ${move.baseDamage}</div>${move.id==='guardbreak'?'<div class="tooltip-line"><b>On Hit:</b> Enemy DEF −2 for the next 2 player attacks.</div>':''}`;
     const genres=Object.entries(move.genres||{}).map(([k,v])=>`<span class="genre-tag" style="color:${genreColor(k)}">${GENRES[k].short} +${v}</span>`).join(' ');
     return `<div class="move-tooltip"><div class="tooltip-name">${move.name}</div><div class="tooltip-line">${move.hint}</div>${mechanics}<div class="tooltip-line"><b>Genres:</b></div><div class="tooltip-line">${genres}</div></div>`;
   }
@@ -3608,7 +3625,7 @@ Genres: ${lines}`;
     const introCount=Math.min(4,Math.max(1,Math.ceil(Math.max(1,game.viewers)/4)));
     for(let i=0;i<introCount;i++){ if(game.viewers>0)addChat(choice(CHAT_REST)); await sleep(randInt(180,420)); }
     const topics=shuffle(REST_TOPICS).slice(0,3);
-    $('nodeOverlayTitle').textContent='Rest Zone — Chat with Viewers';
+    $('nodeOverlayTitle').textContent='Rest Zone: Chat with Viewers';
     $('nodeOverlayText').innerHTML=`<div>HP restored to full. Pick a topic:</div><div class="rest-topic-grid">${topics.map(t=>`<button class="rest-topic-btn" data-rest-topic="${t}">${t}</button>`).join('')}</div>`;
     $('nodeContinue').style.display='none'; $('nodeOverlay').classList.add('show');
     $('nodeOverlayText').querySelectorAll('[data-rest-topic]').forEach(b=>b.onclick=()=>resolveRestTopic(node,b.dataset.restTopic));
@@ -3840,7 +3857,7 @@ Genres: ${lines}`;
   function awardEncounterPopularity(satisfaction,engagementDelta){ const quality=satisfaction/100,reach=Math.log2(2+Math.max(0,game.viewers));let progress=quality*.34+Math.min(.24,Math.max(0,engagementDelta)*.016)+Math.min(.18,reach*.045);const actions=Math.max(1,game.playerActions-game.encounterStartActions),damage=Math.max(0,game.damageTaken-game.encounterStartDamageTaken);if(actions<=2)progress+=.08;if(damage===0)progress+=.06;return addPopularityProgress(progress); }
 
   // Sponsor read is offered as a Rest Zone topic and uses the portrait speech bubble.
-  async function resolveRest(node){ game.player.hp=game.player.maxHp;profile.hp=game.player.hp;updateHp();saveProgress();await wipeSwitch(()=>{showOnlyScreen('combat');$('streamShell').classList.add('resting');$('turnLabel').textContent='REST ZONE';$('roundLabel').textContent='BREAK';$('statusText').textContent='Choose something to talk about while you rest.';updateHp();updateStreamStats();});actionChatStart();const introCount=Math.min(4,Math.max(1,Math.ceil(Math.max(1,game.viewers)/4)));for(let i=0;i<introCount;i++){if(game.viewers>0)addChat(choice(CHAT_REST));await sleep(randInt(180,420));}let topics=shuffle(REST_TOPICS).slice(0,3);if(channel.activeSponsor==='towncrier'&&!game.sponsorProgress.adRead)topics[0]='Read sponsor line';$('nodeOverlayTitle').textContent='Rest Zone — Chat with Viewers';$('nodeOverlayText').innerHTML=`<div>HP restored to full. Pick a topic:</div><div class="rest-topic-grid">${topics.map(x=>`<button class="rest-topic-btn" data-rest-topic="${x}">${x}</button>`).join('')}</div>`;$('nodeContinue').style.display='none';$('nodeOverlay').classList.add('show');$('nodeOverlayText').querySelectorAll('[data-rest-topic]').forEach(b=>b.onclick=()=>resolveRestTopic(node,b.dataset.restTopic)); }
+  async function resolveRest(node){ game.player.hp=game.player.maxHp;profile.hp=game.player.hp;updateHp();saveProgress();await wipeSwitch(()=>{showOnlyScreen('combat');$('streamShell').classList.add('resting');$('turnLabel').textContent='REST ZONE';$('roundLabel').textContent='BREAK';$('statusText').textContent='Choose something to talk about while you rest.';updateHp();updateStreamStats();});actionChatStart();const introCount=Math.min(4,Math.max(1,Math.ceil(Math.max(1,game.viewers)/4)));for(let i=0;i<introCount;i++){if(game.viewers>0)addChat(choice(CHAT_REST));await sleep(randInt(180,420));}let topics=shuffle(REST_TOPICS).slice(0,3);if(channel.activeSponsor==='towncrier'&&!game.sponsorProgress.adRead)topics[0]='Read sponsor line';$('nodeOverlayTitle').textContent='Rest Zone: Chat with Viewers';$('nodeOverlayText').innerHTML=`<div>HP restored to full. Pick a topic:</div><div class="rest-topic-grid">${topics.map(x=>`<button class="rest-topic-btn" data-rest-topic="${x}">${x}</button>`).join('')}</div>`;$('nodeContinue').style.display='none';$('nodeOverlay').classList.add('show');$('nodeOverlayText').querySelectorAll('[data-rest-topic]').forEach(b=>b.onclick=()=>resolveRestTopic(node,b.dataset.restTopic)); }
   async function resolveRestTopic(node,topic){ if(topic==='Read sponsor line'){game.sponsorProgress.adRead=true;showSpeech('This expedition is sponsored by Town Crier Network. Tell everyone. Apparently.',2300);}else showSpeech(choice([`So, ${topic.toLowerCase()}...`,'Chat, I have a question.','Okay, story time.']),1700);const positive=Math.random()<.5,before=game.viewers;let viewerDelta=0,engDelta=0,satDelta=0;if(positive){const pct=randInt(10,30)/100;viewerDelta=Math.max(1,Math.round(Math.max(1,game.viewers)*pct));assignArrivals(viewerDelta);engDelta=randInt(1,5);satDelta=randInt(2,5);addEngagement(engDelta);game.satisfactionBonus+=satDelta;addPopularityProgress(randInt(5,16)/100);}else{const pct=randInt(8,25)/100;viewerDelta=game.viewers>0?-Math.max(1,Math.round(game.viewers*pct)):0;removeViewers(Math.abs(viewerDelta));engDelta=Math.random()<.45?randInt(1,5):-randInt(0,2);addEngagement(engDelta);satDelta=-randInt(1,5);game.satisfactionPenalty+=Math.abs(satDelta);}if(positive)updateStreamStats();const delta=game.viewers-before;showViewerDelta(delta);showViewerImpact(delta);const flavor=positive?choice(REST_POSITIVE):choice(REST_NEGATIVE);$('nodeOverlayTitle').textContent=positive?'Topic Lands':'Topic Fumbles';$('nodeOverlayText').innerHTML=`<div class="${positive?'outcome-positive':'outcome-negative'}"><b>${topic}</b></div><p>${flavor}</p><p><b>${viewerDelta>=0?'+':''}${viewerDelta} CCV</b> · ${engDelta>=0?'+':''}${engDelta} Engagement · ${satDelta>=0?'+':''}${satDelta} Satisfaction</p>`;if(game.viewers>0)burstChat(positive?['wait this is good','lol','keep going','okay chat','real','W topic']:['anyway','bro','what','why are we talking about this','zzz','move on'],Math.min(3,game.viewers),null,130,{special:true});advanceMapNode(node);saveProgress();$('nodeContinue').style.display='inline-block';$('nodeContinue').textContent='Continue';nodeContinueAction=async()=>{$('nodeOverlay').classList.remove('show');$('streamShell').classList.remove('resting');actionChatEnd();await wipeSwitch(()=>showOnlyScreen('dungeon'));renderDungeonMap();}; }
 
   async function useHealingPotion(){ if(busy||game.finished||profile.inventory.healing_potion<=0)return;busy=true;$('itemMenu').classList.remove('show');setMoveButtonsEnabled(false);actionChatStart();beginActionAccounting();profile.inventory.healing_potion--;const before=game.player.hp;game.player.hp=Math.min(game.player.maxHp,game.player.hp+14);profile.hp=game.player.hp;const healed=game.player.hp-before;game.playerActions++;game.actionHistory.push({moveId:'item',encounter:game.encounter,enemyName:game.enemy?.name||''});addEngagement(healed>8?1:0);if(game.sponsorProgress)game.sponsorProgress.potionsUsed++;showSpeech('Potion break.');$('turnLabel').textContent='USE ITEM';$('statusText').textContent=`Healing Potion restores ${healed} HP.`;updateHp();if(game.viewers>0)burstChat(healed<=3?['why','waste','bro you were fine']:['potion','good','heal up','smart'],2,null,180,{special:true});updateAudiencePerTurn(0);saveProgress();await sleep(450);await enemyTurn();if(!game.finished)finishRound();busy=false; }
@@ -3983,13 +4000,13 @@ Genres: ${lines}`;
       }else if(kind==='direction'){
         const arrows=['ArrowUp','ArrowDown','ArrowLeft','ArrowRight'],glyph={ArrowUp:'↑',ArrowDown:'↓',ArrowLeft:'←',ArrowRight:'→'},seq=Array.from({length:10},()=>choice(arrows));let idx=0,correct=0,reactionTotal=0,promptAt=performance.now();area.innerHTML=`<div><div class="direction-sequence">${seq.map((x,i)=>`<span class="direction-token ${i===0?'current':''}" data-seq="${i}">${glyph[x]}</span>`).join('')}</div><div class="direction-buttons"><button data-dir="ArrowUp">↑</button><button data-dir="ArrowLeft">←</button><button data-dir="ArrowDown">↓</button><button data-dir="ArrowRight">→</button></div></div>`;const update=()=>{readout.textContent=`Input ${Math.min(idx+1,10)}/10`;area.querySelectorAll('.direction-token').forEach((el,i)=>el.classList.toggle('current',i===idx));promptAt=performance.now();};update();const press=key=>{if(done||idx>=10)return;const el=area.querySelector(`[data-seq="${idx}"]`),ok=key===seq[idx];el.classList.remove('current');el.classList.add(ok?'correct':'wrong');if(ok){correct++;reactionTotal+=performance.now()-promptAt;}idx++;if(idx>=10){const accuracy=correct/10,avg=correct?reactionTotal/correct:1600;const speedBonus=Math.max(0,4.5-avg/200);finish(clamp(Math.round(1+accuracy*15.5+speedBonus),1,20));}else update();};area.querySelectorAll('[data-dir]').forEach(b=>b.onclick=()=>press(b.dataset.dir));onKey(e=>{const d=mapDirection(e);if(d){e.preventDefault();press(d);}});timeout(10500,()=>clamp(Math.round(1+correct*1.7),1,18));
       }else if(kind==='saw'){
-        area.innerHTML='<div><div style="text-align:center;font-size:26px;font-weight:1000;margin-bottom:12px" id="sawCount">0 / 8</div><div class="saw-buttons"><button id="sawLeft">← PULL</button><button id="sawRight">PUSH →</button></div></div>';let expected='L',count=0,mistakes=0;const started=performance.now();const press=side=>{if(done)return;if(side===expected){count++;expected=expected==='L'?'R':'L';$('sawCount').textContent=`${count} / 8`;if(count>=8){const elapsed=performance.now()-started;let score;if(mistakes===0&&elapsed<=2600)score=20;else if(mistakes===0&&elapsed<=3300)score=19;else score=clamp(16+Math.round((4200-Math.min(4200,elapsed))/900)-mistakes,1,19);finish(score);}}else{mistakes++;readout.textContent='Wrong direction — alternate left/right.';}};$('sawLeft').onclick=()=>press('L');$('sawRight').onclick=()=>press('R');onKey(e=>{if(e.key==='ArrowLeft'||e.key==='a'||e.key==='A'){e.preventDefault();press('L');}if(e.key==='ArrowRight'||e.key==='d'||e.key==='D'){e.preventDefault();press('R');}});timeout(6000,()=>clamp(1+count*2-mistakes,1,18));
+        area.innerHTML='<div><div style="text-align:center;font-size:26px;font-weight:1000;margin-bottom:12px" id="sawCount">0 / 8</div><div class="saw-buttons"><button id="sawLeft">← PULL</button><button id="sawRight">PUSH →</button></div></div>';let expected='L',count=0,mistakes=0;const started=performance.now();const press=side=>{if(done)return;if(side===expected){count++;expected=expected==='L'?'R':'L';$('sawCount').textContent=`${count} / 8`;if(count>=8){const elapsed=performance.now()-started;let score;if(mistakes===0&&elapsed<=2600)score=20;else if(mistakes===0&&elapsed<=3300)score=19;else score=clamp(16+Math.round((4200-Math.min(4200,elapsed))/900)-mistakes,1,19);finish(score);}}else{mistakes++;readout.textContent='Wrong direction: alternate left/right.';}};$('sawLeft').onclick=()=>press('L');$('sawRight').onclick=()=>press('R');onKey(e=>{if(e.key==='ArrowLeft'||e.key==='a'||e.key==='A'){e.preventDefault();press('L');}if(e.key==='ArrowRight'||e.key==='d'||e.key==='D'){e.preventDefault();press('R');}});timeout(6000,()=>clamp(1+count*2-mistakes,1,18));
       }else if(kind==='balance'){
         area.innerHTML='<div><div class="skill-track"><div class="skill-sweet"></div><div class="balance-needle" id="balanceNeedle"></div></div><div class="balance-buttons"><button id="balanceLeft">← LEFT</button><button id="balanceRight">RIGHT →</button></div></div>';let pos=0,velocity=(Math.random()-.5)*.7,totalAbs=0,samples=0;const needle=$('balanceNeedle'),nudge=d=>{velocity+=d*.55;};$('balanceLeft').onclick=()=>nudge(-1);$('balanceRight').onclick=()=>nudge(1);onKey(e=>{if(e.key==='ArrowLeft'||e.key==='a'||e.key==='A'){e.preventDefault();nudge(-1);}if(e.key==='ArrowRight'||e.key==='d'||e.key==='D'){e.preventDefault();nudge(1);}});const id=setInterval(()=>{velocity+=(Math.random()-.5)*.26;velocity*=.94;pos=clamp(pos+velocity,-50,50);if(Math.abs(pos)>=49)velocity*=-.7;needle.style.left=`${50+pos}%`;totalAbs+=Math.abs(pos);samples++;},50);cleanupFns.push(()=>clearInterval(id));timeout(2600,()=>{const avg=samples?totalAbs/samples:50;return skillScoreFromDistance(avg,50);});
       }else finish(10);
     });
   };
-  runMoveSkillCheck=function(move){ const label=SKILL_LABELS[move.skillCheck]||'Skill Check';const instructions={accuracy:'Stop the marker in the center band. Space / Enter also work.',charge:'Release near the golden high-power zone. Space / Enter also work.',tracking:'Click anywhere on each moving target as quickly as possible. Center accuracy does not matter.',rhythm:'Hit three beats as the marker crosses the center. Space / Enter also work.',direction:'Enter the 10-arrow sequence with WASD or arrow keys.',saw:'Alternate A/D or Left/Right quickly without breaking rhythm.',balance:'Use A/D or Left/Right to keep the needle near the center.'};return runSkillCheck(move.skillCheck,`${move.name} — ${label}`,instructions[move.skillCheck]||'Earn a roll from 1–20.'); };
+  runMoveSkillCheck=function(move){ const label=SKILL_LABELS[move.skillCheck]||'Skill Check';const instructions={accuracy:'Stop the marker in the center band. Space / Enter also work.',charge:'Release near the golden high-power zone. Space / Enter also work.',tracking:'Click anywhere on each moving target as quickly as possible. Center accuracy does not matter.',rhythm:'Hit three beats as the marker crosses the center. Space / Enter also work.',direction:'Enter the 10-arrow sequence with WASD or arrow keys.',saw:'Alternate A/D or Left/Right quickly without breaking rhythm.',balance:'Use A/D or Left/Right to keep the needle near the center.'};return runSkillCheck(move.skillCheck,`${move.name}: ${label}`,instructions[move.skillCheck]||'Earn a roll from 1–20.'); };
   runDefenseSkillCheck=function(enemyMove){ const magical=enemyMove.defenseStat==='MND';return runSkillCheck(magical?'balance':'accuracy',magical?`Ward ${enemyMove.name}`:`Defend ${enemyMove.name}`,magical?'Stabilize your ward with A/D or Left/Right.':'Time your defense with Space, Enter, or the button.'); };
 
   function reactNaturalsV11(playerRoll,enemyRoll){
@@ -4063,7 +4080,7 @@ Genres: ${lines}`;
       panel.innerHTML=`<h2>Enhancement Workshop</h2><p>Enhancement consumes crystals you could otherwise sell.</p>${crystalOwnedStrip()}<div class="catalog-columns">${allEquippedUids().map(uid=>{const inst=findEquipment(uid),d=ITEM_DEFS[inst.id],max=MAX_ENHANCE[d.rarity]||3,cost=ENHANCE_COSTS[inst.enhance],sellValue=cost?CRYSTAL_SELL[cost.rank]*cost.qty:0,owned=cost?(profile.inventory.crystals[cost.rank]||0):0;return `<div class="compact-card"><div class="compact-title"><div class="item-name">${d.name} +${inst.enhance}</div><span class="compact-price">${inst.enhance>=max?'MAX':`${cost.rank} ×${cost.qty} · ${owned} owned`}</span><button data-enhance="${uid}" ${inst.enhance>=max?'disabled':''}>Enhance</button></div><div class="compact-meta">${itemBonusText(d,inst)}${inst.enhance<max?`<br>After upgrade: ${owned} → ${Math.max(0,owned-cost.qty)} ${cost.rank} crystals<br>Opportunity cost: ${sellValue} money.`:''}</div></div>`}).join('')}</div>`;panel.querySelectorAll('[data-enhance]').forEach(b=>b.onclick=()=>enhanceItem(b.dataset.enhance));return;
     }
     if(kind==='dojo'){
-      const kinds=['accuracy','charge','tracking','rhythm','direction','saw','balance'];panel.innerHTML=`<h2>Training Dojo</h2><p>Permanent stat training and free skill-check practice. Practice has no cost and no risk.</p><h3>Stat Training</h3><div class="catalog-columns">${STAT_NAMES.map(k=>{const cost=50+profile.trainingCounts[k]*30;return `<div class="compact-card"><div class="compact-title"><div class="item-name">${k} ${profile.baseStats[k]}</div><span class="compact-price">${cost} money</span><button data-train="${k}">Train</button></div><div class="compact-meta">Permanent ${k} +1</div></div>`}).join('')}</div><h3>Practice Minigames</h3><div class="practice-grid">${kinds.map(k=>{const s=profile.practiceStats[k]||{attempts:0,total:0,best:0},avg=s.attempts?(s.total/s.attempts).toFixed(1):'—';return `<div class="practice-card"><b>${SKILL_LABELS[k]}</b><div class="practice-stats">Attempts ${s.attempts} · Best ${s.best||'—'} · Average ${avg}</div><button data-practice="${k}">Practice Free</button></div>`}).join('')}</div>`;panel.querySelectorAll('[data-train]').forEach(b=>b.onclick=()=>trainStat(b.dataset.train));panel.querySelectorAll('[data-practice]').forEach(b=>b.onclick=()=>practiceSkill(b.dataset.practice));return;
+      const kinds=['accuracy','charge','tracking','rhythm','direction','saw','balance'];panel.innerHTML=`<h2>Training Dojo</h2><p>Permanent stat training and free skill-check practice. Practice has no cost and no risk.</p><h3>Stat Training</h3><div class="catalog-columns">${STAT_NAMES.map(k=>{const cost=50+profile.trainingCounts[k]*30;return `<div class="compact-card"><div class="compact-title"><div class="item-name">${k} ${profile.baseStats[k]}</div><span class="compact-price">${cost} money</span><button data-train="${k}">Train</button></div><div class="compact-meta">Permanent ${k} +1</div></div>`}).join('')}</div><h3>Practice Minigames</h3><div class="practice-grid">${kinds.map(k=>{const s=profile.practiceStats[k]||{attempts:0,total:0,best:0},avg=s.attempts?(s.total/s.attempts).toFixed(1):'-';return `<div class="practice-card"><b>${SKILL_LABELS[k]}</b><div class="practice-stats">Attempts ${s.attempts} · Best ${s.best||'-'} · Average ${avg}</div><button data-practice="${k}">Practice Free</button></div>`}).join('')}</div>`;panel.querySelectorAll('[data-train]').forEach(b=>b.onclick=()=>trainStat(b.dataset.train));panel.querySelectorAll('[data-practice]').forEach(b=>b.onclick=()=>practiceSkill(b.dataset.practice));return;
     }
     if(kind==='quests'){
       panel.innerHTML=`<h2>Quest Board</h2><p>Choose any number of challenges for your next stream. Completed quests pay only when that stream ends; incomplete quests fail.</p><div class="quest-board-grid">${Object.values(QUEST_DEFS).map(q=>{const selected=profile.selectedQuests.includes(q.id);return `<div class="quest-card ${selected?'selected':''}"><div class="compact-title"><div class="item-name">${q.name}</div><button data-quest="${q.id}">${selected?'Remove':'Accept'}</button></div><div class="compact-meta">${q.description}</div><div class="quest-reward">${q.money} money + ${q.crystals} dungeon-rank crystal${q.crystals===1?'':'s'}</div></div>`}).join('')}</div>`;panel.querySelectorAll('[data-quest]').forEach(b=>b.onclick=()=>{const id=b.dataset.quest;profile.selectedQuests=profile.selectedQuests.includes(id)?profile.selectedQuests.filter(x=>x!==id):profile.selectedQuests.concat(id);saveProgress();renderHubPanel('quests');});return;
@@ -4208,7 +4225,7 @@ Genres: ${lines}`;
     });
   }
   runSkillCheck=function(kind,title='Skill Check',instruction='Earn a roll from 1–20.'){if(kind==='ringcast')return ringTimingSkillV12(title,instruction);return _v11RunSkillCheckV12(kind,title,instruction);};
-  runMoveSkillCheck=function(move){const label=SKILL_LABELS[move.skillCheck]||'Skill Check';const instructions={accuracy:'Stop the marker in the center band. Space / Enter also work.',charge:'Release near the golden high-power zone. Space / Enter also work.',tracking:'Rapidly acquire and click each moving target. This is the harder burst-magic check.',ringcast:'Time five casts as the shrinking white ring matches the green ring. Space / Enter also work.',rhythm:'Hit three beats as the marker crosses the center. Space / Enter also work.',direction:'Enter the 10-arrow sequence with WASD or arrow keys.',saw:'Alternate A/D or Left/Right quickly without breaking rhythm.',balance:'Use A/D or Left/Right to keep the needle near the center.'};return runSkillCheck(move.skillCheck,`${move.name} — ${label}`,instructions[move.skillCheck]||'Earn a roll from 1–20.');};
+  runMoveSkillCheck=function(move){const label=SKILL_LABELS[move.skillCheck]||'Skill Check';const instructions={accuracy:'Stop the marker in the center band. Space / Enter also work.',charge:'Release near the golden high-power zone. Space / Enter also work.',tracking:'Rapidly acquire and click each moving target. This is the harder burst-magic check.',ringcast:'Time five casts as the shrinking white ring matches the green ring. Space / Enter also work.',rhythm:'Hit three beats as the marker crosses the center. Space / Enter also work.',direction:'Enter the 10-arrow sequence with WASD or arrow keys.',saw:'Alternate A/D or Left/Right quickly without breaking rhythm.',balance:'Use A/D or Left/Right to keep the needle near the center.'};return runSkillCheck(move.skillCheck,`${move.name}: ${label}`,instructions[move.skillCheck]||'Earn a roll from 1–20.');};
 
   // Update the Dojo so Arc Bolt's new ring timing can be practiced for free.
   const _v11RenderHubPanelV12=renderHubPanel;
@@ -4218,7 +4235,7 @@ Genres: ${lines}`;
       normalizeV11Profile();lastHubPanel=kind;const panel=$('hubPanel');updateHubHeader();panel.innerHTML=`<h2>Enhancement Workshop</h2><p>Enhancement consumes crystals you could otherwise sell.</p>${crystalOwnedStrip()}<div class="catalog-columns">${allEquippedUids().map(uid=>{const inst=findEquipment(uid),d=ITEM_DEFS[inst.id],max=MAX_ENHANCE[d.rarity]||3,cost=ENHANCE_COSTS[inst.enhance],sellValue=cost?CRYSTAL_SELL[cost.rank]*cost.qty:0,owned=cost?(profile.inventory.crystals[cost.rank]||0):0;return `<div class="compact-card"><div class="compact-title"><div class="item-name">${d.name} +${inst.enhance}</div><span class="compact-price">${inst.enhance>=max?'MAX':`${cost.rank} ×${cost.qty} · ${owned} owned`}</span><button data-enhance="${uid}" ${inst.enhance>=max?'disabled':''}>Enhance</button></div><div class="compact-meta">Current: ${itemBonusText(d,inst)}${inst.enhance<max?`<br><b>After upgrade:</b> ${enhancedBonusPreviewV12(d,inst)}<br>Opportunity cost: ${sellValue} money.`:''}</div></div>`}).join('')}</div>`;panel.querySelectorAll('[data-enhance]').forEach(b=>b.onclick=()=>enhanceItem(b.dataset.enhance));return;
     }
     if(kind==='dojo'){
-      normalizeV11Profile();lastHubPanel=kind;const panel=$('hubPanel');updateHubHeader();const kinds=['accuracy','charge','saw','ringcast','tracking','rhythm','direction','balance'];panel.innerHTML=`<h2>Training Dojo</h2><p>Permanent stat training and free skill-check practice. Practice has no cost and no risk.</p><h3>Stat Training</h3><div class="catalog-columns">${STAT_NAMES.map(k=>{const cost=50+profile.trainingCounts[k]*30;return `<div class="compact-card"><div class="compact-title"><div class="item-name">${k} ${profile.baseStats[k]}</div><span class="compact-price">${cost} money</span><button data-train="${k}">Train</button></div><div class="compact-meta">Permanent ${k} +1</div></div>`}).join('')}</div><h3>Practice Minigames</h3><div class="practice-grid">${kinds.map(k=>{const s=profile.practiceStats[k]||{attempts:0,total:0,best:0},avg=s.attempts?(s.total/s.attempts).toFixed(1):'—';return `<div class="practice-card"><b>${SKILL_LABELS[k]}</b><div class="practice-stats">Attempts ${s.attempts} · Best ${s.best||'—'} · Average ${avg}</div><button data-practice="${k}">Practice Free</button></div>`}).join('')}</div>`;panel.querySelectorAll('[data-train]').forEach(b=>b.onclick=()=>trainStat(b.dataset.train));panel.querySelectorAll('[data-practice]').forEach(b=>b.onclick=()=>practiceSkill(b.dataset.practice));return;
+      normalizeV11Profile();lastHubPanel=kind;const panel=$('hubPanel');updateHubHeader();const kinds=['accuracy','charge','saw','ringcast','tracking','rhythm','direction','balance'];panel.innerHTML=`<h2>Training Dojo</h2><p>Permanent stat training and free skill-check practice. Practice has no cost and no risk.</p><h3>Stat Training</h3><div class="catalog-columns">${STAT_NAMES.map(k=>{const cost=50+profile.trainingCounts[k]*30;return `<div class="compact-card"><div class="compact-title"><div class="item-name">${k} ${profile.baseStats[k]}</div><span class="compact-price">${cost} money</span><button data-train="${k}">Train</button></div><div class="compact-meta">Permanent ${k} +1</div></div>`}).join('')}</div><h3>Practice Minigames</h3><div class="practice-grid">${kinds.map(k=>{const s=profile.practiceStats[k]||{attempts:0,total:0,best:0},avg=s.attempts?(s.total/s.attempts).toFixed(1):'-';return `<div class="practice-card"><b>${SKILL_LABELS[k]}</b><div class="practice-stats">Attempts ${s.attempts} · Best ${s.best||'-'} · Average ${avg}</div><button data-practice="${k}">Practice Free</button></div>`}).join('')}</div>`;panel.querySelectorAll('[data-train]').forEach(b=>b.onclick=()=>trainStat(b.dataset.train));panel.querySelectorAll('[data-practice]').forEach(b=>b.onclick=()=>practiceSkill(b.dataset.practice));return;
     }
     return _v11RenderHubPanelV12(kind);
   };
@@ -4273,9 +4290,9 @@ Genres: ${lines}`;
       }else if(kind==='saw'){
         const target=randInt(6,18);let expected='L',count=0,mistakes=0,overshot=false;
         area.innerHTML=`<div><div style="text-align:center;font-size:14px;color:var(--muted);margin-bottom:5px">TARGET</div><div id="sawTarget" style="text-align:center;font-size:38px;font-weight:1000;margin-bottom:8px">${target}</div><div id="sawCount" style="text-align:center;font-size:25px;font-weight:950;margin-bottom:12px">0</div><div class="saw-buttons"><button id="sawLeft">← LEFT</button><button id="sawRight">RIGHT →</button><button id="sawLock">LOCK IN</button></div></div>`;
-        const render=()=>{const el=$('sawCount');el.textContent=`${count} / ${target}`;el.style.color=count>target?'var(--bad)':count===target?'var(--good)':'var(--text)';readout.textContent=count>target?'OVERSHOOT — final roll will be halved.':`Alternate left/right, then lock in at ${target}.`;};render();
+        const render=()=>{const el=$('sawCount');el.textContent=`${count} / ${target}`;el.style.color=count>target?'var(--bad)':count===target?'var(--good)':'var(--text)';readout.textContent=count>target?'OVERSHOOT: final roll will be halved.':`Alternate left/right, then lock in at ${target}.`;};render();
         const scoreNow=()=>{const diff=Math.abs(target-count);let score=diff===0?20:diff===1?18:diff===2?16:diff===3?14:Math.max(4,14-diff*2);score=Math.max(1,score-mistakes);if(overshot||count>target)score=Math.max(1,Math.floor(score/2));return score;};
-        const press=side=>{if(done)return;if(side===expected){count++;expected=expected==='L'?'R':'L';if(count>target)overshot=true;}else{mistakes++;readout.textContent='Wrong direction — keep alternating.';}render();};
+        const press=side=>{if(done)return;if(side===expected){count++;expected=expected==='L'?'R':'L';if(count>target)overshot=true;}else{mistakes++;readout.textContent='Wrong direction: keep alternating.';}render();};
         const lock=()=>finish(scoreNow());
         $('sawLeft').onclick=()=>press('L');$('sawRight').onclick=()=>press('R');$('sawLock').onclick=lock;
         onKey(e=>{if(e.key==='ArrowLeft'||e.key==='a'||e.key==='A'){e.preventDefault();press('L');}else if(e.key==='ArrowRight'||e.key==='d'||e.key==='D'){e.preventDefault();press('R');}else if(e.code==='Space'||e.code==='Enter'){e.preventDefault();lock();}});
@@ -4296,7 +4313,7 @@ Genres: ${lines}`;
       saw:'Alternate A/D or Left/Right toward a random target from 6–18, then Lock In with Space/Enter. Overshooting halves the roll.',
       balance:'Use A/D or Left/Right to keep the needle near the center.'
     };
-    return runSkillCheck(move.skillCheck,`${move.name} — ${label}`,instructions[move.skillCheck]||'Earn a roll from 1–20.');
+    return runSkillCheck(move.skillCheck,`${move.name}: ${label}`,instructions[move.skillCheck]||'Earn a roll from 1–20.');
   };
 
 
@@ -4389,7 +4406,7 @@ Genres: ${lines}`;
     $('vnPortraitRight').classList.toggle('active',side==='right');
   }
   function vnButtonV14(label,fn,cls=''){const b=document.createElement('button');b.textContent=label;if(cls)b.className=cls;b.onclick=fn;$('vnActions').appendChild(b);return b;}
-  function setVnV14(speaker,text,{focus='left',centerHtml='',location='Explorer\'s Guild — Registration Hall'}={}){
+  function setVnV14(speaker,text,{focus='left',centerHtml='',location='Explorer\'s Guild: Registration Hall'}={}){
     $('vnSpeaker').textContent=speaker;$('vnText').innerHTML=text;$('vnActions').innerHTML='';$('vnLocation').textContent=location;
     const vnMoney=$('vnMoney');if(vnMoney)vnMoney.textContent=Number(profile.money||0).toLocaleString();
     setVnPortraitFocusV14(focus);const c=$('vnCenterCard');c.innerHTML=centerHtml;c.classList.toggle('show',!!centerHtml);
@@ -4431,7 +4448,7 @@ Genres: ${lines}`;
       setVnV14('Guild Clerk',`"Everything checks out. <b>${escV14(kit.name)}</b>, guild license, PT, PT Core. Once I process this, your balance goes from <b>10,000</b> to <b>100 money</b>."`,{centerHtml:`<b>Final Registration Receipt</b><div class="vn-receipt"><span>Explorer's Guild license & services</span><b>Included</b><span>${escV14(kit.name)}</span><b>Included</b><span>Guild Standard Slate PT + PT Core</span><b>Included</b><span class="total">Package total</span><b class="total">9,900</b></div><div class="vn-money-drop">10,000 → 100</div>`});
       vnButtonV14('Pay 9,900 & Register',()=>{completeRegistrationPaymentV14();o.registrationStep=5;saveProgress();renderRegistrationV14();});
     }else if(step===5){
-      setVnV14('Guild Clerk',`"This is your PT. It talks over the <b>Resonance Communication Network</b>—RCN officially, <b>ResoNet</b> to everyone else. The PT is just a convenient endpoint; plenty of other equipment can interface with ResoNet too."`,{centerHtml:'<b>Guild Standard Slate PT</b><p class="compact-meta">PT Core registered · RCN / ResoNet access active</p>'});
+      setVnV14('Guild Clerk',`"This is your PT. It talks over the <b>Resonance Communication Network</b>. The official abbreviation is <b>RCN</b>, while most people call it <b>ResoNet</b>. The PT is just a convenient endpoint; plenty of other equipment can interface with ResoNet too."`,{centerHtml:'<b>Guild Standard Slate PT</b><p class="compact-meta">PT Core registered · RCN / ResoNet access active</p>'});
       vnButtonV14('Continue',()=>{o.registrationStep=6;saveProgress();renderRegistrationV14();});
     }else if(step===6){
       setVnV14('Guild Clerk',`"I also initialized your <span class="scrying-brand">Scrying Orb</span> channel. Dungeon streaming is common around here. Exploration footage is useful, people like watching adventurers work, and if your channel grows it can become a second source of income."`);
@@ -4481,7 +4498,7 @@ Genres: ${lines}`;
   renderHubPanel=function(kind){
     if(profile.onboarding?.completed&&!hubUnlockedV14(kind)){renderGuildPanelV14();lastHubPanel='guild';return;}
     if(kind==='guild'){lastHubPanel='guild';updateHubHeader();renderGuildPanelV14();return;}
-    if(kind==='channel'&&tutorialStepV14()===5){advanceGuildTutorialV14(6,'Orientation complete — welcome to the guild');}
+    if(kind==='channel'&&tutorialStepV14()===5){advanceGuildTutorialV14(6,'Orientation complete: welcome to the guild');}
     const r=_v13RenderHubPanelV14(kind);
     if(kind==='channel'&&$('hubPanel')){
       const h=$('hubPanel').querySelector('h2');if(h)h.textContent='Channel Dashboard';
@@ -4490,10 +4507,10 @@ Genres: ${lines}`;
   };
 
   const _v13PracticeSkillV14=practiceSkill;
-  practiceSkill=async function(kind){const r=await _v13PracticeSkillV14(kind);if(tutorialStepV14()===1&&totalPracticeAttemptsV14()>=3){advanceGuildTutorialV14(2,'Basic Competency complete — Dungeon Board unlocked');renderHubPanel('dojo');}return r;};
+  practiceSkill=async function(kind){const r=await _v13PracticeSkillV14(kind);if(tutorialStepV14()===1&&totalPracticeAttemptsV14()>=3){advanceGuildTutorialV14(2,'Basic Competency complete: Dungeon Board unlocked');renderHubPanel('dojo');}return r;};
 
   const _v13CompleteEncounterV14=completeEncounter;
-  completeEncounter=async function(){if(tutorialStepV14()===2)advanceGuildTutorialV14(3,'First Expedition complete — bring your loot home');return _v13CompleteEncounterV14();};
+  completeEncounter=async function(){if(tutorialStepV14()===2)advanceGuildTutorialV14(3,'First Expedition complete: bring your loot home');return _v13CompleteEncounterV14();};
 
   const _v13GoHubV14=goHub;
   goHub=function(){const r=_v13GoHubV14();reconcileTutorialV14();refreshHubButtonsV14();if(lastHubPanel==='guild')renderGuildPanelV14();return r;};
@@ -4501,7 +4518,7 @@ Genres: ${lines}`;
   const _v13EndStreamV14=endStream;
   endStream=async function(reason='retreat'){
     const dungeonName=game?.dungeon?.name;const activeStep=tutorialStepV14();const r=await _v13EndStreamV14(reason);
-    if(reason==='complete'&&dungeonName==='Beginner Cave'&&activeStep===4)advanceGuildTutorialV14(5,'First dungeon clear complete — Scrying Orb Dashboard unlocked');
+    if(reason==='complete'&&dungeonName==='Beginner Cave'&&activeStep===4)advanceGuildTutorialV14(5,'First dungeon clear complete: Scrying Orb Dashboard unlocked');
     saveProgress();return r;
   };
 
@@ -4764,7 +4781,7 @@ Genres: ${lines}`;
   function streamerRankV15(){const fame=rankingFameV15(),rank=Math.round(V15_TOTAL_STREAMERS/(1+Math.pow(Math.max(0,fame)/28,3.5)));return clamp(rank,1,V15_TOTAL_STREAMERS);}
   function rankNameV15(rank){if(rank>=1&&rank<=V15_TOP_STREAMERS.length)return V15_TOP_STREAMERS[rank-1][1];const idx=Math.abs((rank*1103515245+12345)>>>0)%V15_NEARBY_NAMES.length;return V15_NEARBY_NAMES[idx]+(rank%7===0?String(rank%100):'');}
   function addNewsV15(tag,text){normalizeChannelV15();const entry={tag:String(tag||'NEWS'),text:String(text||''),stream:channel.streams||0};channel.news.unshift(entry);channel.news=channel.news.slice(0,18);updateNewsTickerV15();}
-  function newsHeadlinesV15(){normalizeChannelV15();const personal=channel.news.map(n=>`${n.tag} — ${n.text}`);return personal.concat(V15_DEFAULT_NEWS);}
+  function newsHeadlinesV15(){normalizeChannelV15();const personal=channel.news.map(n=>`${n.tag}: ${n.text}`);return personal.concat(V15_DEFAULT_NEWS);}
   function updateNewsTickerV15(){const el=$('newsTickerText');if(!el)return;const items=newsHeadlinesV15();const idx=Math.abs((channel.streams||0)+(Date.now?Math.floor(Date.now()/7000):0))%items.length;el.textContent=items[idx]||V15_DEFAULT_NEWS[0];}
   let v15TickerTimer=setInterval(()=>{if(document.body.classList.contains('news-active'))updateNewsTickerV15();},7000);
 
@@ -4776,9 +4793,9 @@ Genres: ${lines}`;
   }
   function renderRankingV15(){
     normalizeChannelV15();const panel=$('hubPanel'),rank=streamerRankV15(),prev=channel.previousRank||channel.lastRank||rank,delta=prev-rank;
-    const movement=delta>0?`↑ ${delta.toLocaleString()}`:delta<0?`↓ ${Math.abs(delta).toLocaleString()}`:'—';
+    const movement=delta>0?`↑ ${delta.toLocaleString()}`:delta<0?`↓ ${Math.abs(delta).toLocaleString()}`:'-';
     const top=V15_TOP_STREAMERS.slice(0,5).map(([r,n,c])=>`<div class="ranking-row"><div class="ranking-rank">${r}</div><div class="ranking-name">${n}</div><div class="ranking-meta">${c}</div></div>`).join('');
-    const news=(channel.news.length?channel.news:[{tag:'ORB NEWS',text:'Your channel is new. Finish streams and set records to start appearing in the news.'}]).slice(0,6).map(n=>`<div class="news-card"><b>${escV14(n.tag)}</b> — ${escV14(n.text)}</div>`).join('');
+    const news=(channel.news.length?channel.news:[{tag:'ORB NEWS',text:'Your channel is new. Finish streams and set records to start appearing in the news.'}]).slice(0,6).map(n=>`<div class="news-card"><b>${escV14(n.tag)}</b>: ${escV14(n.text)}</div>`).join('');
     panel.innerHTML=`<h2>Streamer's Ranking</h2><p>Scrying Orb's platform-wide ranking. Popularity is your uncapped channel level; this ranking is your position among roughly ${V15_TOTAL_STREAMERS.toLocaleString()} active streamer profiles.</p><div class="ranking-hero"><div class="slot-card wide"><b>Your Current Position</b><div class="ranking-position">#${rank.toLocaleString()}</div><div class="compact-meta">${movement} since the previous recorded ranking</div></div><div class="slot-card"><b>Popularity</b><div>Lv. ${channel.popularity}</div></div><div class="slot-card"><b>Last Avg CCV</b><div>${channel.lastAverageCCV||0}</div></div><div class="slot-card"><b>Last Peak CCV</b><div>${channel.lastPeakCCV||0}</div></div></div><h3>Around You</h3><div class="ranking-list">${nearbyRankingHtmlV15(rank)}</div><h3>Top Streamers</h3><div class="ranking-list">${top}</div><h3>Recent Orb News</h3><div class="news-feed">${news}</div>`;
   }
 
@@ -4904,7 +4921,7 @@ Genres: ${lines}`;
   const RESET_CONFIRM_COPY_V16=[
     ['Are you sure?','Resetting deletes your current character, guild progress, equipment, money, channel progress, and saved settings for this prototype.','Yes, reset'],
     ["Are you sure you're sure?",'This is the second confirmation. Cancel still keeps everything exactly as it is.','I am sure'],
-    ['Okay, last one — are you SUPER sure?','This is the last warning. The next button really does reset the save.','SUPER sure']
+    ['Okay, last one: are you SUPER sure?','This is the last warning. The next button really does reset the save.','SUPER sure']
   ];
   function renderResetConfirmV16(){const [title,text,label]=RESET_CONFIRM_COPY_V16[resetConfirmStepV16];$('resetConfirmTitle').textContent=title;$('resetConfirmText').textContent=text;$('resetConfirmNext').textContent=label;}
   function openResetProgressV16(){resetConfirmStepV16=0;renderResetConfirmV16();$('settingsPopup').classList.remove('show');$('resetConfirmOverlay').classList.add('show');}
@@ -4925,13 +4942,13 @@ Genres: ${lines}`;
   function applyBroadcastChromeV16(){
     $('storyScreen').classList.add('broadcast-mode');
     $('vnKicker').textContent='Bluebell Media Network · Orb Dungeon Weekly';
-    $('vnLocation').textContent='Scrying Orb — Bluebell Dungeon Desk';
+    $('vnLocation').textContent='Scrying Orb: Bluebell Dungeon Desk';
     $('vnBalance').innerHTML='LIVE ON <b>SCRYING ORB<sup>TM</sup></b>';
   }
   function restoreStoryChromeV16(){
     $('storyScreen').classList.remove('broadcast-mode');
     $('vnKicker').textContent="Day 1 · Explorer's Guild Registration";
-    $('vnLocation').textContent="Explorer's Guild — Registration Hall";
+    $('vnLocation').textContent="Explorer's Guild: Registration Hall";
     $('vnBalance').innerHTML='Savings <b id="vnMoney">'+Number(profile.money||0).toLocaleString()+'</b> money';
   }
   function bluebellTopBoardV16(){return V15_TOP_STREAMERS.slice(0,5).map(([r,n,c])=>`<div class="broadcast-rank-row"><span class="rank">${r}</span><b>${escV14(n)}</b><span class="category">${escV14(c)}</span></div>`).join('');}
@@ -5011,32 +5028,32 @@ Genres: ${lines}`;
     brasssaint:{id:'brasssaint',name:'Brass Saint Arsenal',sector:'Weapons & ritual-compatible arms',reward:180,description:'Complete the dungeon with an Iron Sword equipped.',success:'weapon',required:'iron_sword',minScale:.55,adLine:'Brass Saint Arsenal. Built for the jobs that bite back.',creatives:[
       {id:'brass_static',type:'static',text:'BRASS SAINT ARSENAL · FIELD TEST'},
       {id:'brass_image',type:'image',title:'BRASS SAINT',sub:'RITUAL-COMPATIBLE ARMS'},
-      {id:'brass_run',type:'running',text:'BRASS SAINT ARSENAL — tested where the monsters are.'}
+      {id:'brass_run',type:'running',text:'BRASS SAINT ARSENAL: tested where the monsters are.'}
     ]},
     marrowlight:{id:'marrowlight',name:'Marrowlight Therapeutics',sector:'Medical supplies & recovery',reward:150,description:'Use at least one potion and complete the dungeon.',success:'potion',minScale:.55,adLine:'Marrowlight Therapeutics. Recovery is part of the expedition.',creatives:[
       {id:'marrow_static',type:'static',text:'MARROWLIGHT · STAY IN THE FIGHT'},
       {id:'marrow_image',type:'image',title:'MARROWLIGHT',sub:'FIELD RECOVERY SYSTEMS'},
-      {id:'marrow_run',type:'running',text:'MARROWLIGHT THERAPEUTICS — field recovery for adventurers and operators.'}
+      {id:'marrow_run',type:'running',text:'MARROWLIGHT THERAPEUTICS: field recovery for adventurers and operators.'}
     ]},
     manatek:{id:'manatek',name:'Manatek Atelier',sector:'Mana engineering & ritual systems',reward:195,description:'Use Arc Bolt or Mana Burst at least 4 times and complete the dungeon.',success:'magic',count:4,minScale:.55,adLine:'Manatek Atelier. Precision mana engineering, even underground.',creatives:[
       {id:'manatek_static',type:'static',text:'POWERED BY MANATEK ATELIER'},
       {id:'manatek_image',type:'image',title:'MANATEK',sub:'PRECISION MANA ENGINEERING'},
-      {id:'manatek_run',type:'running',text:'MANATEK ATELIER — precision spell-conduction systems for serious operators.'}
+      {id:'manatek_run',type:'running',text:'MANATEK ATELIER: precision spell-conduction systems for serious operators.'}
     ]},
     halcyon:{id:'halcyon',name:'Halcyon Coreworks',sector:'Mana-stone refinement & cores',reward:210,description:'Recover at least 5 Magic Crystals and complete the dungeon.',success:'crystals',count:5,minScale:.55,adLine:'Halcyon Coreworks. Better cores, better output.',creatives:[
       {id:'halcyon_static',type:'static',text:'HALCYON COREWORKS · STABILIZED POWER'},
       {id:'halcyon_image',type:'image',title:'HALCYON',sub:'STABILIZED CORES · REFINED POWER'},
-      {id:'halcyon_run',type:'running',text:'HALCYON COREWORKS — refined cores for workshops, casters, and field equipment.'}
+      {id:'halcyon_run',type:'running',text:'HALCYON COREWORKS: refined cores for workshops, casters, and field equipment.'}
     ]},
     nemea:{id:'nemea',name:'Nemea Tactical Robotics',sector:'Drones, sensors & field systems',reward:185,description:'Analyze at least 2 different enemies and complete the dungeon.',success:'analyze',count:2,minScale:.55,adLine:'Nemea Tactical Robotics. See the field before the field sees you.',creatives:[
       {id:'nemea_static',type:'static',text:'NEMEA FIELD INTELLIGENCE'},
       {id:'nemea_image',type:'image',title:'NEMEA',sub:'TACTICAL ROBOTICS · FIELD SENSORS'},
-      {id:'nemea_run',type:'running',text:'NEMEA TACTICAL ROBOTICS — sensors, deployables, and autonomous field support.'}
+      {id:'nemea_run',type:'running',text:'NEMEA TACTICAL ROBOTICS: sensors, deployables, and autonomous field support.'}
     ]},
     bluebell:{id:'bluebell',name:'Bluebell Media Network',sector:'Media & entertainment',reward:165,description:'Read the Bluebell promo at a Rest Zone and complete the dungeon.',success:'adread',minScale:.55,adLine:'This run is also brought to you by Bluebell Media Network. Orb Dungeon Weekly, every week.',creatives:[
       {id:'bluebell_static',type:'static',text:'BLUEBELL MEDIA NETWORK · ORB DUNGEON WEEKLY'},
       {id:'bluebell_image',type:'image',title:'BLUEBELL',sub:'ORB DUNGEON WEEKLY'},
-      {id:'bluebell_run',type:'running',text:'BLUEBELL MEDIA NETWORK — Orb Dungeon Weekly: rankings, records, and dungeon news.'}
+      {id:'bluebell_run',type:'running',text:'BLUEBELL MEDIA NETWORK: Orb Dungeon Weekly: rankings, records, and dungeon news.'}
     ]},
     boukenshupps:{id:'boukenshupps',name:'BoukenShupps',sector:'Adventurer drink mix & merchandise',reward:145,description:'Keep a BoukenShupps promo visible and complete the dungeon.',success:'complete',minScale:.55,adLine:'BoukenShupps. Adventure fuel, apparently.',creatives:[
       {id:'bouken_code',type:'running',text:'Use code [PlayerName] for 15% off your first BoukenShupps purchase!'},
@@ -5101,7 +5118,7 @@ Genres: ${lines}`;
 
   // Generic sponsored Rest-Zone ad reads. Bluebell currently uses this contract form.
   resolveRest=async function(node){
-    game.player.hp=game.player.maxHp;profile.hp=game.player.hp;updateHp();saveProgress();await wipeSwitch(()=>{showOnlyScreen('combat');$('streamShell').classList.add('resting');$('turnLabel').textContent='REST ZONE';$('roundLabel').textContent='BREAK';$('statusText').textContent='Choose something to talk about while you rest.';updateHp();updateStreamStats();});actionChatStart();const introCount=Math.min(4,Math.max(1,Math.ceil(Math.max(1,game.viewers)/4)));for(let i=0;i<introCount;i++){if(game.viewers>0)addChat(choice(CHAT_REST));await sleep(randInt(180,420));}let topics=shuffle(REST_TOPICS).slice(0,3);const sid=game.sponsorId||channel.activeSponsor,s=v17Sponsor(sid);if(s?.success==='adread'&&!game.sponsorProgress.adRead)topics[0]='Read sponsor line';$('nodeOverlayTitle').textContent='Rest Zone — Chat with Viewers';$('nodeOverlayText').innerHTML=`<div>HP restored to full. Pick a topic:</div><div class="rest-topic-grid">${topics.map(x=>`<button class="rest-topic-btn" data-rest-topic="${x}">${x}</button>`).join('')}</div>`;$('nodeContinue').style.display='none';$('nodeOverlay').classList.add('show');$('nodeOverlayText').querySelectorAll('[data-rest-topic]').forEach(b=>b.onclick=()=>resolveRestTopic(node,b.dataset.restTopic));
+    game.player.hp=game.player.maxHp;profile.hp=game.player.hp;updateHp();saveProgress();await wipeSwitch(()=>{showOnlyScreen('combat');$('streamShell').classList.add('resting');$('turnLabel').textContent='REST ZONE';$('roundLabel').textContent='BREAK';$('statusText').textContent='Choose something to talk about while you rest.';updateHp();updateStreamStats();});actionChatStart();const introCount=Math.min(4,Math.max(1,Math.ceil(Math.max(1,game.viewers)/4)));for(let i=0;i<introCount;i++){if(game.viewers>0)addChat(choice(CHAT_REST));await sleep(randInt(180,420));}let topics=shuffle(REST_TOPICS).slice(0,3);const sid=game.sponsorId||channel.activeSponsor,s=v17Sponsor(sid);if(s?.success==='adread'&&!game.sponsorProgress.adRead)topics[0]='Read sponsor line';$('nodeOverlayTitle').textContent='Rest Zone: Chat with Viewers';$('nodeOverlayText').innerHTML=`<div>HP restored to full. Pick a topic:</div><div class="rest-topic-grid">${topics.map(x=>`<button class="rest-topic-btn" data-rest-topic="${x}">${x}</button>`).join('')}</div>`;$('nodeContinue').style.display='none';$('nodeOverlay').classList.add('show');$('nodeOverlayText').querySelectorAll('[data-rest-topic]').forEach(b=>b.onclick=()=>resolveRestTopic(node,b.dataset.restTopic));
   };
   resolveRestTopic=async function(node,topic){
     const sid=game.sponsorId||channel.activeSponsor,s=v17Sponsor(sid);if(topic==='Read sponsor line'&&s){game.sponsorProgress.adRead=true;showSpeech(s.adLine,2300);}else showSpeech(choice([`So, ${topic.toLowerCase()}...`,'Chat, I have a question.','Okay, story time.']),1700);const positive=Math.random()<.5,before=game.viewers;let viewerDelta=0,engDelta=0,satDelta=0;if(positive){const pct=randInt(10,30)/100;viewerDelta=Math.max(1,Math.round(Math.max(1,game.viewers)*pct));assignArrivals(viewerDelta);engDelta=randInt(1,5);satDelta=randInt(2,5);addEngagement(engDelta);game.satisfactionBonus+=satDelta;addPopularityProgress(randInt(5,16)/100);}else{const pct=randInt(8,25)/100;viewerDelta=game.viewers>0?-Math.max(1,Math.round(game.viewers*pct)):0;removeViewers(Math.abs(viewerDelta));engDelta=Math.random()<.45?randInt(1,5):-randInt(0,2);addEngagement(engDelta);satDelta=-randInt(1,5);game.satisfactionPenalty+=Math.abs(satDelta);}if(positive)updateStreamStats();const delta=game.viewers-before;showViewerDelta(delta);showViewerImpact(delta);const flavor=positive?choice(REST_POSITIVE):choice(REST_NEGATIVE);$('nodeOverlayTitle').textContent=positive?'Topic Lands':'Topic Fumbles';$('nodeOverlayText').innerHTML=`<div class="${positive?'outcome-positive':'outcome-negative'}"><b>${topic}</b></div><p>${flavor}</p><p><b>${viewerDelta>=0?'+':''}${viewerDelta} CCV</b> · ${engDelta>=0?'+':''}${engDelta} Engagement · ${satDelta>=0?'+':''}${satDelta} Satisfaction</p>`;if(game.viewers>0)burstChat(positive?['wait this is good','lol','keep going','okay chat','real','W topic']:['anyway','bro','what','why are we talking about this','zzz','move on'],Math.min(3,game.viewers),null,130,{special:true});advanceMapNode(node);saveProgress();$('nodeContinue').style.display='inline-block';$('nodeContinue').textContent='Continue';nodeContinueAction=async()=>{$('nodeOverlay').classList.remove('show');$('streamShell').classList.remove('resting');actionChatEnd();await wipeSwitch(()=>showOnlyScreen('dungeon'));renderDungeonMap();};
@@ -5124,7 +5141,7 @@ Genres: ${lines}`;
   function sponsorOfferHtmlV17(){
     normalizeSponsorsV17();const active=v17Sponsor(channel.activeSponsor);
     if(!channel.unlocks?.sponsors)return '<p class="compact-meta">Reach the sponsorship unlock requirement to receive brand offers and unlock overlay customization.</p>';
-    if(active)return `<div class="sponsor-offer"><div class="sponsor-brand">Active Contract — ${escV14(active.name)}</div><div class="sponsor-sector">${escV14(active.sector)}</div><div class="sponsor-condition">${escV14(active.description)}<br>Overlay requirement: keep at least one ${escV14(active.name)} creative visible at <b>${Math.round(active.minScale*100)}% scale or larger</b>.</div><div class="sponsor-reward">Payout: ${active.reward} money</div><div class="sponsor-active-actions"><button data-overlay-shortcut>Customize Overlay</button><button data-cancel-sponsor>Cancel Contract</button></div></div>`;
+    if(active)return `<div class="sponsor-offer"><div class="sponsor-brand">Active Contract: ${escV14(active.name)}</div><div class="sponsor-sector">${escV14(active.sector)}</div><div class="sponsor-condition">${escV14(active.description)}<br>Overlay requirement: keep at least one ${escV14(active.name)} creative visible at <b>${Math.round(active.minScale*100)}% scale or larger</b>.</div><div class="sponsor-reward">Payout: ${active.reward} money</div><div class="sponsor-active-actions"><button data-overlay-shortcut>Customize Overlay</button><button data-cancel-sponsor>Cancel Contract</button></div></div>`;
     return `<div class="sponsor-offer-grid">${Object.values(V17_SPONSORS).map(s=>`<div class="sponsor-offer"><div class="sponsor-brand">${escV14(s.name)}</div><div class="sponsor-sector">${escV14(s.sector)}</div><div class="sponsor-condition">${escV14(s.description)}<br>Requires one sponsor creative at ${Math.round(s.minScale*100)}%+ scale.</div><div class="sponsor-reward">${s.reward} money</div><button data-v17-sponsor="${s.id}">Accept Contract</button></div>`).join('')}</div>`;
   }
   function bindSponsorPanelV17(panel){
@@ -5207,7 +5224,7 @@ Genres: ${lines}`;
   function tickerStepV17(now){const dt=Math.min(.1,Math.max(0,(now-v17TickerLastTime)/1000));v17TickerLastTime=now;const speed=78;for(const item of v17TickerItems){item.x-=speed*dt;item.el.style.transform=`translateX(${item.x}px)`;}for(const item of v17TickerItems.filter(x=>x.x+x.width<0))item.el.remove();v17TickerItems=v17TickerItems.filter(x=>x.x+x.width>=0);if(document.body.classList.contains('news-active')&&v17TickerPending.length){enqueueTickerV17(v17TickerPending.shift());}requestAnimationFrame(tickerStepV17);}
   setupTickerV17();requestAnimationFrame(tickerStepV17);
   const _v16AddNewsV17=addNewsV15;
-  addNewsV15=function(tag,text){v17PendingHeadline=`${String(tag||'NEWS')} — ${String(text||'')}`;return _v16AddNewsV17(tag,text);};
+  addNewsV15=function(tag,text){v17PendingHeadline=`${String(tag||'NEWS')}: ${String(text||'')}`;return _v16AddNewsV17(tag,text);};
   updateNewsTickerV15=function(){
     let text=v17PendingHeadline;v17PendingHeadline=null;if(!text){const items=newsHeadlinesV15();text=items[v17TickerCursor++%Math.max(1,items.length)]||V15_DEFAULT_NEWS[0];}
     if(!document.body.classList.contains('news-active')){v17TickerPending.push(text);return;}enqueueTickerV17(text);
@@ -5756,7 +5773,7 @@ Genres: ${lines}`;
       saw:'Alternate A/D or Left/Right toward a random target from 6–18, then Lock In with Space/Enter. Overshooting halves the roll.',
       balance:'Use A/D or Left/Right to keep the needle centered. Instability accelerates the farther it escapes.'
     };
-    return runSkillCheck(move.skillCheck,`${move.name} — ${label}`,instructions[move.skillCheck]||'Earn a roll from 1–20.');
+    return runSkillCheck(move.skillCheck,`${move.name}: ${label}`,instructions[move.skillCheck]||'Earn a roll from 1–20.');
   };
 
   runDefenseSkillCheck=function(enemyMove){
@@ -5920,25 +5937,25 @@ Genres: ${lines}`;
   for(const id of ['field_spear','steel_longsword','duelist_rapier','battle_staff'])if(!WEAPON_SHOP_IDS.includes(id))WEAPON_SHOP_IDS.push(id);
 
   const V19_ASSIGNMENT_STAGES=[
-    {name:'Field Samples — Beginner Cave',dungeon:'Beginner Cave',requirements:[
+    {name:'Field Samples: Beginner Cave',dungeon:'Beginner Cave',requirements:[
       {id:v19MaterialId('Wolf Fang'),qty:1,monster:'Cave Wolf',dungeon:'Beginner Cave'},
       {id:v19MaterialId('Imp Horn'),qty:1,monster:'Ash Imp',dungeon:'Beginner Cave'},
       {id:v19MaterialId('Stone Slime Gel'),qty:1,monster:'Stone Slime',dungeon:'Beginner Cave'}
-    ],catalog:1,reward:'Field Catalogue I — Fur and Leather equipment.'},
-    {name:'Comparative Survey — Mossy Grotto',dungeon:'Mossy Grotto',requirements:[
+    ],catalog:1,reward:'Field Catalogue I: Fur and Leather equipment.'},
+    {name:'Comparative Survey: Mossy Grotto',dungeon:'Mossy Grotto',requirements:[
       {id:v19MaterialId('Spore Sac'),qty:1,monster:'Sporeling',dungeon:'Mossy Grotto'},
       {id:v19MaterialId('Beetle Carapace'),qty:1,monster:'Thorn Beetle',dungeon:'Mossy Grotto'},
       {id:v19MaterialId('Glow Dust'),qty:1,monster:'Glow Moth',dungeon:'Mossy Grotto'}
-    ],catalog:2,reward:'Field Catalogue II — Studded Leather, improved weapons, and Hi-Potions.'},
+    ],catalog:2,reward:'Field Catalogue II: Studded Leather, improved weapons, and Hi-Potions.'},
     {name:'Elite Specimen',requireClear:false,requirements:[
       {id:v19MaterialId('Ironhide Fang'),qty:1,monster:'Ironhide Wolf',dungeon:'Beginner Cave'}
-    ],catalog:3,reward:'Field Catalogue III — Chainmail and runic equipment.'},
-    {name:'Advanced Field Survey — Flooded Cavern',dungeon:'Flooded Cavern',requirements:[
+    ],catalog:3,reward:'Field Catalogue III: Chainmail and runic equipment.'},
+    {name:'Advanced Field Survey: Flooded Cavern',dungeon:'Flooded Cavern',requirements:[
       {id:v19MaterialId('Mire Toad Skin'),qty:1,monster:'Mire Toad',dungeon:'Flooded Cavern'},
       {id:v19MaterialId('Serpent Scale'),qty:1,monster:'River Serpent',dungeon:'Flooded Cavern'},
       {id:v19MaterialId('Bubble Slime Gel'),qty:1,monster:'Bubble Slime',dungeon:'Flooded Cavern'},
       {id:v19MaterialId('Flooded Keystone'),qty:1,monster:'Flooded Dungeon Master',dungeon:'Flooded Cavern'}
-    ],catalog:4,reward:'Field Catalogue IV — Iron/Steel plate, advanced weapons, and Full Potions.'}
+    ],catalog:4,reward:'Field Catalogue IV: Iron/Steel plate, advanced weapons, and Full Potions.'}
   ];
 
   function normalizeV19Profile(){
@@ -5976,9 +5993,9 @@ Genres: ${lines}`;
   function v19StatRemaining(){return V19_FREE_POINTS-STAT_NAMES.reduce((s,k)=>s+(profile.abilityAllocation?.[k]||0),0);}
   function v19ApplyAbilityStats(){profile.baseStats=Object.fromEntries(STAT_NAMES.map(k=>[k,V19_BASE_STAT+(profile.abilityAllocation?.[k]||0)]));normalizeProfileHp();}
   function v19Portraits(){const l=$('vnPortraitLeft'),r=$('vnPortraitRight');if(l)l.dataset.character='POTE';if(r)r.dataset.character='PLAYER';}
-  function v19SetGuildChrome(kicker='Explorer\'s Guild Services',location='Explorer\'s Guild — Service Desk'){$('vnKicker').textContent=kicker;$('vnLocation').textContent=location;const visual=document.querySelector('.vn-visual');if(visual)visual.dataset.locationTitle=location.toUpperCase();v19Portraits();}
+  function v19SetGuildChrome(kicker='Explorer\'s Guild Services',location='Explorer\'s Guild: Service Desk'){$('vnKicker').textContent=kicker;$('vnLocation').textContent=location;const visual=document.querySelector('.vn-visual');if(visual)visual.dataset.locationTitle=location.toUpperCase();v19Portraits();}
   renderRegistrationV14=function(){
-    normalizeV19Profile();showOnlyScreen('story');$('settingsPopup').classList.remove('show');v19SetGuildChrome('Day 1 · Explorer\'s Guild Registration','Explorer\'s Guild — Registration Hall');
+    normalizeV19Profile();showOnlyScreen('story');$('settingsPopup').classList.remove('show');v19SetGuildChrome('Day 1 · Explorer\'s Guild Registration','Explorer\'s Guild: Registration Hall');
     const o=profile.onboarding;const step=Number(o.registrationStep)||0;
     if(step===0){setVnV14('Pote','"Registration desk. I\'m <b>Pote</b>, the receptionist assigned to your Explorer file. If you need guild services later, you\'ll be dealing with me."');vnButtonV14('Begin Registration',()=>{o.registrationStep=1;saveProgress();renderRegistrationV14();});}
     else if(step===1){setVnV14('Pote','"First, I need the name you want on your guild license and Scrying Orb channel."',{focus:'right'});const input=document.createElement('input');input.className='vn-input';input.id='vnNameInput';input.maxLength=24;input.placeholder='Enter adventurer name';input.value=profile.playerName||'';$('vnActions').appendChild(input);vnButtonV14('Confirm Name',()=>{const name=input.value.trim();if(!name){input.focus();return;}profile.playerName=name;o.registrationStep=2;saveProgress();renderRegistrationV14();});setTimeout(()=>input.focus(),0);}
@@ -5994,7 +6011,7 @@ Genres: ${lines}`;
     else if(step===3){setVnV14('Pote',`"All right, <b>${escV14(profile.playerName)}</b>. The guild registration package is <b>9,900 money</b>. That covers your Explorer license, starter equipment, a guild-standard Personal Terminal and PT Core registration."`,{centerHtml:`<b>Registration Package</b><div class="vn-receipt"><span>Starting savings</span><b>10,000</b><span>Explorer registration package</span><b>−9,900</b><span class="total">Remaining after registration</span><b class="total">100</b></div>`});vnButtonV14('Continue',()=>{o.registrationStep=4;saveProgress();renderRegistrationV14();});}
     else if(step===4){setVnV14('Pote','"Pick your starter set. It does not lock you into a class; your ability form and future equipment are completely independent."',{focus:'right'});const grid=document.createElement('div');grid.className='starter-kit-grid';for(const [id,kit] of Object.entries(V14_STARTER_KITS)){const card=document.createElement('button');card.className='starter-kit'+(o.starterKit===id?' selected':'');card.innerHTML=`<b>${escV14(kit.name)}</b><small>${escV14(kit.summary)}<br>${kit.items.map(x=>ITEM_DEFS[x].name).join(' · ')}</small>`;card.onclick=()=>{o.starterKit=id;saveProgress();renderRegistrationV14();};grid.appendChild(card);}$('vnText').appendChild(grid);vnButtonV14('Confirm Starter Set',()=>{if(!o.starterKit)return;o.registrationStep=5;saveProgress();renderRegistrationV14();});}
     else if(step===5){const kit=V14_STARTER_KITS[o.starterKit]||V14_STARTER_KITS.vanguard;setVnV14('Pote',`"Everything checks out. <b>${escV14(kit.name)}</b>, guild license, PT, PT Core. Once I process this, your balance goes from <b>10,000</b> to <b>100 money</b>."`,{centerHtml:`<b>Final Registration Receipt</b><div class="vn-receipt"><span>Explorer's Guild license & services</span><b>Included</b><span>${escV14(kit.name)}</span><b>Included</b><span>Guild Standard Slate PT + PT Core</span><b>Included</b><span class="total">Package total</span><b class="total">9,900</b></div><div class="vn-money-drop">10,000 → 100</div>`});vnButtonV14('Pay 9,900 & Register',()=>{completeRegistrationPaymentV14();normalizeV19Profile();profile.guilds.explorer.catalogLevel=0;o.registrationStep=6;saveProgress();renderRegistrationV14();});}
-    else if(step===6){setVnV14('Pote','"This is your PT. It talks over the <b>Resonance Communication Network</b>—RCN officially, <b>ResoNet</b> to everyone else. The PT is just one convenient endpoint."',{centerHtml:'<b>Guild Standard Slate PT</b><p class="compact-meta">PT Core registered · RCN / ResoNet access active</p>'});vnButtonV14('Continue',()=>{o.registrationStep=7;saveProgress();renderRegistrationV14();});}
+    else if(step===6){setVnV14('Pote','"This is your PT. It talks over the <b>Resonance Communication Network</b>. The official abbreviation is <b>RCN</b>, while most people call it <b>ResoNet</b>. The PT is just one convenient endpoint."',{centerHtml:'<b>Guild Standard Slate PT</b><p class="compact-meta">PT Core registered · RCN / ResoNet access active</p>'});vnButtonV14('Continue',()=>{o.registrationStep=7;saveProgress();renderRegistrationV14();});}
     else if(step===7){setVnV14('Pote','"I also initialized your <span class="scrying-brand">Scrying Orb</span> channel. Exploration footage is useful, people like watching adventurers work, and a successful channel can become a second source of income."');vnButtonV14('Continue',()=>{o.registrationStep=8;saveProgress();renderRegistrationV14();});}
     else{setVnV14('Pote',`"Registration complete, <b>${escV14(profile.playerName)}</b>. You have <b>100 money</b> left. Start with the Training Dojo; I\'ve marked it as your first orientation assignment."`,{centerHtml:'<b>EXPLORER\'S GUILD REGISTRATION COMPLETE</b><p class="compact-meta">License active · ability record filed · PT registered · Scrying Orb channel created</p>'});vnButtonV14('Enter Hub',()=>{o.completed=true;profile.guilds.explorer.tutorialStep=1;normalizeV19Profile();saveProgress();refreshHubButtonsV14();syncPlayerIdentityV14();showOnlyScreen('hub');renderHubPanel('guild');});}
   };
@@ -6019,7 +6036,7 @@ Genres: ${lines}`;
   // Guild main assignment utilities. v19.1 uses exact named samples so the player always knows what to hunt.
   function v191MaterialRequirementLabel(req){
     const d=V19_MATERIAL_DEFS[req.id],name=d?.name||req.id,qty=Math.max(1,req.qty||1);
-    return `${qty} × ${name} — dropped by ${req.monster} in ${req.dungeon}`;
+    return `${qty} × ${name}: dropped by ${req.monster} in ${req.dungeon}`;
   }
   function v191MaterialRequirementHtml(req,showState=true){
     const d=V19_MATERIAL_DEFS[req.id],name=d?.name||req.id,qty=Math.max(1,req.qty||1),owned=profile.inventory.materials?.[req.id]||0,ok=owned>=qty;
@@ -6047,7 +6064,7 @@ Genres: ${lines}`;
 
   function v19LeaveGuild(){lastHubPanel='guild';$('vnActions').classList.remove('v19-service-actions');showOnlyScreen('hub');renderHubPanel('guild');}
   function v19GuildAction(label,fn,wide=false){const b=vnButtonV14(label,fn);if(wide)b.classList.add('wide');return b;}
-  function v19Pote(text,centerHtml='',focus='left'){showOnlyScreen('story');v19SetGuildChrome('Explorer\'s Guild Services',"Explorer's Guild — Pote's Service Desk");setVnV14('Pote',text,{focus,centerHtml,location:"Explorer's Guild — Pote's Service Desk"});$('vnActions').classList.add('v19-service-actions');}
+  function v19Pote(text,centerHtml='',focus='left'){showOnlyScreen('story');v19SetGuildChrome('Explorer\'s Guild Services',"Explorer's Guild: Pote's Service Desk");setVnV14('Pote',text,{focus,centerHtml,location:"Explorer's Guild: Pote's Service Desk"});$('vnActions').classList.add('v19-service-actions');}
   function v19GoHubService(kind){$('vnActions').classList.remove('v19-service-actions');showOnlyScreen('hub');renderHubPanel(kind);}
 
   function openGuildV19(){
@@ -6079,7 +6096,7 @@ Genres: ${lines}`;
     v19GuildAction('Back to Guild Services',openGuildV19,true);
   }
   function v19RenderMainAssignment(){
-    const st=v19AssignmentStatus();if(st.complete){v19Pote('"The <b>Local Dungeon Survey</b> is complete. Your field certification is current, and the full Explorer supplier catalogue is authorized for your file."','<b>LOCAL DUNGEON SURVEY — COMPLETE</b><p class="compact-meta">Field Catalogue IV active · all current shop tiers authorized</p>');v19GuildAction('Back to Guild Services',openGuildV19,true);return;}
+    const st=v19AssignmentStatus();if(st.complete){v19Pote('"The <b>Local Dungeon Survey</b> is complete. Your field certification is current, and the full Explorer supplier catalogue is authorized for your file."','<b>LOCAL DUNGEON SURVEY: COMPLETE</b><p class="compact-meta">Field Catalogue IV active · all current shop tiers authorized</p>');v19GuildAction('Back to Guild Services',openGuildV19,true);return;}
     const s=st.stage,checks=st.checks.map(([label,ok,req])=>req?v191MaterialRequirementHtml(req,true):`<div class="v191-requirement ${ok?'done':''}"><span class="mark">${ok?'✓':'·'}</span><span><b>${escV14(label)}</b></span></div>`).join('');
     v19Pote(`"Your Explorer main assignment is one continuing survey: <b>Local Dungeon Survey</b>. Right now I need the exact samples listed in the field report."`,`<div class="mission-kicker">Local Dungeon Survey · Stage ${st.idx+1}/${V19_ASSIGNMENT_STAGES.length}</div><h3>${escV14(s.name)}</h3><div class="v191-requirements">${checks}</div><p class="compact-meta"><b>Reward:</b> ${escV14(s.reward)}<br>Submitting a stage consumes exactly the listed material samples.</p>`);
     const b=v19GuildAction(st.ready?'Submit Report & Samples':'Requirements Not Met',()=>{if(!v19CompleteAssignmentStage())return;const finished=explorerStateV14().mainAssignmentComplete;v19Pote(finished?'"That completes the Local Dungeon Survey. Nice work. I\'ve authorized the full supplier catalogue on your file."':`"Report accepted. I\'ve authorized <b>${escV14(V19_CATALOG_NAMES[explorerStateV14().catalogLevel])}</b>. The next survey stage is ready whenever you are."`,`<b>${escV14(s.reward)}</b><p class="compact-meta">Explorer Reputation +15</p>`);v19GuildAction('Continue',v19RenderMainAssignment,true);});b.disabled=!st.ready;
@@ -6173,14 +6190,14 @@ Genres: ${lines}`;
   function v19FinishRest(node){advanceMapNode(node);saveProgress();$('nodeContinue').style.display='inline-block';$('nodeContinue').textContent='Continue';nodeContinueAction=async()=>{$('nodeOverlay').classList.remove('show');$('streamShell').classList.remove('resting');actionChatEnd();await wipeSwitch(()=>showOnlyScreen('dungeon'));renderDungeonMap();};}
   function v19SponsorReadButtonHtml(){const sid=game.sponsorId||channel.activeSponsor,s=v17Sponsor?.(sid);return s?.success==='adread'&&!game.sponsorProgress.adRead?`<button class="v19-rest-choice" id="v19SponsorRead"><b>Read Sponsor Message</b><span class="v19-rest-effect">Required for ${escV14(s.name)} contract · does not consume this Rest Zone segment</span></button>`:'';}
   function v19BindSponsorRead(rerender){const b=$('v19SponsorRead');if(!b)return;b.onclick=()=>{const sid=game.sponsorId||channel.activeSponsor,s=v17Sponsor(sid);if(!s)return;game.sponsorProgress.adRead=true;showSpeech(s.adLine,1800);saveProgress();rerender();};}
-  function v19RenderJustChat(node){const topics=shuffle(V19_JUST_CHAT).slice(0,3);$('nodeOverlayTitle').textContent='Rest Zone — Just Chatting';$('nodeOverlayText').innerHTML=`<div>HP restored to full. Pick a topic; the effects are shown before you commit.</div>${v19SponsorReadButtonHtml()}<div class="v19-rest-options">${topics.map((t,i)=>`<button class="v19-rest-choice" data-v19-topic="${i}"><b>${escV14(t.label)}</b><span class="v19-rest-effect">${escV14(v19EffectText(t.effect))}</span></button>`).join('')}</div>`;v19BindSponsorRead(()=>v19RenderJustChat(node));$('nodeOverlayText').querySelectorAll('[data-v19-topic]').forEach(b=>b.onclick=()=>{const t=topics[Number(b.dataset.v19Topic)];v19ApplyRestEffect(t.effect);showSpeech(`So, ${t.label.toLowerCase()}...`,1400);$('nodeOverlayTitle').textContent='Just Chatting';$('nodeOverlayText').innerHTML=`<div class="outcome-positive"><b>${escV14(t.label)}</b></div><p>${escV14(t.text)}</p><p>${escV14(v19EffectText(t.effect))}</p>`;v19FinishRest(node);});}
+  function v19RenderJustChat(node){const topics=shuffle(V19_JUST_CHAT).slice(0,3);$('nodeOverlayTitle').textContent='Rest Zone: Just Chatting';$('nodeOverlayText').innerHTML=`<div>HP restored to full. Pick a topic; the effects are shown before you commit.</div>${v19SponsorReadButtonHtml()}<div class="v19-rest-options">${topics.map((t,i)=>`<button class="v19-rest-choice" data-v19-topic="${i}"><b>${escV14(t.label)}</b><span class="v19-rest-effect">${escV14(v19EffectText(t.effect))}</span></button>`).join('')}</div>`;v19BindSponsorRead(()=>v19RenderJustChat(node));$('nodeOverlayText').querySelectorAll('[data-v19-topic]').forEach(b=>b.onclick=()=>{const t=topics[Number(b.dataset.v19Topic)];v19ApplyRestEffect(t.effect);showSpeech(`So, ${t.label.toLowerCase()}...`,1400);$('nodeOverlayTitle').textContent='Just Chatting';$('nodeOverlayText').innerHTML=`<div class="outcome-positive"><b>${escV14(t.label)}</b></div><p>${escV14(t.text)}</p><p>${escV14(v19EffectText(t.effect))}</p>`;v19FinishRest(node);});}
   function v19RenderDonationSequence(node){
     const library=shuffle(v19DonationLibrary()),total=randInt(4,5);let index=0,current=null;
     const renderCurrent=()=>{
-      if(index>=total){$('nodeOverlayTitle').textContent='Donation Messages — Segment Complete';$('nodeOverlayText').innerHTML='<p>You finish the stack of paid viewer messages and get ready to move on.</p>';v19FinishRest(node);return;}
+      if(index>=total){$('nodeOverlayTitle').textContent='Donation Messages: Segment Complete';$('nodeOverlayText').innerHTML='<p>You finish the stack of paid viewer messages and get ready to move on.</p>';v19FinishRest(node);return;}
       if(!current){current={entry:library[index%library.length],chatter:v19DonationChatter(),amount:v19DonationAmount()};v19RecordDonation(current.amount);}
       const {entry,chatter,amount}=current;
-      $('nodeOverlayTitle').textContent=`Donation Messages — ${index+1}/${total}`;
+      $('nodeOverlayTitle').textContent=`Donation Messages: ${index+1}/${total}`;
       $('nodeOverlayText').innerHTML=`${v19SponsorReadButtonHtml()}<div class="v19-donation-card"><div class="v19-donation-head">${chatter.member?'★ MEMBER · ':''}${escV14(chatter.name)} · ${amount} money</div><div>${escV14(entry.q)}</div></div><div class="v19-rest-options">${entry.answers.map((a,i)=>`<button class="v19-rest-choice" data-v19-answer="${i}"><b>${escV14(a.text)}</b><span class="v19-rest-effect">${escV14(v19EffectText(a.effect))}</span></button>`).join('')}</div>`;
       v19BindSponsorRead(renderCurrent);
       $('nodeOverlayText').querySelectorAll('[data-v19-answer]').forEach(b=>b.onclick=()=>{
@@ -6285,9 +6302,9 @@ Genres: ${lines}`;
   streamerRankV15=function(){const score=rankingFameV15(),rank=Math.round(V15_TOTAL_STREAMERS/(1+Math.pow(Math.max(0,score)/35,4)));return clamp(rank,1,V15_TOTAL_STREAMERS);};
   renderRankingV15=function(){
     normalizeChannelV15();const panel=$('hubPanel'),rank=streamerRankV15(),prev=channel.previousRank||channel.lastRank||rank,delta=prev-rank,m=v191RecentCCVMetrics();
-    const movement=delta>0?`↑ ${delta.toLocaleString()}`:delta<0?`↓ ${Math.abs(delta).toLocaleString()}`:'—';
+    const movement=delta>0?`↑ ${delta.toLocaleString()}`:delta<0?`↓ ${Math.abs(delta).toLocaleString()}`:'-';
     const top=V15_TOP_STREAMERS.slice(0,5).map(([r,n,c])=>`<div class="ranking-row"><div class="ranking-rank">${r}</div><div class="ranking-name">${n}</div><div class="ranking-meta">${c}</div></div>`).join('');
-    const news=(channel.news.length?channel.news:[{tag:'ORB NEWS',text:'Your channel is new. Finish streams and set records to start appearing in the news.'}]).slice(0,6).map(n=>`<div class="news-card"><b>${escV14(n.tag)}</b> — ${escV14(n.text)}</div>`).join('');
+    const news=(channel.news.length?channel.news:[{tag:'ORB NEWS',text:'Your channel is new. Finish streams and set records to start appearing in the news.'}]).slice(0,6).map(n=>`<div class="news-card"><b>${escV14(n.tag)}</b>: ${escV14(n.text)}</div>`).join('');
     panel.innerHTML=`<h2>Streamer's Ranking</h2><p>Scrying Orb's platform-wide ranking among roughly ${V15_TOTAL_STREAMERS.toLocaleString()} active streamer profiles. Popularity is the main ranking signal; your rolling recent viewership provides a secondary boost.</p><div class="ranking-hero"><div class="slot-card wide"><b>Your Current Position</b><div class="ranking-position">#${rank.toLocaleString()}</div><div class="compact-meta">${movement} since the previous recorded ranking</div></div><div class="slot-card"><b>Popularity</b><div>Lv. ${channel.popularity}</div></div><div class="slot-card"><b>Recent Avg CCV</b><div>${Math.round(m.average)}</div><small>${m.count}-stream rolling sample</small></div><div class="slot-card"><b>Recent Peak CCV</b><div>${Math.round(m.peak)}</div><small>${m.count}-stream rolling sample</small></div></div><div class="compact-card" style="margin-top:12px"><b>Ranking metric</b><div class="compact-meta">Popularity + recent Average CCV + recent Peak CCV. Stream count and mastery feat points do not directly add ranking score.</div></div><h3>Around You</h3><div class="ranking-list">${nearbyRankingHtmlV15(rank)}</div><h3>Top Streamers</h3><div class="ranking-list">${top}</div><h3>Recent Orb News</h3><div class="news-feed">${news}</div>`;
   };
 
@@ -6295,12 +6312,12 @@ Genres: ${lines}`;
   function v191AssignmentOverviewHtml(){
     const step=tutorialStepV14();
     if(step<6){const m=V14_TUTORIAL_MISSIONS[step]||V14_TUTORIAL_MISSIONS[6];return `<div class="mission-kicker">Current Orientation</div><h3>${escV14(m.name)}</h3><p>${escV14(m.description)}</p><div class="compact-meta"><b>Progress:</b> ${escV14(guildMissionProgressV14(step))}<br><b>Reward:</b> ${escV14(m.unlock)}</div>`;}
-    const st=v19AssignmentStatus();if(st.complete)return `<div class="mission-kicker">Main Assignment</div><h3>Local Dungeon Survey — Complete</h3><p class="compact-meta">All current field reports are filed. Field Catalogue IV is authorized.</p>`;
+    const st=v19AssignmentStatus();if(st.complete)return `<div class="mission-kicker">Main Assignment</div><h3>Local Dungeon Survey: Complete</h3><p class="compact-meta">All current field reports are filed. Field Catalogue IV is authorized.</p>`;
     const s=st.stage,checks=st.checks.map(([label,ok,req])=>req?v191MaterialRequirementHtml(req,true):`<div class="v191-requirement ${ok?'done':''}"><span class="mark">${ok?'✓':'·'}</span><span><b>${escV14(label)}</b></span></div>`).join('');
     return `<div class="mission-kicker">Main Assignment · Local Dungeon Survey · Stage ${st.idx+1}/${V19_ASSIGNMENT_STAGES.length}</div><h3>${escV14(s.name)}</h3><div class="v191-requirements">${checks}</div><p class="compact-meta"><b>Reward:</b> ${escV14(s.reward)}</p>`;
   }
   function v191RenderGuildDirectory(){
-    reconcileTutorialV14();const g=explorerStateV14(),step=tutorialStepV14(),mission=step<6?(V14_TUTORIAL_MISSIONS[step]||V14_TUTORIAL_MISSIONS[6]):(v19AssignmentStatus().complete?{name:'Local Dungeon Survey — Complete'}:{name:v19AssignmentStatus().stage.name}),panel=$('hubPanel');
+    reconcileTutorialV14();const g=explorerStateV14(),step=tutorialStepV14(),mission=step<6?(V14_TUTORIAL_MISSIONS[step]||V14_TUTORIAL_MISSIONS[6]):(v19AssignmentStatus().complete?{name:'Local Dungeon Survey: Complete'}:{name:v19AssignmentStatus().stage.name}),panel=$('hubPanel');
     lastHubPanel='guild';updateHubHeader();panel.innerHTML=`<h2>Guilds</h2><p>Guild memberships are tracked independently. You can belong to multiple guilds as more organizations are introduced.</p><div class="guild-directory"><div class="guild-card"><div><h3>Explorer's Guild</h3><div class="guild-meta">${escV14(explorerStandingV14())} · Reputation ${g.reputation||0}<br>Current assignment: <b>${escV14(mission.name)}</b></div></div><button class="small-btn" data-guild-open="explorer">Open Guild</button></div><div class="guild-card placeholder"><div><h3>Additional Guilds</h3><div class="guild-meta">No other guild memberships are available in this prototype yet. Future guilds will appear here and provide their own services.</div></div><button class="small-btn" disabled>Not Available</button></div></div>`;
     panel.querySelector('[data-guild-open="explorer"]').onclick=()=>renderHubPanel('guild_explorer');refreshHubButtonsV14();
   }
@@ -6337,7 +6354,7 @@ Genres: ${lines}`;
   }
   const _v19VnButtonV191=vnButtonV14;
   vnButtonV14=function(label,fn,cls=''){const b=_v19VnButtonV191(label,fn,cls);if(v191Typewriter)b.classList.add('v191-pending-action');return b;};
-  setVnV14=function(speaker,text,{focus='left',centerHtml='',location='Explorer\'s Guild — Registration Hall'}={}){
+  setVnV14=function(speaker,text,{focus='left',centerHtml='',location='Explorer\'s Guild: Registration Hall'}={}){
     v191FinishTypewriter();$('vnSpeaker').textContent=speaker;$('vnActions').innerHTML='';$('vnLocation').textContent=location;const vnMoney=$('vnMoney');if(vnMoney)vnMoney.textContent=Number(profile.money||0).toLocaleString();setVnPortraitFocusV14(focus);const c=$('vnCenterCard');c.innerHTML=centerHtml;c.classList.toggle('show',!!centerHtml);v191StartTypewriter($('vnText'),text);
   };
   document.querySelector('.vn-dialogue')?.addEventListener('click',e=>{if(e.target.closest('button,input,textarea,select'))return;if(v191FinishTypewriter()){e.preventDefault();return;}const buttons=[...$('vnActions').querySelectorAll('button')].filter(b=>!b.disabled&&getComputedStyle(b).visibility!=='hidden');if(buttons.length===1)buttons[0].click();});
@@ -6440,7 +6457,7 @@ Genres: ${lines}`;
     const s=Math.max(0,Number(score)||0);return clamp(Math.round(total/(1+Math.pow(s/Math.max(.001,mid),exp))),1,total);
   }
   function v20HighestCleared(){
-    v20NormalizeSpecialist();const idx=channel.specialist.highestRankIndex;return idx>=0?V20_RANK_LABELS[idx]:'—';
+    v20NormalizeSpecialist();const idx=channel.specialist.highestRankIndex;return idx>=0?V20_RANK_LABELS[idx]:'-';
   }
   function v20SpecialistMetrics(){
     normalizeChannelV15();const sp=channel.specialist,m=v191RecentCCVMetrics(),clears=Math.max(totalDungeonClears(),sp.completedRuns||0),highestIdx=Math.max(-1,sp.highestRankIndex);
@@ -6485,7 +6502,7 @@ Genres: ${lines}`;
 
   // Start timing each expedition. The timer measures actual play time from entering the dungeon until completion.
   const V20_INSURANCE_PLANS=[
-    {id:'none',name:'No Insurance',grade:'—',premium:0,coverage:0},
+    {id:'none',name:'No Insurance',grade:'-',premium:0,coverage:0},
     {id:'F',name:'F-Grade Recovery',grade:'F',premium:15,coverage:400},
     {id:'E',name:'E-Grade Recovery',grade:'E',premium:35,coverage:900},
     {id:'D',name:'D-Grade Recovery',grade:'D',premium:80,coverage:2000},
@@ -6635,7 +6652,7 @@ Genres: ${lines}`;
 
   // Use the user's revised Pote copy as the dialogue source of truth.
   renderRegistrationV14=function(){
-    normalizeV19Profile();showOnlyScreen('story');$('settingsPopup').classList.remove('show');v19SetGuildChrome('Day 1 · Explorer\'s Guild Registration','Explorer\'s Guild — Registration Hall');
+    normalizeV19Profile();showOnlyScreen('story');$('settingsPopup').classList.remove('show');v19SetGuildChrome('Day 1 · Explorer\'s Guild Registration','Explorer\'s Guild: Registration Hall');
     const o=profile.onboarding,step=Number(o.registrationStep)||0;
     if(step===0){setVnV14('Pote',v201PoteLine('registration.intro'));vnButtonV14('Begin Registration',()=>{o.registrationStep=1;saveProgress();renderRegistrationV14();});}
     else if(step===1){setVnV14('Pote',v201PoteLine('registration.name'),{focus:'right'});const input=document.createElement('input');input.className='vn-input';input.id='vnNameInput';input.maxLength=24;input.placeholder='Enter adventurer name';input.value=profile.playerName||'';$('vnActions').appendChild(input);vnButtonV14('Confirm Name',()=>{const name=input.value.trim();if(!name){input.focus();return;}profile.playerName=name;o.registrationStep=2;saveProgress();renderRegistrationV14();});setTimeout(()=>input.focus(),0);}
@@ -6661,7 +6678,7 @@ Genres: ${lines}`;
   };
   v19RenderOrientation=function(step=tutorialStepV14()){const mission=V14_TUTORIAL_MISSIONS[step]||V14_TUTORIAL_MISSIONS[6];v19Pote(v201PoteLine('service.orientation',{missionName:escV14(mission.name)}),`<b>${escV14(mission.name)}</b><p>${escV14(mission.description)}</p><p class="compact-meta"><b>Progress:</b> ${escV14(guildMissionProgressV14(step))}<br><b>Reward:</b> ${escV14(mission.unlock)}</p>`);if(step===1)v19GuildAction('Go to Training Dojo',()=>v19GoHubService('dojo'));if(step===2||step===4)v19GuildAction('Go to Dungeon Board',()=>v19GoHubService('dungeon'));if(step===5)v19GuildAction('Open Channel Dashboard',()=>v19GoHubService('channel'));v19GuildAction('Back to Guild Services',openGuildV19,true);};
   v19RenderMainAssignment=function(){
-    const st=v19AssignmentStatus();if(st.complete){v19Pote(v201PoteLine('service.assignment_complete'),'<b>LOCAL DUNGEON SURVEY — COMPLETE</b><p class="compact-meta">Field Catalogue IV active · all current shop tiers authorized</p>');v19GuildAction('Back to Guild Services',openGuildV19,true);return;}
+    const st=v19AssignmentStatus();if(st.complete){v19Pote(v201PoteLine('service.assignment_complete'),'<b>LOCAL DUNGEON SURVEY: COMPLETE</b><p class="compact-meta">Field Catalogue IV active · all current shop tiers authorized</p>');v19GuildAction('Back to Guild Services',openGuildV19,true);return;}
     const s=st.stage,checks=st.checks.map(([label,ok,req])=>req?v191MaterialRequirementHtml(req,true):`<div class="v191-requirement ${ok?'done':''}"><span class="mark">${ok?'✓':'·'}</span><span><b>${escV14(label)}</b></span></div>`).join('');v19Pote(v201PoteLine('service.assignment_active'),`<div class="mission-kicker">Local Dungeon Survey · Stage ${st.idx+1}/${V19_ASSIGNMENT_STAGES.length}</div><h3>${escV14(s.name)}</h3><div class="v191-requirements">${checks}</div><p class="compact-meta"><b>Reward:</b> ${escV14(s.reward)}<br>Submitting a stage consumes exactly the listed material samples.</p>`);
     const b=v19GuildAction(st.ready?'Submit Report & Samples':'Requirements Not Met',()=>{if(!v19CompleteAssignmentStage())return;const finished=explorerStateV14().mainAssignmentComplete;v19Pote(finished?v201PoteLine('service.assignment_final_accepted'):v201PoteLine('service.assignment_stage_accepted',{catalogName:escV14(V19_CATALOG_NAMES[explorerStateV14().catalogLevel])}),`<b>${escV14(s.reward)}</b><p class="compact-meta">Explorer Reputation +15</p>`);v19GuildAction('Continue',v19RenderMainAssignment,true);});b.disabled=!st.ready;v19GuildAction('Back to Guild Services',openGuildV19,true);
   };
@@ -6706,7 +6723,7 @@ Genres: ${lines}`;
   function v201EnhancementOutcome(grades){const g=Array.isArray(grades)?grades:[];const perfect=g.filter(x=>x==='perfect').length,miss=g.filter(x=>x==='miss').length,hits=g.length-miss;if(g.length===15&&perfect===15)return {levels:2,label:'Exceptional Enhancement',className:'exceptional',perfect,miss,hits};if(g.length===15&&hits>=11)return {levels:1,label:'Enhancement Successful',className:'',perfect,miss,hits};return {levels:0,label:'Enhancement Failed',className:'failed',perfect,miss,hits};}
   function v201EnhancementRhythm(tier=0){
     const overlay=$('skillOverlay'),area=$('skillArea'),readout=$('skillReadout'),speed=.082+clamp(Number(tier)||0,0,6)*.013;
-    $('skillTitle').textContent='Enhancement — Rhythm Timing';$('skillInstruction').textContent='Hit 15 beats as the marker crosses the green center band. All 15 Perfect grants +2. Up to 4 misses still grants +1; 5+ misses fails and the crystals are lost.';v18SetHorizontalSkillMode(true);overlay.classList.add('show');area.innerHTML=`<div><div class="v201-enhance-beats">${Array.from({length:15},(_,i)=>`<span class="v201-enhance-beat" id="v201Beat${i}"></span>`).join('')}</div><div class="skill-track"><div class="v201-enhance-target"></div><div class="skill-marker" id="v201EnhanceMarker"></div></div><button class="skill-action" id="v201EnhanceHit">HIT</button><div class="v18-speed-note">Higher enhancement levels move the marker faster. Space / Enter also work.</div></div>`;readout.textContent='Beat 1 / 15';
+    $('skillTitle').textContent='Enhancement: Rhythm Timing';$('skillInstruction').textContent='Hit 15 beats as the marker crosses the green center band. All 15 Perfect grants +2. Up to 4 misses still grants +1; 5+ misses fails and the crystals are lost.';v18SetHorizontalSkillMode(true);overlay.classList.add('show');area.innerHTML=`<div><div class="v201-enhance-beats">${Array.from({length:15},(_,i)=>`<span class="v201-enhance-beat" id="v201Beat${i}"></span>`).join('')}</div><div class="skill-track"><div class="v201-enhance-target"></div><div class="skill-marker" id="v201EnhanceMarker"></div></div><button class="skill-action" id="v201EnhanceHit">HIT</button><div class="v18-speed-note">Higher enhancement levels move the marker faster. Space / Enter also work.</div></div>`;readout.textContent='Beat 1 / 15';
     if(Array.isArray(window.__DSC_TEST_ENHANCEMENT)){const grades=window.__DSC_TEST_ENHANCEMENT.slice(0,15);while(grades.length<15)grades.push('miss');for(let i=0;i<15;i++)$(`v201Beat${i}`)?.classList.add(grades[i]);const out=v201EnhancementOutcome(grades);readout.textContent=`${out.label} · ${out.perfect} Perfect · ${out.miss} Miss`;return sleep(40).then(()=>{overlay.classList.remove('show');area.innerHTML='';v18SetHorizontalSkillMode(false);return out;});}
     return new Promise(resolve=>{let idx=0,pos=0,last=performance.now(),raf=0,done=false,canHit=false;const grades=[];const marker=$('v201EnhanceMarker');const key=e=>{if(e.code==='Space'||e.code==='Enter'){e.preventDefault();hit();}};const gradeAt=()=>{const d=Math.abs(pos-50);return d<=5?'perfect':d<=16?(pos<50?'early':'late'):'miss';};const record=grade=>{if(done)return;grades.push(grade);$(`v201Beat${idx}`)?.classList.add(grade==='perfect'?'perfect':grade==='miss'?'miss':'good');idx++;pos=0;canHit=false;if(idx>=15)finish();else readout.textContent=`Beat ${idx+1} / 15 · ${grade==='perfect'?'Perfect':grade==='miss'?'Miss':grade[0].toUpperCase()+grade.slice(1)}`;};const hit=()=>{if(done||!canHit)return;record(gradeAt());};const tick=now=>{if(done)return;const dt=Math.min(40,now-last);last=now;pos+=dt*speed;if(pos>=8)canHit=true;if(pos>=100){record('miss');}if(marker)marker.style.left=`${clamp(pos,0,100)}%`;raf=requestAnimationFrame(tick);};const finish=async()=>{if(done)return;done=true;cancelAnimationFrame(raf);document.removeEventListener('keydown',key);const out=v201EnhancementOutcome(grades);readout.innerHTML=`<span class="v201-enhance-result ${out.className}">${out.label}</span> · ${out.perfect} Perfect · ${out.miss} Miss`;await sleep(650);overlay.classList.remove('show');area.innerHTML='';v18SetHorizontalSkillMode(false);resolve(out);};document.addEventListener('keydown',key);$('v201EnhanceHit').onclick=hit;raf=requestAnimationFrame(tick);});
   }
@@ -6728,7 +6745,7 @@ Genres: ${lines}`;
 
   // Version label and test/debug surfaces.
   const _v20FinalizeBrandingV201=finalizeV15Branding;
-  finalizeV15Branding=function(){_v20FinalizeBrandingV201();const sub=document.querySelector('.hub-sub');if(sub&&sub.textContent.includes('Prototype Hub'))sub.textContent='Prototype Hub · v20.2';};
+  finalizeV15Branding=function(){_v20FinalizeBrandingV201();const sub=document.querySelector('.hub-sub');if(sub&&sub.textContent.includes('Prototype Hub'))sub.textContent='Prototype Hub · v21';};
   window.__DSC_V201={
     poteText:(id,vars)=>v201PoteLine(id,vars),
     dungeonIntel:(name)=>v201DungeonIntel(name,DUNGEON_DEFS[name]),
@@ -6853,7 +6870,7 @@ Genres: ${lines}`;
 
   // Keep the version label in sync after older branding wrappers run.
   const _v201FinalizeBrandingV202=finalizeV15Branding;
-  finalizeV15Branding=function(){_v201FinalizeBrandingV202();const sub=document.querySelector('.hub-sub');if(sub&&sub.textContent.includes('Prototype Hub'))sub.textContent='Prototype Hub · v20.2';};
+  finalizeV15Branding=function(){_v201FinalizeBrandingV202();const sub=document.querySelector('.hub-sub');if(sub&&sub.textContent.includes('Prototype Hub'))sub.textContent='Prototype Hub · v21';};
 
   v202InstallSaveUi();
   v202InstallCombatEquipmentUi();
@@ -6867,6 +6884,231 @@ Genres: ${lines}`;
     addNews:(tag,text)=>{addNewsV15(tag,text);saveProgress();},
     renderRanking:()=>renderRankingV15(),
     specialist:()=>v20SpecialistMetrics()
+  };
+
+
+  // ===== v21: living leaderboards and concrete specialist records =====
+  const V21_SAVE_VERSION='21';
+  const V21_BOARD_TOTALS={peak:120000,treasure:80000,flawless:60000};
+  const V21_WORLD_TEMPLATES=[
+    {name:'AstraLily',category:'Variety / Dungeon',overall:1000,pop:168,avg:18400,conqueror:285,speed:74500,power:1760,peak:48200,treasure:66500,flawless:38,focus:{overall:1.25,conqueror:1.10,audience:1.20}},
+    {name:'VantaVale',category:'High-Rank Dungeon',overall:992,pop:165,avg:17100,conqueror:318,speed:79200,power:1840,peak:42100,treasure:73800,flawless:44,focus:{overall:1.08,conqueror:1.55,power:1.12}},
+    {name:'MiraVolt',category:'Power / Challenge',overall:985,pop:164,avg:16600,conqueror:258,speed:83500,power:2150,peak:44700,treasure:59200,flawless:31,focus:{overall:1.14,power:1.70,audience:1.08}},
+    {name:'SaintSignal',category:'Technical',overall:979,pop:162,avg:15900,conqueror:274,speed:70100,power:1640,peak:39800,treasure:55300,flawless:61,focus:{overall:1.05,flawless:1.75,speed:1.25}},
+    {name:'Crownsong',category:'Variety',overall:972,pop:161,avg:17600,conqueror:225,speed:90600,power:1510,peak:52600,treasure:51800,flawless:25,focus:{overall:1.18,audience:1.55}},
+    {name:'GlassWitch',category:'Magic',overall:967,pop:159,avg:14800,conqueror:269,speed:82100,power:2010,peak:38600,treasure:70100,flawless:34,focus:{power:1.42,treasure:1.18}},
+    {name:'RookRush',category:'Speed Clear',overall:961,pop:157,avg:14200,conqueror:247,speed:54200,power:1570,peak:35200,treasure:49600,flawless:48,focus:{speed:1.95,flawless:1.16}},
+    {name:'MoonMantis',category:'Dungeon',overall:956,pop:156,avg:13900,conqueror:291,speed:76800,power:1690,peak:33700,treasure:82400,flawless:39,focus:{conqueror:1.28,treasure:1.75}},
+    {name:'BrassBard',category:'Entertainment',overall:951,pop:155,avg:15300,conqueror:204,speed:95400,power:1480,peak:50500,treasure:54500,flawless:22,focus:{audience:1.48,overall:1.22}},
+    {name:'QuietTitan',category:'Power',overall:946,pop:154,avg:13600,conqueror:302,speed:88100,power:2240,peak:32900,treasure:61200,flawless:36,focus:{power:1.88,conqueror:1.22}}
+  ];
+  const V21_NEARBY_EXTRA=['AshPocket','SwordStudent','NightLantern','PotionDebt','MossTheory','CaveLunch','WandIntern','SoftShield','LootReceipt','TinyPaladin','RainyRapier','CrateWizard','DungeonAfterClass','OrbHomework','WeekendKnight','SteelNoodle','MireIntern','CrystalBreak','RestZoneFan','HelmetOptional'];
+
+  function v21Hash(n){n=(Number(n)||0)>>>0;n^=n<<13;n^=n>>>17;n^=n<<5;return n>>>0;}
+  function v21Rand(world){world.seed=((Math.imul(world.seed>>>0,1664525)+1013904223)>>>0);return world.seed/4294967296;}
+  function v21RandRange(world,min,max){return min+(max-min)*v21Rand(world);}
+  const _v202NormalizeSpecialistV21=v20NormalizeSpecialist;
+  v20NormalizeSpecialist=function(){
+    const old=channel.specialist&&typeof channel.specialist==='object'?channel.specialist:{};
+    const extra={peakAudience:Math.max(0,Number(old.peakAudience)||0),treasureRecord:Math.max(0,Number(old.treasureRecord)||0),treasureDungeon:old.treasureDungeon||null,bestFlawlessStreak:Math.max(0,Number(old.bestFlawlessStreak)||0)};
+    _v202NormalizeSpecialistV21();Object.assign(channel.specialist,extra);
+  };
+  function v21NormalizeRecords(){
+    v20NormalizeSpecialist();const sp=channel.specialist;
+    const recentPeaks=(channel.recentCCV||[]).map(x=>Number(x?.peak)||0);
+    sp.peakAudience=Math.max(0,Number(sp.peakAudience)||0,Number(channel.lastPeakCCV)||0,...recentPeaks);
+    sp.treasureRecord=Math.max(0,Number(sp.treasureRecord)||0);
+    sp.treasureDungeon=sp.treasureDungeon||null;
+    sp.bestFlawlessStreak=Math.max(0,Number(sp.bestFlawlessStreak)||0);
+  }
+  function v21FreshWorld(){
+    const day=Math.max(0,Number(channel.streams)||0),seed=(0x51C0FFEE ^ Math.imul(day+1,2654435761))>>>0;
+    const streamers=V21_WORLD_TEMPLATES.map((t,i)=>{
+      const growth=day*(5.5+(10-i)*.18);
+      return {...t,focus:{...t.focus},overall:t.overall+growth,pop:t.pop+Math.floor(day*.08),avg:Math.round(t.avg*(1+day*.0018)),peak:Math.round(t.peak*(1+day*.0024)),conqueror:t.conqueror+day*(.72+(t.focus.conqueror||1)*.18),power:Math.round(t.power*(1+day*.0015)),treasure:Math.round(t.treasure*(1+day*.0021)),flawless:t.flawless+Math.floor(day*.035),earnings:250000+i*11000+day*(3500+i*90),streams:day};
+    });
+    return {version:21,day,seed,streamers,lastOverallLeader:streamers[0]?.name||'',lastSpecialistLeaders:{}};
+  }
+  function v21NormalizeWorld(){
+    if(!channel.v21World||typeof channel.v21World!=='object'||!Array.isArray(channel.v21World.streamers))channel.v21World=v21FreshWorld();
+    const w=channel.v21World;w.version=21;w.day=Math.max(0,Number(w.day)||0);w.seed=(Number(w.seed)>>>0)||0x51C0FFEE;
+    const byName=new Map((w.streamers||[]).filter(Boolean).map(x=>[x.name,x]));
+    w.streamers=V21_WORLD_TEMPLATES.map(t=>{const s=byName.get(t.name)||{};return {...t,...s,focus:{...t.focus,...(s.focus||{})},overall:Math.max(1,Number(s.overall??t.overall)||t.overall),pop:Math.max(1,Number(s.pop??t.pop)||t.pop),avg:Math.max(1,Number(s.avg??t.avg)||t.avg),conqueror:Math.max(0,Number(s.conqueror??t.conqueror)||t.conqueror),speed:Math.max(10000,Number(s.speed??t.speed)||t.speed),power:Math.max(1,Number(s.power??t.power)||t.power),peak:Math.max(1,Number(s.peak??t.peak)||t.peak),treasure:Math.max(1,Number(s.treasure??t.treasure)||t.treasure),flawless:Math.max(0,Number(s.flawless??t.flawless)||t.flawless),earnings:Math.max(0,Number(s.earnings??0)||0),streams:Math.max(0,Number(s.streams??w.day)||0)};});
+    w.lastSpecialistLeaders=w.lastSpecialistLeaders&&typeof w.lastSpecialistLeaders==='object'?w.lastSpecialistLeaders:{};
+    v21SyncOverallArray();return w;
+  }
+  function v21OverallOrder(){const w=v21NormalizeWorld();return [...w.streamers].sort((a,b)=>b.overall-a.overall||b.avg-a.avg||a.name.localeCompare(b.name));}
+  function v21SyncOverallArray(){
+    const w=channel.v21World;if(!w||!Array.isArray(w.streamers))return;const order=[...w.streamers].sort((a,b)=>b.overall-a.overall||b.avg-a.avg);
+    V15_TOP_STREAMERS.splice(0,V15_TOP_STREAMERS.length,...order.map((s,i)=>[`#${i+1}`,s.name,`Popularity Lv. ${Math.round(s.pop)} · Avg ${Math.round(s.avg).toLocaleString()} CCV`]));
+  }
+  function v21BoardSort(board){
+    const rows=[...v21NormalizeWorld().streamers];
+    if(board==='speed')return rows.sort((a,b)=>a.speed-b.speed||b.overall-a.overall);
+    return rows.sort((a,b)=>(Number(b[board])||0)-(Number(a[board])||0)||b.overall-a.overall);
+  }
+  function v21BoardLabel(board,value){
+    const n=Number(value)||0;
+    if(board==='conqueror')return `${Math.round(n)} conquest points`;
+    if(board==='speed')return v20FormatTime(n);
+    if(board==='power')return `${Math.round(n).toLocaleString()} Clash Power`;
+    if(board==='peak')return `${Math.round(n).toLocaleString()} Peak CCV`;
+    if(board==='treasure')return `${Math.round(n).toLocaleString()} money haul`;
+    if(board==='flawless')return `${Math.round(n)} fight streak`;
+    return Math.round(n).toLocaleString();
+  }
+  function v21Leader(board){return v21BoardSort(board)[0];}
+  function v21LeaderText(board){const s=v21Leader(board);return s?`${s.name}, ${v21BoardLabel(board,s[board])}`:'No record';}
+  function v21SpecialistMetrics(){
+    v21NormalizeRecords();const base=_v20SpecialistMetricsV201(),sp=channel.specialist;
+    const peak=sp.peakAudience||0,treasure=sp.treasureRecord||0,flawless=sp.bestFlawlessStreak||0;
+    const peakRank=peak>0?v20RankCurve(peak,V21_BOARD_TOTALS.peak,220,1.6):null;
+    const treasureRank=treasure>0?v20RankCurve(treasure,V21_BOARD_TOTALS.treasure,500,1.7):null;
+    const flawlessRank=flawless>0?v20RankCurve(flawless,V21_BOARD_TOTALS.flawless,6,2.15):null;
+    return {...base,
+      conqueror:{...base.dungeon,metric:`${Math.max(totalDungeonClears(),sp.completedRuns||0)} clears · highest ${v20HighestCleared()}`},
+      powerRank:{...base.clash,metric:sp.highestClashPower>0?`Record Clash Power: ${Math.round(sp.highestClashPower).toLocaleString()}`:'No Clash Power record yet'},
+      peak:{rank:peakRank,metric:peak>0?`Best stream peak: ${Math.round(peak).toLocaleString()} CCV`:'No completed stream peak recorded yet'},
+      treasure:{rank:treasureRank,metric:treasure>0?`Best haul: ${Math.round(treasure).toLocaleString()} money value${sp.treasureDungeon?` · ${sp.treasureDungeon}`:''}`:'No expedition haul recorded yet'},
+      flawless:{rank:flawlessRank,metric:flawless>0?`Best consecutive no-damage fights: ${Math.round(flawless)}`:'No flawless streak recorded yet'}
+    };
+  }
+  v20SpecialistMetrics=v21SpecialistMetrics;
+
+  function v21SpecialistCard(title,key,data){
+    return `<div class="v20-specialist-card v21-board-card" data-v21-card="${key}"><b>${escV14(title)}</b><div class="rank">${v20RankText(data.rank)}</div><div class="metric">${escV14(data.metric||'')}</div><div class="leader">Current #1: <b class="v21-live-leader">${escV14(v21LeaderText(key))}</b></div><button class="small-btn v21-board-open" data-v21-board="${key}">View Top 10</button></div>`;
+  }
+  function v21PlayerBoardRecord(board){const m=v21SpecialistMetrics();if(board==='conqueror')return {rank:m.conqueror.rank,value:m.conqueror.score||0,label:m.conqueror.metric};if(board==='speed')return {rank:m.speed.rank,value:channel.specialist.fastestClearMs||0,label:m.speed.metric};if(board==='power')return {rank:m.powerRank.rank,value:channel.specialist.highestClashPower||0,label:m.powerRank.metric};if(board==='peak')return {rank:m.peak.rank,value:channel.specialist.peakAudience||0,label:m.peak.metric};if(board==='treasure')return {rank:m.treasure.rank,value:channel.specialist.treasureRecord||0,label:m.treasure.metric};return {rank:m.flawless.rank,value:channel.specialist.bestFlawlessStreak||0,label:m.flawless.metric};}
+  function v21EnsureBoardModal(){
+    let modal=$('v21BoardOverlay');if(modal)return modal;
+    modal=document.createElement('div');modal.className='modal-overlay';modal.id='v21BoardOverlay';modal.innerHTML='<div class="modal-card" style="width:min(760px,92vw)"><h2 id="v21BoardTitle">Specialist Ranking</h2><div id="v21BoardBody"></div><div class="modal-actions"><button class="small-btn" id="v21BoardClose">Close</button></div></div>';document.body.appendChild(modal);$('v21BoardClose').onclick=()=>modal.classList.remove('show');modal.addEventListener('click',e=>{if(e.target===modal)modal.classList.remove('show');});return modal;
+  }
+  function v21BoardTitle(board){return {conqueror:'Conqueror Ranking',speed:'Fastest Clear',power:'Power Ranking',peak:'Peak Audience Ranking',treasure:'Treasure Hunter Ranking',flawless:'Flawless Ranking'}[board]||'Specialist Ranking';}
+  function v21ShowBoard(board){
+    const modal=v21EnsureBoardModal(),rows=v21BoardSort(board).slice(0,10),player=v21PlayerBoardRecord(board),playerRank=Number(player.rank)||999999;
+    let rendered=rows.map((s,i)=>`<div class="v21-board-row"><span class="rank">#${i+1}</span><span class="name">${escV14(s.name)}</span><span class="record">${escV14(v21BoardLabel(board,s[board]))}</span></div>`).join('');
+    if(playerRank<=10){const arr=rows.map((s,i)=>({rank:i+1,name:s.name,record:v21BoardLabel(board,s[board])}));arr.splice(Math.max(0,playerRank-1),0,{rank:playerRank,name:profile.playerName||'Player',record:player.label,player:true});rendered=arr.slice(0,10).map((r,i)=>`<div class="v21-board-row ${r.player?'player':''}"><span class="rank">#${i+1}</span><span class="name">${escV14(r.name)}</span><span class="record">${escV14(r.record)}</span></div>`).join('');}
+    $('v21BoardTitle').textContent=v21BoardTitle(board);$('v21BoardBody').innerHTML=`<div class="compact-meta">Records update after every completed stream day. The top streamers continue running dungeons even when you are not on their part of the board.</div><div class="v21-board-list">${rendered}</div><div class="v21-board-foot"><b>Your current record:</b> ${escV14(player.label)}${player.rank?` · ${v20RankText(player.rank)}`:' · Unranked'}</div>`;modal.classList.add('show');
+  }
+
+  const _v202NearbyRankingHtmlV21=nearbyRankingHtmlV15;
+  nearbyRankingHtmlV15=function(playerRank){
+    const w=v21NormalizeWorld(),day=w.day,names=V15_NEARBY_NAMES.concat(V21_NEARBY_EXTRA),rows=[];
+    for(let r=Math.max(1,playerRank-3);r<=Math.min(V15_TOTAL_STREAMERS,playerRank+3);r++){
+      if(r===playerRank){rows.push(`<div class="ranking-row player"><div class="ranking-rank">#${r.toLocaleString()}</div><div class="ranking-name">${escV14(profile.playerName||'Player')}</div><div class="ranking-meta">You · Popularity Lv. ${channel.popularity}</div></div>`);continue;}
+      if(r<=10){const top=v21OverallOrder()[r-1];rows.push(`<div class="ranking-row"><div class="ranking-rank">#${r}</div><div class="ranking-name">${escV14(top.name)}</div><div class="ranking-meta">Popularity Lv. ${Math.round(top.pop)} · Avg ${Math.round(top.avg).toLocaleString()} CCV</div></div>`);continue;}
+      const h=v21Hash(Math.imul(r,1103515245)^Math.imul(day+1,2654435761)),name=names[h%names.length]+((h>>>8)%9===0?String((h>>>16)%100):''),lv=Math.max(0,Math.round(channel.popularity+(playerRank-r)*.08+((h>>>12)%7)-3)),avg=Math.max(1,Math.round((channel.lastAverageCCV||3)*(0.75+((h>>>20)%65)/100)));
+      rows.push(`<div class="ranking-row"><div class="ranking-rank">#${r.toLocaleString()}</div><div class="ranking-name">${escV14(name)}</div><div class="ranking-meta">Active today · Lv. ${lv} · Avg ${avg.toLocaleString()} CCV</div></div>`);
+    }return rows.join('');
+  };
+  function v21OverallTopHtml(){
+    const rank=streamerRankV15(),order=v21OverallOrder(),rows=order.map((s,i)=>({rank:i+1,name:s.name,meta:`Popularity Lv. ${Math.round(s.pop)} · Avg ${Math.round(s.avg).toLocaleString()} CCV`}));
+    if(rank<=10)rows.splice(Math.max(0,rank-1),0,{rank,name:profile.playerName||'Player',meta:`You · Popularity Lv. ${channel.popularity}`,player:true});
+    return rows.slice(0,10).map((r,i)=>`<div class="ranking-row ${r.player?'player':''}"><div class="ranking-rank">#${i+1}</div><div class="ranking-name">${escV14(r.name)}</div><div class="ranking-meta">${escV14(r.meta)}</div></div>`).join('');
+  }
+
+  const _v202RenderRankingV21=renderRankingV15;
+  renderRankingV15=function(){
+    v21NormalizeRecords();v21NormalizeWorld();v21SyncOverallArray();_v202RenderRankingV21();const panel=$('hubPanel');if(!panel)return;
+    panel.querySelectorAll('.v20-specialists').forEach(el=>el.remove());
+    const metrics=v21SpecialistMetrics(),newsHeading=[...panel.querySelectorAll('h3')].find(h=>h.textContent.trim()==='Recent Orb News');
+    const section=document.createElement('section');section.className='v20-specialists';section.innerHTML=`<h3>Specialist Rankings <span class="v21-day-chip"><span class="v21-live-dot"></span>Day ${v21NormalizeWorld().day}</span></h3><p class="compact-meta">These boards track concrete records. Other streamers advance after every stream day, so leaders and nearby profiles can change while you climb.</p><div class="v20-specialist-grid">${v21SpecialistCard('Conqueror Ranking','conqueror',metrics.conqueror)}${v21SpecialistCard('Fastest Clear','speed',metrics.speed)}${v21SpecialistCard('Power Ranking','power',metrics.powerRank)}${v21SpecialistCard('Peak Audience Ranking','peak',metrics.peak)}${v21SpecialistCard('Treasure Hunter Ranking','treasure',metrics.treasure)}${v21SpecialistCard('Flawless Ranking','flawless',metrics.flawless)}</div>`;
+    if(newsHeading)newsHeading.before(section);else panel.appendChild(section);section.querySelectorAll('[data-v21-board]').forEach(b=>b.onclick=()=>v21ShowBoard(b.dataset.v21Board));
+    const topHeading=[...panel.querySelectorAll('h3')].find(h=>h.textContent.trim()==='Top Streamers');if(topHeading?.nextElementSibling?.classList.contains('ranking-list'))topHeading.nextElementSibling.innerHTML=v21OverallTopHtml();
+    const intro=panel.querySelector('h2')?.nextElementSibling;if(intro&&intro.tagName==='P'&&!intro.querySelector('.v21-day-chip'))intro.insertAdjacentHTML('beforeend',` <span class="v21-day-chip"><span class="v21-live-dot"></span>World Day ${v21NormalizeWorld().day}</span>`);
+  };
+
+  function v21TreasureValue(){
+    const loot=game?.runLootSummary;if(!loot)return 0;let value=Math.max(0,Number(loot.money)||0);
+    for(const [r,q] of Object.entries(loot.crystals||{}))value+=(CRYSTAL_SELL[r]||0)*(Number(q)||0);
+    for(const [id,q] of Object.entries(loot.materials||{}))value+=(V19_MATERIAL_DEFS[id]?.sellValue||0)*(Number(q)||0);
+    for(const [id,q] of Object.entries(loot.items||{}))value+=(ITEM_DEFS[id]?.price||0)*(Number(q)||0);
+    return Math.round(value);
+  }
+
+  const _v202StartDungeonV21=startDungeon;
+  startDungeon=async function(name){await _v202StartDungeonV21(name);if(game&&!game.finished){game.v21FlawlessStreak=0;game.v21BestFlawlessStreak=0;}};
+  const _v202CompleteEncounterV21=completeEncounter;
+  completeEncounter=async function(){
+    if(game){const damage=Math.max(0,(game.damageTaken||0)-(game.encounterStartDamageTaken||0));if(damage===0){game.v21FlawlessStreak=(game.v21FlawlessStreak||0)+1;game.v21BestFlawlessStreak=Math.max(game.v21BestFlawlessStreak||0,game.v21FlawlessStreak);}else game.v21FlawlessStreak=0;}
+    return _v202CompleteEncounterV21();
+  };
+
+  function v21WorldLeadersSnapshot(){return {overall:v21OverallOrder()[0]?.name||'',conqueror:v21Leader('conqueror')?.name||'',speed:v21Leader('speed')?.name||'',power:v21Leader('power')?.name||'',peak:v21Leader('peak')?.name||'',treasure:v21Leader('treasure')?.name||'',flawless:v21Leader('flawless')?.name||''};}
+  function v21AdvanceOneDay(){
+    const w=v21NormalizeWorld(),before=v21WorldLeadersSnapshot();w.day++;
+    for(const s of w.streamers){
+      const f=s.focus||{},activity=.82+v21Rand(w)*.38;s.streams=(s.streams||0)+1;
+      const clearChance=.72+Math.min(.20,(f.conqueror||1)*.07);if(v21Rand(w)<clearChance){const difficulty=1+Math.floor(v21Rand(w)*Math.min(7,2+w.day/35));s.conqueror+=difficulty*(.8+v21Rand(w)*.8)*(f.conqueror||1);}
+      s.pop+=v21Rand(w)<.28?1:0;s.avg=Math.round(s.avg*(1+v21RandRange(w,.0005,.006)*(f.audience||1)));if(v21Rand(w)<.32)s.peak=Math.max(s.peak,Math.round(s.avg*v21RandRange(w,1.8,3.8)*(f.audience||1)));
+      if(v21Rand(w)<.28*(f.speed||1))s.speed=Math.max(18000,Math.round(s.speed-v21RandRange(w,120,900)*(f.speed||1)));
+      if(v21Rand(w)<.34*(f.power||1))s.power=Math.max(s.power,Math.round(s.power+v21RandRange(w,4,38)*(f.power||1)));
+      if(v21Rand(w)<.30*(f.treasure||1))s.treasure=Math.max(s.treasure,Math.round(s.treasure*(1+v21RandRange(w,.002,.026)*(f.treasure||1))));
+      if(v21Rand(w)<.24*(f.flawless||1))s.flawless+=Math.max(1,Math.round(v21RandRange(w,.3,1.6)*(f.flawless||1)));
+      const dailyEarn=Math.round(s.avg*v21RandRange(w,.9,2.5)+v21RandRange(w,900,6500));s.earnings=(s.earnings||0)+dailyEarn;
+      s.overall+=activity*(5+v21RandRange(w,0,14))*(f.overall||1)+Math.log10(1+dailyEarn)*.35;
+    }
+    v21SyncOverallArray();const after=v21WorldLeadersSnapshot();
+    if(before.overall&&after.overall!==before.overall)addNewsV15('RANKING WATCH',`${after.overall} overtook ${before.overall} for the #1 Overall Streamer position.`);
+    const labels={conqueror:'Conqueror Ranking',speed:'Fastest Clear',power:'Power Ranking',peak:'Peak Audience Ranking',treasure:'Treasure Hunter Ranking',flawless:'Flawless Ranking'};
+    const changed=Object.keys(labels).filter(k=>before[k]&&after[k]!==before[k]);if(changed.length){const k=changed[Math.floor(v21Rand(w)*changed.length)];addNewsV15('SPECIALIST RECORD',`${after[k]} took #1 on the ${labels[k]}.`);}
+  }
+  function v21AdvanceWorldTo(day){const w=v21NormalizeWorld(),target=Math.max(w.day,Math.max(0,Number(day)||0));while(w.day<target)v21AdvanceOneDay();return w.day;}
+
+  const _v202EndStreamV21=endStream;
+  endStream=async function(reason='retreat'){
+    if(!game||game.finished)return _v202EndStreamV21(reason);v21NormalizeRecords();v21NormalizeWorld();
+    const peak=Math.max(0,Number(game.peakViewers)||0),haul=v21TreasureValue(),dungeon=game.dungeon?.name||game.dungeon?.definition||'Dungeon',flawless=Math.max(0,Number(game.v21BestFlawlessStreak)||0),beforeTreasure=channel.specialist.treasureRecord||0,beforePeak=channel.specialist.peakAudience||0,beforeFlawless=channel.specialist.bestFlawlessStreak||0;
+    await _v202EndStreamV21(reason);v21NormalizeRecords();const sp=channel.specialist;
+    sp.peakAudience=Math.max(sp.peakAudience||0,peak);if(reason!=='death'&&haul>(sp.treasureRecord||0)){sp.treasureRecord=haul;sp.treasureDungeon=dungeon;}sp.bestFlawlessStreak=Math.max(sp.bestFlawlessStreak||0,flawless);
+    if(peak>beforePeak)addNewsV15('AUDIENCE RECORD',`${profile.playerName||'Player'} set a new personal Peak Audience record at ${peak.toLocaleString()} CCV.`);
+    if(reason!=='death'&&haul>beforeTreasure)addNewsV15('TREASURE RECORD',`${profile.playerName||'Player'} returned from ${dungeon} with a haul valued at ${haul.toLocaleString()} money.`);
+    if(flawless>beforeFlawless&&flawless>1)addNewsV15('FLAWLESS RECORD',`${profile.playerName||'Player'} reached ${flawless} consecutive fights without taking damage.`);
+    v21AdvanceWorldTo(channel.streams||0);saveProgress();updateNewsTickerV15();
+  };
+
+  // Non-action encounter announcements do not carry turn labels.
+  const _v202SystemLogV21=systemLog;
+  systemLog=function(html){
+    if(/appeared\.|Stream started\.| rested\./i.test(String(html||''))){const host=$('systemLog');if(!host)return;const row=document.createElement('div');row.className='system-log-entry';row.innerHTML=html;host.appendChild(row);while(host.children.length>50)host.firstElementChild.remove();host.scrollTop=host.scrollHeight;return;}
+    return _v202SystemLogV21(html);
+  };
+
+  // Text style rule: no em dashes or semicolons in visible game copy. This observer is a safety net
+  // for legacy strings while newer copy is authored without them.
+  function v21CleanTextValue(s){if(!s)return s;let out=String(s);if(out.trim()==='-')return out;out=out.replace(/\s*\u2014\s*/g,': ');out=out.replace(/;\s*/g,'. ');return out;}
+  function v21CleanTextNode(node){if(node?.nodeType===Node.TEXT_NODE){const tag=node.parentElement?.tagName;if(tag==='SCRIPT'||tag==='STYLE'||tag==='TEXTAREA')return;const next=v21CleanTextValue(node.nodeValue);if(next!==node.nodeValue)node.nodeValue=next;}}
+  function v21CleanTree(root=document.body){if(!root)return;const walker=document.createTreeWalker(root,NodeFilter.SHOW_TEXT);let n;while((n=walker.nextNode()))v21CleanTextNode(n);}
+  const v21TextObserver=new MutationObserver(records=>{for(const rec of records){for(const n of rec.addedNodes){if(n.nodeType===Node.TEXT_NODE)v21CleanTextNode(n);else if(n.nodeType===Node.ELEMENT_NODE)v21CleanTree(n);}if(rec.type==='characterData')v21CleanTextNode(rec.target);}});
+  v21CleanTree();v21TextObserver.observe(document.body,{subtree:true,childList:true,characterData:true});
+
+  // Save export now identifies the v21 schema while remaining plain readable JSON.
+  v202ExportObject=function(){saveProgress();let data={profile,channel,uidCounter};try{const raw=localStorage.getItem('dsc_v7_progress');if(raw)data=JSON.parse(raw);}catch(_){ }return {format:'Dungeon Streamer Save',save_version:V21_SAVE_VERSION,exported_at:new Date().toISOString(),data:JSON.parse(JSON.stringify(data)),settings:v202SaveSettings()};};
+  v202DownloadSave=function(){const data=v202ExportObject(),json=JSON.stringify(data,null,2),blob=new Blob([json],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a'),safe=(profile.playerName||'player').replace(/[^a-z0-9_-]+/gi,'_').replace(/^_+|_+$/g,'')||'player';a.href=url;a.download=`dungeon-streamer-${safe}-v21-save.json`;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),0);$('settingsPopup')?.classList.remove('show');};
+
+  const _v202LoadProgressV21=loadProgress;
+  loadProgress=function(){_v202LoadProgressV21();v21NormalizeRecords();v21NormalizeWorld();v21SyncOverallArray();};
+  const _v202FreshV21=prepareFreshV14Defaults;
+  prepareFreshV14Defaults=function(){_v202FreshV21();channel.v21World=null;v21NormalizeRecords();v21NormalizeWorld();};
+
+  const _v202FinalizeBrandingV21=finalizeV15Branding;
+  finalizeV15Branding=function(){_v202FinalizeBrandingV21();const sub=document.querySelector('.hub-sub');if(sub&&sub.textContent.includes('Prototype Hub'))sub.textContent='Prototype Hub · v21';document.title='Scrying Orb: Dungeon Streaming Prototype v21';};
+  finalizeV15Branding();
+  if($('exportSaveButton'))$('exportSaveButton').onclick=v202DownloadSave;
+
+  window.__DSC_V21={
+    metrics:()=>v21SpecialistMetrics(),
+    world:()=>JSON.parse(JSON.stringify(v21NormalizeWorld())),
+    day:()=>v21NormalizeWorld().day,
+    advanceDay:()=>{v21AdvanceOneDay();saveProgress();return v21NormalizeWorld().day;},
+    overallTop:()=>v21OverallOrder().map((x,i)=>({rank:i+1,name:x.name,score:x.overall,avg:x.avg})),
+    board:(key)=>v21BoardSort(key).map((x,i)=>({rank:i+1,name:x.name,value:x[key]})),
+    leader:(key)=>v21Leader(key)?.name||null,
+    treasureValue:()=>v21TreasureValue(),
+    cleanText:(s)=>v21CleanTextValue(s),
+    setPlayerRecords:(x={})=>{v21NormalizeRecords();Object.assign(channel.specialist,x);saveProgress();},
+    renderRanking:()=>renderRankingV15(),
+    showBoard:(key)=>v21ShowBoard(key)
   };
 
   initV14();
