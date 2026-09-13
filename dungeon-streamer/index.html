@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Scrying Orb — Dungeon Streaming Prototype v18.2</title>
+<title>Scrying Orb — Dungeon Streaming Prototype v20.2</title>
 <style>
   :root {
     --bg: #0f1116;
@@ -1442,6 +1442,149 @@
   .v18-speed-note { margin-top:9px; text-align:center; color:var(--muted); font-size:11px; }
   .v18-speed-note b { color:var(--accent); }
 
+
+
+  /* ===== v19: Explorer's Guild institution, character build, materials, membership, Rest Zone Q&A ===== */
+  [data-hub="quests"] { display:none !important; }
+  .v19-service-actions { display:grid !important; grid-template-columns:repeat(2,minmax(220px,1fr)); width:100%; justify-content:stretch !important; }
+  .v19-service-actions button { text-align:left; min-height:46px; }
+  .v19-service-actions .wide { grid-column:1/-1; }
+  .v19-stat-form { display:grid; gap:9px; margin-top:12px; }
+  .v19-stat-row { display:grid; grid-template-columns:56px 1fr auto auto auto; gap:9px; align-items:center; border:1px solid var(--line); background:#10151d; border-radius:8px; padding:9px 10px; }
+  .v19-stat-row .stat-name { font-weight:1000; color:var(--accent); }
+  .v19-stat-row .stat-desc { color:var(--muted); font-size:12px; }
+  .v19-stat-row .stat-value { min-width:34px; text-align:center; font-size:20px; font-weight:1000; }
+  .v19-stat-row button { width:36px; height:32px; padding:0; display:grid; place-items:center; }
+  .v19-points { display:flex; align-items:center; justify-content:space-between; gap:16px; padding:10px 12px; margin-top:10px; border:1px solid var(--line-strong); border-radius:8px; background:#151a22; }
+  .v19-points b { color:var(--accent); font-size:19px; }
+  .v19-guild-card { border:1px solid var(--line-strong); background:#10151d; border-radius:9px; padding:14px; margin-top:10px; }
+  .v19-guild-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; margin-top:10px; }
+  .v19-scroll-card { max-height:44vh; overflow:auto; padding-right:5px; }
+  .v19-service-row { display:grid; grid-template-columns:minmax(150px,1fr) auto auto auto; gap:8px; align-items:center; border-bottom:1px solid #252d39; padding:8px 0; }
+  .v19-service-row:last-child { border-bottom:0; }
+  .v19-service-row button { padding:7px 9px; }
+  .v19-material-chip { display:inline-flex; align-items:center; gap:5px; border:1px solid var(--line); border-radius:999px; padding:4px 8px; margin:3px 4px 3px 0; background:#111720; font-size:11px; }
+  .v19-catalog-group { margin-bottom:18px; }
+  .v19-catalog-group h3 { display:flex; align-items:center; justify-content:space-between; gap:10px; }
+  .v19-lock { color:#d6a5aa; font-size:11px; font-weight:800; }
+  .compact-card.v19-locked { opacity:.58; }
+  .compact-card.v19-locked button { cursor:not-allowed; }
+  .v19-membership { margin-top:18px; }
+  .v19-membership-row { display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
+  .v19-membership-row input { flex:1 1 220px; min-width:180px; border:1px solid var(--line-strong); background:#0d1117; color:var(--text); padding:9px 10px; border-radius:6px; }
+  .chat-user.member { color:#ffd76a !important; text-shadow:0 0 10px rgba(255,215,106,.22); }
+  .v19-rest-options { display:grid; gap:9px; margin-top:12px; }
+  .v19-rest-choice { width:100%; text-align:left; border:1px solid var(--line); border-radius:8px; background:#111720; color:var(--text); padding:11px 12px; cursor:pointer; }
+  .v19-rest-choice:hover { border-color:var(--accent); background:#181e27; }
+  .v19-rest-choice b { display:block; margin-bottom:5px; }
+  .v19-rest-effect { color:var(--muted); font-size:11px; line-height:1.45; }
+  .v19-donation-card { border:1px solid #7d6428; background:#1c180e; border-radius:9px; padding:12px 14px; margin:10px 0; }
+  .v19-donation-head { color:#ffd76a; font-size:11px; font-weight:1000; letter-spacing:.07em; text-transform:uppercase; margin-bottom:6px; }
+  .v19-followup { border-left:3px solid var(--accent); padding:8px 10px; margin-top:10px; background:#111720; }
+  .v19-assignment-progress { display:grid; gap:6px; margin-top:10px; }
+  .v19-assignment-progress div { display:flex; gap:8px; align-items:center; color:var(--muted); }
+  .v19-assignment-progress .done { color:var(--good); }
+  .v19-assignment-progress .mark { width:18px; text-align:center; font-weight:1000; }
+  .v19-inventory-materials { margin-top:18px; }
+  .vn-portrait[data-character]::after { content:attr(data-character) ' · PORTRAIT PLACEHOLDER'; }
+  .vn-visual[data-location-title]::before { content:attr(data-location-title); }
+  @media(max-width:850px){ .v19-service-actions,.v19-guild-grid{grid-template-columns:1fr}.v19-stat-row{grid-template-columns:50px 1fr auto auto auto}.v19-service-row{grid-template-columns:1fr auto auto}.v19-service-row .value{grid-column:1/-1} }
+  /* ===== v19.1: guild navigation, readable material requirements, VN typewriter ===== */
+  .v191-pending-action { visibility:hidden !important; pointer-events:none !important; }
+  .v191-guild-summary { margin-top:14px; }
+  .v191-requirements { display:grid; gap:7px; margin:10px 0 0; }
+  .v191-requirement { display:grid; grid-template-columns:18px 1fr; gap:8px; align-items:start; color:var(--muted); }
+  .v191-requirement.done { color:var(--good); }
+  .v191-requirement .mark { font-weight:1000; text-align:center; }
+  .v191-source { display:block; margin-top:2px; font-size:11px; color:var(--muted); }
+  .v191-overview-actions { display:flex; flex-wrap:wrap; gap:9px; margin-top:14px; }
+  .vn-dialogue.v191-typing { cursor:pointer; }
+
+
+
+  /* ===== v20: Istana, specialist rankings, Explorer expedition insurance ===== */
+  .v20-specialist-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(225px,1fr));gap:10px;margin:10px 0 18px}
+  .v20-specialist-card{border:1px solid var(--line);border-radius:8px;background:#000;padding:12px;min-height:116px}
+  .v20-specialist-card .rank{font-size:25px;font-weight:1000;color:var(--accent);margin:5px 0}
+  .v20-specialist-card .metric{font-size:12px;color:var(--muted);line-height:1.45}
+  .v20-specialist-card .leader{font-size:11px;color:var(--muted);margin-top:7px;border-top:1px solid var(--line);padding-top:6px}
+  .v20-istana-card{border:1px solid #f0a7cf;border-radius:9px;background:linear-gradient(135deg,#090408,#000);padding:14px;margin:14px 0}
+  .v20-istana-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:7px}
+  .v20-istana-name{font-size:20px;font-weight:1000;color:#ffc2e3}
+  .v20-istana-badge{font-size:10px;font-weight:1000;letter-spacing:.09em;border:1px solid #f0a7cf;border-radius:999px;padding:4px 7px;color:#ffc2e3}
+  .v20-istana-ranks{display:flex;flex-wrap:wrap;gap:6px;margin-top:9px}
+  .v20-istana-ranks span{border:1px solid var(--line);border-radius:999px;padding:4px 7px;font-size:11px;color:var(--muted)}
+  .v20-insurance-summary{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;margin-bottom:12px}
+  .v20-insurance-plans{display:grid;gap:8px;max-height:48vh;overflow:auto;padding-right:4px}
+  .v20-insurance-plan{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:center;border:1px solid var(--line);border-radius:7px;padding:10px;background:#000}
+  .v20-insurance-plan.selected{border-color:var(--accent);box-shadow:inset 3px 0 0 var(--accent)}
+  .v20-insurance-plan button{min-width:92px}
+  .v20-insurance-note{font-size:11px;color:var(--muted);line-height:1.45;margin-top:10px}
+  .v20-policy-pill{display:inline-block;border:1px solid var(--line);border-radius:999px;padding:3px 7px;font-size:11px;color:var(--muted)}
+  .v20-insurance-result{margin-top:10px}
+  .v20-insurance-result .saved{color:var(--good);font-weight:900}
+  .v20-insurance-result .fee{color:var(--bad);font-weight:900}
+
+
+
+  /* ===== v20.1: inventory density, enhancement rhythm, stable scrolling ===== */
+  .v201-equipment-top{display:grid;grid-template-columns:minmax(205px,.72fr) minmax(280px,1.15fr) minmax(320px,1.25fr);gap:12px;align-items:start}
+  .v201-equipment-column{border:1px solid var(--line);border-radius:8px;padding:12px;background:#000;min-width:0}
+  .v201-equipment-column>h3{margin:0 0 10px}
+  .v201-slot-list{display:grid;gap:5px}
+  .v201-slot{border:1px solid var(--line);border-radius:6px;padding:7px 9px;min-width:0}
+  .v201-slot b{display:block;font-size:10px;letter-spacing:.06em;text-transform:uppercase}
+  .v201-slot span{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .v201-owned-list{display:grid;gap:7px;max-height:48vh;overflow:auto;padding-right:3px}
+  .v201-consumables{margin-top:18px;padding-top:18px;border-top:1px solid var(--line)}
+  .v201-passive-crystals{display:flex;flex-wrap:wrap;gap:7px}
+  .v201-crystal-chip{border:1px solid var(--line);border-radius:999px;padding:5px 8px;font-size:11px;color:var(--muted)}
+  .v201-enhance-beats{display:grid;grid-template-columns:repeat(15,1fr);gap:4px;width:min(var(--v181-track-width),100%);margin:0 auto 14px}
+  .v201-enhance-beat{height:9px;border-radius:999px;background:#222a35;border:1px solid #36404f}
+  .v201-enhance-beat.perfect{background:var(--good);border-color:var(--good)}
+  .v201-enhance-beat.good{background:var(--accent);border-color:var(--accent)}
+  .v201-enhance-beat.miss{background:var(--bad);border-color:var(--bad)}
+  .v201-enhance-target{position:absolute;left:45%;width:10%;top:0;bottom:0;border:2px solid var(--good);background:rgba(100,255,150,.08)}
+  .v201-enhance-result{font-weight:900}
+  .v201-enhance-result.exceptional{color:var(--good)}
+  .v201-enhance-result.failed{color:var(--bad)}
+  .v201-dungeon-intel{display:grid;gap:5px;margin-top:7px}
+  .v201-intel-line{display:grid;grid-template-columns:120px 1fr;gap:8px;font-size:11px;color:var(--muted)}
+  .v201-intel-line b{color:var(--text)}
+  .v201-pro-wall{margin-top:7px;padding:7px 9px;border-left:3px solid var(--accent);background:#080808;font-size:11px;color:var(--muted)}
+  @media(max-width:1040px){.v201-equipment-top{grid-template-columns:minmax(190px,.8fr) 1fr}.v201-equipment-column:last-child{grid-column:1/-1}}
+  @media(max-width:720px){.v201-equipment-top{grid-template-columns:1fr}.v201-equipment-column:last-child{grid-column:auto}.v201-owned-list{max-height:none}}
+
+
+  /* ===== v20.2: save portability, combat equipment inspection, viewport cleanup ===== */
+  .v202-save-row{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:7px}
+  .v202-save-row button{width:100%}
+  .v202-import-preview{display:grid;gap:7px;margin:10px 0 14px;padding:10px;border:1px solid var(--line);border-radius:7px;background:#000}
+  .v202-import-preview-row{display:flex;justify-content:space-between;gap:12px;font-size:12px}
+  .v202-import-preview-row span{color:var(--muted)}
+  .v202-import-error{color:var(--bad);font-size:12px;margin-top:8px}
+  .v202-equipment-toggle-wrap{padding:8px 14px;border-bottom:1px solid var(--line);background:#11141a;flex:0 0 auto}
+  .v202-equipment-toggle{width:100%}
+  .v202-combat-equipment{display:none;padding:0 14px 16px}
+  .v202-combat-equipment.show{display:block}
+  .v202-loadout-row{display:grid;grid-template-columns:64px minmax(0,1fr);gap:8px;padding:7px 0;border-bottom:1px solid var(--line);font-size:11px}
+  .v202-loadout-row .slot{color:var(--muted);font-weight:850;text-transform:uppercase;letter-spacing:.04em}
+  .v202-loadout-row .gear-name{font-weight:900;color:var(--text)}
+  .v202-loadout-row .gear-bonus{margin-top:2px;color:var(--muted);line-height:1.35}
+  .v202-equipment-total{margin-top:10px;padding:9px;border:1px solid var(--line);border-radius:7px;background:#000;font-size:11px;line-height:1.5}
+  .news-card.v202-istana-news{border-color:#b65a91;background:#10050c;box-shadow:inset 3px 0 0 #e681bc}
+  .news-card.v202-istana-news b{color:#ff9bd0}
+
+  /* The stream shell owns the viewport height. Its children must not independently use 100vh. */
+  .stream-shell{height:100dvh;min-height:0;box-sizing:border-box}
+  .stream-panel,.center-stage{height:100%;min-height:0;box-sizing:border-box}
+  body.news-active .stream-shell:not(.hidden){height:calc(100dvh - 30px);margin-top:30px}
+  .chat-messages{padding-bottom:30px;scroll-padding-bottom:30px}
+  @supports not (height:100dvh){
+    .stream-shell{height:100vh}
+    body.news-active .stream-shell:not(.hidden){height:calc(100vh - 30px)}
+  }
+
 </style>
 </head>
 <body>
@@ -1656,7 +1799,7 @@
 <div class="game-screen hub-screen" id="hubScreen">
   <div class="hub-shell">
     <header class="hub-header">
-      <div><div class="hub-title">Scrying Orb™️ <span class="hub-title-divider">|</span> The Dungeon Streaming Service</div><div class="hub-sub">Prototype Hub · v18.2</div></div>
+      <div><div class="hub-title">Scrying Orb<sup>TM</sup> <span class="hub-title-divider">|</span> The Dungeon Streaming Service</div><div class="hub-sub">Prototype Hub · v20.2</div></div>
       <div class="hub-resources">
         <span>Money <b id="hubMoney">0</b></span>
         <span>Popularity <b id="hubPopularity">0</b></span>
@@ -3706,7 +3849,7 @@ Genres: ${lines}`;
 
   async function endStream(reason='retreat'){
     if(!game||game.finished)return;game.finished=true;setMoveButtonsEnabled(false);const satisfaction=computeSatisfaction();channel.streams++;profile.hp=game.player.hp;normalizeChannelV10();const def=DUNGEON_DEFS[game.dungeon?.definition]||{reward:0};if(reason==='complete'){profile.money+=def.reward||0;profile.clearedDungeons++;profile.dungeonClears[game.dungeon.name]=(profile.dungeonClears[game.dungeon.name]||0)+1;addPopularityProgress(.5);}
-    const avg=Math.round(game.viewerSamples?game.viewerTurnSum/game.viewerSamples:game.viewers);channel.lastPeakCCV=game.peakViewers;channel.lastAverageCCV=avg;channel.lastSatisfaction=satisfaction;
+    const avg=Math.round(game.viewerSamples?game.viewerTurnSum/game.viewerSamples:game.viewers);channel.lastPeakCCV=game.peakViewers;channel.lastAverageCCV=avg;v191RecordRecentCCV(avg,game.peakViewers);channel.lastSatisfaction=satisfaction;
     let adRevenue=0,memberRevenue=0,newMembers=0,sponsorRevenue=0;if(channel.unlocks.ads){adRevenue=Math.floor((game.viewerTurnSum||0)/35);profile.money+=adRevenue;game.streamIncome.ads=adRevenue;channel.lifetimeStreamIncome+=adRevenue;}if(channel.unlocks.memberships){newMembers=satisfaction>=65?randomCount(avg*(satisfaction/100)*.012):0;channel.members+=newMembers;memberRevenue=channel.members*2;profile.money+=memberRevenue;game.streamIncome.members=memberRevenue;channel.lifetimeStreamIncome+=memberRevenue;}if(sponsorSucceeded(reason)){const s=SPONSORS[channel.activeSponsor];sponsorRevenue=s.reward;profile.money+=sponsorRevenue;game.streamIncome.sponsor=sponsorRevenue;channel.lifetimeStreamIncome+=sponsorRevenue;}const sponsorName=channel.activeSponsor?SPONSORS[channel.activeSponsor]?.name:null;channel.activeSponsor=null;const newUnlocks=evaluateMonetizationUnlocks();
     showOnlyScreen('combat');$('turnLabel').textContent=reason==='complete'?'DUNGEON COMPLETE':'STREAM ENDING';$('statusText').textContent=reason==='complete'?`Dungeon clear. Contract reward: ${def.reward||0} money.`:'Retreating safely from the dungeon.';actionChatStart();const farewellDuration=window.__DSC_FAST?160:5000,start=Date.now();while(Date.now()-start<farewellDuration){if(game.viewers>0)addChat(choice(CHAT_FAREWELL));await sleep(randInt(350,850));}
     saveProgress();$('resultTitle').textContent=reason==='death'?'RUN ENDED':reason==='complete'?'DUNGEON COMPLETE':'STREAM ENDED';$('resultTitle').style.color=reason==='death'?'var(--bad)':'var(--good)';$('resultSatisfaction').textContent=`${satisfaction}%`;$('resultEngagement').textContent=Math.round(game.engagementScore);$('resultPeak').textContent=game.peakViewers.toLocaleString();$('resultPopularity').textContent=channel.popularity;$('resultDefeated').textContent=game.enemiesDefeated;const card=$('resultOverlay').querySelector('.result-card');let extra=$('v10StreamEconomy');if(!extra){extra=document.createElement('div');extra.id='v10StreamEconomy';extra.className='compact-card';card.insertBefore(extra,$('againButton'));}extra.innerHTML=`<b>Stream Economy</b><div class="compact-meta">Average CCV: ${avg}<br>Ads: ${adRevenue} · Donations: ${game.streamIncome.donations} · Memberships: ${memberRevenue}${newMembers?` (+${newMembers} new members)`:''}<br>Sponsor: ${sponsorRevenue}${sponsorName?` (${sponsorName})`:''}${newUnlocks.length?`<br><b>Unlocked: ${newUnlocks.join(', ')}</b>`:''}</div>`;$('resultOverlay').classList.add('show');
@@ -3838,7 +3981,7 @@ Genres: ${lines}`;
       }else if(kind==='rhythm'){
         area.innerHTML='<div><div class="rhythm-dots"><span class="rhythm-dot" id="beat0"></span><span class="rhythm-dot" id="beat1"></span><span class="rhythm-dot" id="beat2"></span></div><div class="skill-track"><div class="skill-sweet"></div><div class="skill-marker" id="scMarker"></div></div><button class="skill-action" id="scAction">HIT BEAT</button></div>';const marker=$('scMarker');let taps=[],phase=0,last=performance.now(),lastTap=-999;const tick=now=>{if(done)return;const dt=Math.min(40,now-last);last=now;phase=(phase+dt/9)%100;marker.style.left=`${phase}%`;raf=requestAnimationFrame(tick)};let raf=requestAnimationFrame(tick);cleanupFns.push(()=>cancelAnimationFrame(raf));const tap=()=>{const now=performance.now();if(now-lastTap<280)return;lastTap=now;const q=skillScoreFromDistance(Math.abs(phase-50),50);taps.push(q);$(`beat${taps.length-1}`).classList.add('hit');readout.textContent=`Beats: ${taps.length}/3`;if(taps.length>=3)finish(Math.round(taps.reduce((a,b)=>a+b,0)/3));};$('scAction').onclick=tap;onKey(e=>{if(e.code==='Space'||e.code==='Enter'){e.preventDefault();tap();}});timeout(5200,()=>taps.length?Math.round(taps.reduce((a,b)=>a+b,0)/taps.length*.75):1);
       }else if(kind==='direction'){
-        const arrows=['ArrowUp','ArrowDown','ArrowLeft','ArrowRight'],glyph={ArrowUp:'↑',ArrowDown:'↓',ArrowLeft:'←',ArrowRight:'→'},seq=Array.from({length:10},()=>choice(arrows));let idx=0,correct=0,reactionTotal=0,promptAt=performance.now();area.innerHTML=`<div><div class="direction-sequence">${seq.map((x,i)=>`<span class="direction-token ${i===0?'current':''}" data-seq="${i}">${glyph[x]}</span>`).join('')}</div><div class="direction-buttons"><button data-dir="ArrowUp">↑</button><button data-dir="ArrowLeft">←</button><button data-dir="ArrowDown">↓</button><button data-dir="ArrowRight">→</button></div></div>`;const update=()=>{readout.textContent=`Input ${Math.min(idx+1,10)}/10`;area.querySelectorAll('.direction-token').forEach((el,i)=>el.classList.toggle('current',i===idx));promptAt=performance.now();};update();const press=key=>{if(done||idx>=10)return;const el=area.querySelector(`[data-seq="${idx}"]`),ok=key===seq[idx];el.classList.remove('current');el.classList.add(ok?'correct':'wrong');if(ok){correct++;reactionTotal+=performance.now()-promptAt;}idx++;if(idx>=10){const accuracy=correct/10,avg=correct?reactionTotal/correct:1600;const speedBonus=Math.max(0,3.5-avg/260);finish(clamp(Math.round(1+accuracy*15.5+speedBonus),1,20));}else update();};area.querySelectorAll('[data-dir]').forEach(b=>b.onclick=()=>press(b.dataset.dir));onKey(e=>{const d=mapDirection(e);if(d){e.preventDefault();press(d);}});timeout(10500,()=>clamp(Math.round(1+correct*1.7),1,18));
+        const arrows=['ArrowUp','ArrowDown','ArrowLeft','ArrowRight'],glyph={ArrowUp:'↑',ArrowDown:'↓',ArrowLeft:'←',ArrowRight:'→'},seq=Array.from({length:10},()=>choice(arrows));let idx=0,correct=0,reactionTotal=0,promptAt=performance.now();area.innerHTML=`<div><div class="direction-sequence">${seq.map((x,i)=>`<span class="direction-token ${i===0?'current':''}" data-seq="${i}">${glyph[x]}</span>`).join('')}</div><div class="direction-buttons"><button data-dir="ArrowUp">↑</button><button data-dir="ArrowLeft">←</button><button data-dir="ArrowDown">↓</button><button data-dir="ArrowRight">→</button></div></div>`;const update=()=>{readout.textContent=`Input ${Math.min(idx+1,10)}/10`;area.querySelectorAll('.direction-token').forEach((el,i)=>el.classList.toggle('current',i===idx));promptAt=performance.now();};update();const press=key=>{if(done||idx>=10)return;const el=area.querySelector(`[data-seq="${idx}"]`),ok=key===seq[idx];el.classList.remove('current');el.classList.add(ok?'correct':'wrong');if(ok){correct++;reactionTotal+=performance.now()-promptAt;}idx++;if(idx>=10){const accuracy=correct/10,avg=correct?reactionTotal/correct:1600;const speedBonus=Math.max(0,4.5-avg/200);finish(clamp(Math.round(1+accuracy*15.5+speedBonus),1,20));}else update();};area.querySelectorAll('[data-dir]').forEach(b=>b.onclick=()=>press(b.dataset.dir));onKey(e=>{const d=mapDirection(e);if(d){e.preventDefault();press(d);}});timeout(10500,()=>clamp(Math.round(1+correct*1.7),1,18));
       }else if(kind==='saw'){
         area.innerHTML='<div><div style="text-align:center;font-size:26px;font-weight:1000;margin-bottom:12px" id="sawCount">0 / 8</div><div class="saw-buttons"><button id="sawLeft">← PULL</button><button id="sawRight">PUSH →</button></div></div>';let expected='L',count=0,mistakes=0;const started=performance.now();const press=side=>{if(done)return;if(side===expected){count++;expected=expected==='L'?'R':'L';$('sawCount').textContent=`${count} / 8`;if(count>=8){const elapsed=performance.now()-started;let score;if(mistakes===0&&elapsed<=2600)score=20;else if(mistakes===0&&elapsed<=3300)score=19;else score=clamp(16+Math.round((4200-Math.min(4200,elapsed))/900)-mistakes,1,19);finish(score);}}else{mistakes++;readout.textContent='Wrong direction — alternate left/right.';}};$('sawLeft').onclick=()=>press('L');$('sawRight').onclick=()=>press('R');onKey(e=>{if(e.key==='ArrowLeft'||e.key==='a'||e.key==='A'){e.preventDefault();press('L');}if(e.key==='ArrowRight'||e.key==='d'||e.key==='D'){e.preventDefault();press('R');}});timeout(6000,()=>clamp(1+count*2-mistakes,1,18));
       }else if(kind==='balance'){
@@ -4694,7 +4837,7 @@ Genres: ${lines}`;
     ['DUNGEON WATCH','MiraVolt announced another high-power dungeon challenge for her next Orb stream.'],
     ['SPEEDRUN','RookRush is practicing a new F-rank route and claims the current record is soft.'],
     ['BLUEBELL','Bluebell Dungeon Desk is preparing its next Orb Dungeon Weekly ranking broadcast.'],
-    ['FIELD DAY','Bluebell’s dungeon-news idol says she may do another light field crawl after this week’s broadcast.'],
+    ['FIELD DAY','Istana says she may do another light dungeon crawl after this week’s broadcast.'],
     ['GUILD NEWS','Explorer’s Guild reminds new members that safe retreats still preserve recovered loot.'],
     ['TRENDING','Technical viewers are sharing flawless-defense clips across Scrying Orb today.']
   ];
@@ -4778,12 +4921,12 @@ Genres: ${lines}`;
   $('resetConfirmNext').addEventListener('click',()=>{if(resetConfirmStepV16<2){resetConfirmStepV16++;renderResetConfirmV16();return;}closeResetProgressV16();performSoftResetV16();});
   $('resetConfirmOverlay').addEventListener('click',e=>{if(e.target===$('resetConfirmOverlay'))closeResetProgressV16();});
 
-  // Bluebell's idol/newscaster is intentionally role-named for now; a permanent character name can be assigned later.
+  // Istana is Bluebell Media Network's cheerful dungeon-news idol and occasional low-level field crawler.
   function applyBroadcastChromeV16(){
     $('storyScreen').classList.add('broadcast-mode');
     $('vnKicker').textContent='Bluebell Media Network · Orb Dungeon Weekly';
     $('vnLocation').textContent='Scrying Orb — Bluebell Dungeon Desk';
-    $('vnBalance').innerHTML='LIVE ON <b>SCRYING ORB</b>';
+    $('vnBalance').innerHTML='LIVE ON <b>SCRYING ORB<sup>TM</sup></b>';
   }
   function restoreStoryChromeV16(){
     $('storyScreen').classList.remove('broadcast-mode');
@@ -4803,17 +4946,17 @@ Genres: ${lines}`;
     const data=activeBroadcastV16||{rank:streamerRankV15()},rank=data.rank||streamerRankV15();
     showOnlyScreen('story');
     if(broadcastPageV16===0){
-      setVnV14('Bluebell Idol',`"Welcome back to <b>Orb Dungeon Weekly</b>! I'm your Bluebell dungeon desk host, here with this week's ranking movement, dungeon stories, and clips worth knowing about."`,{focus:'left',centerHtml:'<div class="broadcast-board"><div class="broadcast-logo">ORB DUNGEON WEEKLY</div><div class="broadcast-sub">A Bluebell Media Network program</div></div>'});
+      setVnV14('Istana',`"Welcome back to <b>Orb Dungeon Weekly</b>! I'm your Bluebell dungeon desk host, here with this week's ranking movement, dungeon stories, and clips worth knowing about."`,{focus:'left',centerHtml:'<div class="broadcast-board"><div class="broadcast-logo">ORB DUNGEON WEEKLY</div><div class="broadcast-sub">A Bluebell Media Network program</div></div>'});
       applyBroadcastChromeV16();vnButtonV14('Continue',()=>{broadcastPageV16++;renderBroadcastPageV16();});
     }else if(broadcastPageV16===1){
-      setVnV14('Bluebell Idol','"First, the top of the board. These channels are still the ones everyone else is chasing."',{focus:'left',centerHtml:`<div class="broadcast-board"><div class="broadcast-logo">STREAMER'S RANKING · TOP 5</div><div class="broadcast-rank-list">${bluebellTopBoardV16()}</div></div>`});
+      setVnV14('Istana','"First, the top of the board. These channels are still the ones everyone else is chasing."',{focus:'left',centerHtml:`<div class="broadcast-board"><div class="broadcast-logo">STREAMER'S RANKING · TOP 5</div><div class="broadcast-rank-list">${bluebellTopBoardV16()}</div></div>`});
       applyBroadcastChromeV16();vnButtonV14('Continue',()=>{broadcastPageV16++;renderBroadcastPageV16();});
     }else if(broadcastPageV16===2){
-      const line=playerBroadcastLineV16(data);setVnV14('Bluebell Idol',`"${line}"`,{focus:'left',centerHtml:`<div class="broadcast-board"><div class="broadcast-logo">RANKING WATCH</div><div class="broadcast-player-highlight"><b>${escV14(profile.playerName||'Player')}</b><br>#${rank.toLocaleString()} · Popularity Lv. ${channel.popularity}</div></div>`});
+      const line=playerBroadcastLineV16(data);setVnV14('Istana',`"${line}"`,{focus:'left',centerHtml:`<div class="broadcast-board"><div class="broadcast-logo">RANKING WATCH</div><div class="broadcast-player-highlight"><b>${escV14(profile.playerName||'Player')}</b><br>#${rank.toLocaleString()} · Popularity Lv. ${channel.popularity}</div></div>`});
       applyBroadcastChromeV16();vnButtonV14('Continue',()=>{broadcastPageV16++;renderBroadcastPageV16();});
     }else{
       const fieldLine=(channel.streams||0)%10===0?'"And yes, before chat asks again: I am doing another light dungeon field stream soon. News desk first, dungeon crawling second!"':'"That is it for the board today. I do crawl occasionally myself, but I am much happier reporting on the people brave enough to make it their main job."';
-      setVnV14('Bluebell Idol',fieldLine,{focus:'left',centerHtml:'<div class="broadcast-board"><div class="broadcast-logo">BLUEBELL DUNGEON DESK</div><div class="broadcast-sub">Dungeon news · rankings · occasional field streams</div></div>'});
+      setVnV14('Istana',fieldLine,{focus:'left',centerHtml:'<div class="broadcast-board"><div class="broadcast-logo">BLUEBELL DUNGEON DESK</div><div class="broadcast-sub">Dungeon news · rankings · occasional field streams</div></div>'});
       applyBroadcastChromeV16();vnButtonV14('Return to Hub',async()=>{channel.lastBroadcastStream=channel.streams||0;channel.pendingBroadcast=null;saveProgress();restoreStoryChromeV16();await wipeSwitch(()=>goHub());});
     }
   }
@@ -4842,7 +4985,7 @@ Genres: ${lines}`;
   renderRankingV15=function(){
     _v15RenderRankingV16();normalizeWorldV16();const panel=$('hubPanel');
     const newsHeading=[...panel.querySelectorAll('h3')].find(h=>h.textContent.trim()==='Recent Orb News');
-    if(newsHeading){const blue=document.createElement('div');blue.className='bluebell-desk-card';blue.innerHTML='<b>Bluebell Dungeon Desk</b><div class="compact-meta">Orb Dungeon Weekly is hosted by a Bluebell Media Network idol talent. Dungeon news is her main job; she occasionally does lighter field crawls herself.</div>';newsHeading.before(blue);const h=document.createElement('h3');h.textContent='Streamer Reactions';blue.before(h);const holder=document.createElement('div');holder.innerHTML=streamerReactionHtmlV16();h.after(holder);}
+    if(newsHeading){const blue=document.createElement('div');blue.className='bluebell-desk-card';blue.innerHTML='<b>Bluebell Dungeon Desk</b><div class="compact-meta">Orb Dungeon Weekly is hosted by Istana, Bluebell Media Network’s cheerful, baby-faced idol newscaster. Dungeon news is her main job; she occasionally does light, low-level field crawls herself.</div>';newsHeading.before(blue);const h=document.createElement('h3');h.textContent='Streamer Reactions';blue.before(h);const holder=document.createElement('div');holder.innerHTML=streamerReactionHtmlV16();h.after(holder);}
   };
 
   // Expand news coverage and queue Bluebell broadcasts after streams.
@@ -5641,11 +5784,1090 @@ Genres: ${lines}`;
   };
 
 
+  // ===== v19: Explorer's Guild institution, character build, materials, catalog progression, membership, Rest Zone Q&A =====
+  const V19_STAT_DESCRIPTIONS={PHY:'Physical attack power.',MAG:'Magical attack power.',DEF:'Physical defense.',MND:'Magical defense.',AGI:'Mobility and Flurry power.',TEC:'Precision and technical attacks.',VIT:'Vitality. Each point raises maximum HP by 2.'};
+  const V19_BASE_STAT=1;
+  const V19_FREE_POINTS=20;
+  const V19_CATALOG_NAMES=['Starter Catalogue','Field Catalogue I','Field Catalogue II','Field Catalogue III','Field Catalogue IV'];
+  const V19_FAMILY_RANK={cave:'F',grotto:'F',mine:'F',flooded:'E',rotroot:'E',crystal:'D',ashen:'C',abyssgarden:'B'};
+  const V19_RANK_MATERIAL_MULT={F:1,E:2,D:3,C:5,B:8,A:13,S:20};
+
+  // Three material drops are defined for every monster currently in the prototype.
+  // Related monsters deliberately share some components; elites drop larger quantities of shared components.
+  const V19_MONSTER_MATERIAL_NAMES={
+    'Cave Wolf':['Wolf Pelt','Wolf Fang','Wolf Claw'],
+    'Ash Imp':['Imp Horn','Ash Gland','Cinder Claw'],
+    'Stone Slime':['Stone Slime Gel','Stone Slime Core','Mineralized Membrane'],
+    'Cave Bat':['Cave Bat Wing','Cave Bat Fang','Cave Bat Ear'],
+    'Ironhide Wolf':['Wolf Pelt','Ironhide Plate','Ironhide Fang'],
+    'Rune Stalker':['Stalker Tendon','Rune Shard','Arcane Hide'],
+    'Cave Dungeon Master':['Dungeon Core Fragment','Cave Keystone','Condensed Cave Essence'],
+    'Moss Slime':['Moss Slime Gel','Moss Slime Core','Mossy Membrane'],
+    'Sporeling':['Spore Sac','Mycelial Fiber','Sporeling Cap'],
+    'Thorn Beetle':['Beetle Carapace','Thorn Mandible','Resin Gland'],
+    'Glow Moth':['Glow Dust','Glow Moth Wing','Luminous Antenna'],
+    'Giant Mantis':['Mantis Chitin','Mantis Blade','Mantis Eye'],
+    'Mycelial Stalker':['Stalker Tendon','Mycelial Fiber','Spore Heart'],
+    'Grotto Dungeon Master':['Dungeon Core Fragment','Grotto Keystone','Bioluminescent Core'],
+    'Mire Toad':['Mire Toad Skin','Toad Venom Gland','Mire Toad Eye'],
+    'River Serpent':['Serpent Scale','Serpent Fang','River Spine'],
+    'Bubble Slime':['Bubble Slime Gel','Bubble Slime Core','Elastic Membrane'],
+    'Lamprey Swarm':['Lamprey Tooth Cluster','Lamprey Oil','Blood Sac'],
+    'Shellback':['Shell Plate','Shellback Claw','Brine Gland'],
+    'Deep Eel':['Deep Eel Skin','Electrocyte Organ','Deep Eel Fang'],
+    'Flooded Dungeon Master':['Dungeon Core Fragment','Flooded Keystone','Abyssal Pearl'],
+    'Rock Crawler':['Crawler Stoneplate','Crawler Claw','Granite Nodule'],
+    'Dust Slime':['Dust Slime Gel','Dust Slime Core','Powdered Membrane'],
+    'Tunnel Wyrm':['Wyrm Scale','Tunnel Wyrm Fang','Burrowing Tendon'],
+    'Ore Beetle':['Ore Beetle Carapace','Ore Mandible','Metallic Resin'],
+    'Stoneback Mole':['Stoneback Hide','Stoneback Claw','Dense Bone Plate'],
+    'Crystal Centipede':['Crystal Chitin','Centipede Fang','Prismatic Gland'],
+    'Mine Dungeon Master':['Dungeon Core Fragment','Mine Keystone','Compressed Ore Heart'],
+    'Rootling':['Root Fiber','Sap Gland','Rootling Seed'],
+    'Rot Moth':['Rot Moth Wing','Rot Dust','Blight Antenna'],
+    'Vine Slime':['Vine Slime Gel','Vine Slime Core','Living Tendril'],
+    'Bog Lizard':['Bog Lizard Hide','Bog Fang','Swamp Gland'],
+    'Bramble Beast':['Bramble Hide','Thorn Horn','Bramble Heart'],
+    'Spore Warden':['Warden Mycelium','Warden Spore Sac','Spore Crown'],
+    'Rotroot Dungeon Master':['Dungeon Core Fragment','Rotroot Keystone','Rotheart Bulb'],
+    'Prism Slime':['Prism Slime Gel','Prism Slime Core','Refraction Membrane'],
+    'Crystal Lizard':['Crystal Lizard Scale','Crystal Fang','Prism Eye'],
+    'Echo Bat':['Echo Bat Wing','Echo Fang','Resonance Ear'],
+    'Shard Crawler':['Shard Carapace','Shard Claw','Crystal Nodule'],
+    'Glassback':['Glassback Plate','Glassback Horn','Tempered Crystal Organ'],
+    'Resonant Wyrm':['Resonant Scale','Resonant Fang','Vibrating Tendon'],
+    'Crystal Dungeon Master':['Dungeon Core Fragment','Crystal Keystone','Resonant Prism Heart'],
+    'Cinder Beetle':['Cinder Carapace','Cinder Mandible','Ember Resin'],
+    'Ash Hound':['Ash Hound Pelt','Ash Hound Fang','Cinderbone'],
+    'Ember Slime':['Ember Slime Gel','Ember Slime Core','Heatproof Membrane'],
+    'Smoke Wisp':['Wisp Ash','Smoke Condensate','Wisp Core'],
+    'Magma Shell':['Magma Plate','Magma Claw','Molten Gland'],
+    'Cinder Wyrm':['Cinder Scale','Cinder Wyrm Fang','Ember Tendon'],
+    'Ashen Dungeon Master':['Dungeon Core Fragment','Ashen Keystone','Volcanic Heartstone'],
+    'Night Bloom':['Night Petal','Night Nectar','Umbral Seed'],
+    'Thorn Serpent':['Abyss Serpent Scale','Abyss Fang','Black Thorn Spine'],
+    'Void Moth':['Void Moth Wing','Void Dust','Dark Antenna'],
+    'Blackcap Slime':['Blackcap Gel','Blackcap Core','Abyssal Membrane'],
+    'Abyss Mantis':['Abyss Chitin','Abyss Mantis Blade','Void Eye'],
+    'Root Horror':['Horror Bark','Horror Tendon','Abyss Root Heart'],
+    'Garden Dungeon Master':['Dungeon Core Fragment','Garden Keystone','Black Bloom Core']
+  };
+  const V19_MATERIAL_DEFS={};
+  const V19_MONSTER_MATERIALS={};
+  function v19MaterialId(name){return 'mat_'+name.toLowerCase().replace(/[^a-z0-9]+/g,'_').replace(/^_|_$/g,'');}
+  for(const enemy of ENEMY_TYPES){
+    const names=V19_MONSTER_MATERIAL_NAMES[enemy.name];
+    if(!names)continue;
+    V19_MONSTER_MATERIALS[enemy.name]=names.map((name,index)=>{
+      const id=v19MaterialId(name),rank=V19_FAMILY_RANK[enemy.family]||'F',mult=V19_RANK_MATERIAL_MULT[rank]||1;
+      const value=name==='Dungeon Core Fragment'?6:[1,3,6][index]*mult;
+      if(!V19_MATERIAL_DEFS[id])V19_MATERIAL_DEFS[id]={id,name,sellValue:value,families:[],sources:[],rarity:['Common','Uncommon','Rare'][index]};
+      V19_MATERIAL_DEFS[id].sellValue=Math.max(V19_MATERIAL_DEFS[id].sellValue,value);
+      if(!V19_MATERIAL_DEFS[id].families.includes(enemy.family))V19_MATERIAL_DEFS[id].families.push(enemy.family);
+      if(!V19_MATERIAL_DEFS[id].sources.includes(enemy.name))V19_MATERIAL_DEFS[id].sources.push(enemy.name);
+      return id;
+    });
+  }
+
+  // Expanded shop catalogue. Casual wear is intentionally cheap and weak; armor progresses through recognizable tiers.
+  Object.assign(ITEM_DEFS,{
+    baseball_cap:{name:'Baseball Cap',type:'equipment',slot:'head',rarity:'common',price:18,bonuses:{TEC:1},primary:'TEC',description:'TEC +1. Cheap everyday wear.',gearTier:'Everyday',guildCatalog:0},
+    sports_jersey:{name:'Sports Jersey',type:'equipment',slot:'body',rarity:'common',price:25,bonuses:{DEF:1,AGI:1},primary:'AGI',description:'DEF +1, AGI +1. Light casual wear.',gearTier:'Everyday',guildCatalog:0},
+    hoodie:{name:'Hoodie',type:'equipment',slot:'body',rarity:'common',price:30,bonuses:{MND:1,VIT:1},primary:'VIT',description:'MND +1, VIT +1. Comfortable and not especially protective.',gearTier:'Everyday',guildCatalog:0},
+    work_gloves:{name:'Work Gloves',type:'equipment',slot:'hands',rarity:'common',price:15,bonuses:{PHY:1},primary:'PHY',description:'PHY +1. Better grip, little protection.',gearTier:'Everyday',guildCatalog:0},
+    track_pants:{name:'Track Pants',type:'equipment',slot:'legs',rarity:'common',price:20,bonuses:{AGI:1},primary:'AGI',description:'AGI +1.',gearTier:'Everyday',guildCatalog:0},
+    running_shoes:{name:'Running Shoes',type:'equipment',slot:'legs',rarity:'common',price:35,bonuses:{AGI:2,DEF:-1},primary:'AGI',description:'AGI +2, DEF -1. Fast, decidedly not armor.',gearTier:'Everyday',guildCatalog:0},
+    cloth_hood:{name:'Cloth Hood',type:'equipment',slot:'head',rarity:'common',price:30,bonuses:{MND:1},primary:'MND',description:'MND +1.',gearTier:'Cloth',guildCatalog:0},
+    padded_tunic:{name:'Padded Tunic',type:'equipment',slot:'body',rarity:'common',price:45,bonuses:{DEF:2,VIT:1},primary:'DEF',description:'DEF +2, VIT +1.',gearTier:'Cloth',guildCatalog:0},
+    cloth_wraps:{name:'Cloth Wraps',type:'equipment',slot:'hands',rarity:'common',price:25,bonuses:{TEC:1,MND:1},primary:'TEC',description:'TEC +1, MND +1.',gearTier:'Cloth',guildCatalog:0},
+    soft_boots:{name:'Soft Boots',type:'equipment',slot:'legs',rarity:'common',price:28,bonuses:{AGI:1,MND:1},primary:'AGI',description:'AGI +1, MND +1.',gearTier:'Cloth',guildCatalog:0},
+    fur_cap:{name:'Fur Cap',type:'equipment',slot:'head',rarity:'common',price:70,bonuses:{DEF:2,VIT:1},primary:'DEF',description:'DEF +2, VIT +1.',gearTier:'Fur',guildCatalog:1},
+    fur_coat:{name:'Fur Coat',type:'equipment',slot:'body',rarity:'common',price:110,bonuses:{DEF:3,VIT:2},primary:'DEF',description:'DEF +3, VIT +2.',gearTier:'Fur',guildCatalog:1},
+    fur_mitts:{name:'Fur Mitts',type:'equipment',slot:'hands',rarity:'common',price:55,bonuses:{DEF:1,VIT:1},primary:'VIT',description:'DEF +1, VIT +1.',gearTier:'Fur',guildCatalog:1},
+    fur_boots:{name:'Fur Boots',type:'equipment',slot:'legs',rarity:'common',price:65,bonuses:{DEF:1,VIT:1,MND:1},primary:'VIT',description:'DEF +1, VIT +1, MND +1.',gearTier:'Fur',guildCatalog:1},
+    leather_vest:{name:'Leather Vest',type:'equipment',slot:'body',rarity:'common',price:125,bonuses:{DEF:4,AGI:1},primary:'DEF',description:'DEF +4, AGI +1.',gearTier:'Leather',guildCatalog:1},
+    leather_bracers:{name:'Leather Bracers',type:'equipment',slot:'hands',rarity:'common',price:75,bonuses:{DEF:2,TEC:1},primary:'DEF',description:'DEF +2, TEC +1.',gearTier:'Leather',guildCatalog:1},
+    leather_boots:{name:'Leather Boots',type:'equipment',slot:'legs',rarity:'common',price:80,bonuses:{DEF:2,AGI:1},primary:'DEF',description:'DEF +2, AGI +1.',gearTier:'Leather',guildCatalog:1},
+    studded_cap:{name:'Studded Leather Cap',type:'equipment',slot:'head',rarity:'common',price:120,bonuses:{DEF:3,TEC:1},primary:'DEF',description:'DEF +3, TEC +1.',gearTier:'Studded Leather',guildCatalog:2},
+    studded_jerkin:{name:'Studded Leather Jerkin',type:'equipment',slot:'body',rarity:'rare',price:185,bonuses:{DEF:5,VIT:2,AGI:1},primary:'DEF',description:'DEF +5, VIT +2, AGI +1.',gearTier:'Studded Leather',guildCatalog:2},
+    studded_gloves:{name:'Studded Leather Gloves',type:'equipment',slot:'hands',rarity:'common',price:115,bonuses:{DEF:2,PHY:1,TEC:1},primary:'DEF',description:'DEF +2, PHY +1, TEC +1.',gearTier:'Studded Leather',guildCatalog:2},
+    studded_boots:{name:'Studded Leather Boots',type:'equipment',slot:'legs',rarity:'common',price:125,bonuses:{DEF:2,AGI:2},primary:'AGI',description:'DEF +2, AGI +2.',gearTier:'Studded Leather',guildCatalog:2},
+    mail_coif:{name:'Mail Coif',type:'equipment',slot:'head',rarity:'rare',price:180,bonuses:{DEF:5,MND:1,AGI:-1},primary:'DEF',description:'DEF +5, MND +1, AGI -1.',gearTier:'Chainmail',guildCatalog:3},
+    chain_shirt:{name:'Chainmail Shirt',type:'equipment',slot:'body',rarity:'rare',price:280,bonuses:{DEF:8,VIT:3,AGI:-1},primary:'DEF',description:'DEF +8, VIT +3, AGI -1.',gearTier:'Chainmail',guildCatalog:3},
+    mail_gauntlets:{name:'Mail Gauntlets',type:'equipment',slot:'hands',rarity:'rare',price:170,bonuses:{DEF:4,PHY:1,AGI:-1},primary:'DEF',description:'DEF +4, PHY +1, AGI -1.',gearTier:'Chainmail',guildCatalog:3},
+    mail_boots:{name:'Mail Boots',type:'equipment',slot:'legs',rarity:'rare',price:185,bonuses:{DEF:4,VIT:1,AGI:-1},primary:'DEF',description:'DEF +4, VIT +1, AGI -1.',gearTier:'Chainmail',guildCatalog:3},
+    iron_helm:{name:'Iron Plate Helm',type:'equipment',slot:'head',rarity:'rare',price:270,bonuses:{DEF:7,VIT:2,AGI:-1},primary:'DEF',description:'DEF +7, VIT +2, AGI -1.',gearTier:'Iron Plate',guildCatalog:4},
+    iron_plate:{name:'Iron Plate Cuirass',type:'equipment',slot:'body',rarity:'rare',price:420,bonuses:{DEF:11,VIT:4,AGI:-2},primary:'DEF',description:'DEF +11, VIT +4, AGI -2.',gearTier:'Iron Plate',guildCatalog:4},
+    iron_gauntlets:{name:'Iron Plate Gauntlets',type:'equipment',slot:'hands',rarity:'rare',price:250,bonuses:{DEF:6,PHY:2,AGI:-1},primary:'DEF',description:'DEF +6, PHY +2, AGI -1.',gearTier:'Iron Plate',guildCatalog:4},
+    iron_greaves:{name:'Iron Plate Greaves',type:'equipment',slot:'legs',rarity:'rare',price:275,bonuses:{DEF:6,VIT:2,AGI:-2},primary:'DEF',description:'DEF +6, VIT +2, AGI -2.',gearTier:'Iron Plate',guildCatalog:4},
+    steel_helm:{name:'Steel Plate Helm',type:'equipment',slot:'head',rarity:'rare',price:430,bonuses:{DEF:10,VIT:3,AGI:-1},primary:'DEF',description:'DEF +10, VIT +3, AGI -1.',gearTier:'Steel Plate',guildCatalog:4},
+    steel_plate:{name:'Steel Plate Cuirass',type:'equipment',slot:'body',rarity:'rare',price:680,bonuses:{DEF:15,VIT:6,AGI:-3},primary:'DEF',description:'DEF +15, VIT +6, AGI -3.',gearTier:'Steel Plate',guildCatalog:4},
+    steel_gauntlets:{name:'Steel Plate Gauntlets',type:'equipment',slot:'hands',rarity:'rare',price:390,bonuses:{DEF:8,PHY:3,AGI:-1},primary:'DEF',description:'DEF +8, PHY +3, AGI -1.',gearTier:'Steel Plate',guildCatalog:4},
+    steel_greaves:{name:'Steel Plate Greaves',type:'equipment',slot:'legs',rarity:'rare',price:420,bonuses:{DEF:9,VIT:3,AGI:-2},primary:'DEF',description:'DEF +9, VIT +3, AGI -2.',gearTier:'Steel Plate',guildCatalog:4},
+    field_spear:{name:'Field Spear',type:'equipment',slot:'weapon',rarity:'common',price:80,bonuses:{PHY:2,TEC:1},primary:'PHY',description:'PHY +2, TEC +1.',gearTier:'Basic Weapon',guildCatalog:0},
+    steel_longsword:{name:'Steel Longsword',type:'equipment',slot:'weapon',rarity:'rare',price:390,bonuses:{PHY:7,TEC:1},primary:'PHY',description:'PHY +7, TEC +1.',gearTier:'Advanced Weapon',guildCatalog:4},
+    duelist_rapier:{name:'Duelist Rapier',type:'equipment',slot:'weapon',rarity:'rare',price:420,bonuses:{PHY:4,TEC:5,AGI:1},primary:'TEC',description:'PHY +4, TEC +5, AGI +1.',gearTier:'Advanced Weapon',guildCatalog:4},
+    battle_staff:{name:'Battle Staff',type:'equipment',slot:'weapon',rarity:'rare',price:430,bonuses:{MAG:7,MND:2},primary:'MAG',description:'MAG +7, MND +2.',gearTier:'Advanced Weapon',guildCatalog:4}
+  });
+  const v19OldGearMeta={
+    iron_sword:['Basic Weapon',0],apprentice_wand:['Basic Weapon',0],longsword:['Improved Weapon',1],rapier:['Improved Weapon',1],focus_wand:['Improved Weapon',1],greatsword:['Reinforced Weapon',2],battle_catalyst:['Reinforced Weapon',2],runic_blade:['Runic Weapon',3],runic_staff:['Runic Weapon',3],
+    leather_cap:['Leather',1],leather_gloves:['Leather',1],travel_boots:['Leather',1],mystic_hood:['Studded / Mystic',2],iron_coat:['Chainmail / Heavy',3],rune_robe:['Runic Armor',3],
+    power_charm:['Accessories',1],mind_charm:['Accessories',1],swift_charm:['Accessories',1],tech_charm:['Accessories',1],vitality_charm:['Accessories',2]
+  };
+  for(const [id,[tier,lvl]] of Object.entries(v19OldGearMeta)){if(ITEM_DEFS[id]){ITEM_DEFS[id].gearTier=tier;ITEM_DEFS[id].guildCatalog=lvl;}}
+  ITEM_DEFS.healing_potion.guildCatalog=0;ITEM_DEFS.hi_potion.guildCatalog=2;ITEM_DEFS.full_potion.guildCatalog=4;
+  for(const id of ['baseball_cap','sports_jersey','hoodie','work_gloves','track_pants','running_shoes','cloth_hood','padded_tunic','cloth_wraps','soft_boots','fur_cap','fur_coat','fur_mitts','fur_boots','leather_vest','leather_bracers','leather_boots','studded_cap','studded_jerkin','studded_gloves','studded_boots','mail_coif','chain_shirt','mail_gauntlets','mail_boots','iron_helm','iron_plate','iron_gauntlets','iron_greaves','steel_helm','steel_plate','steel_gauntlets','steel_greaves']) if(!ARMOR_SHOP_IDS.includes(id))ARMOR_SHOP_IDS.push(id);
+  for(const id of ['field_spear','steel_longsword','duelist_rapier','battle_staff'])if(!WEAPON_SHOP_IDS.includes(id))WEAPON_SHOP_IDS.push(id);
+
+  const V19_ASSIGNMENT_STAGES=[
+    {name:'Field Samples — Beginner Cave',dungeon:'Beginner Cave',requirements:[
+      {id:v19MaterialId('Wolf Fang'),qty:1,monster:'Cave Wolf',dungeon:'Beginner Cave'},
+      {id:v19MaterialId('Imp Horn'),qty:1,monster:'Ash Imp',dungeon:'Beginner Cave'},
+      {id:v19MaterialId('Stone Slime Gel'),qty:1,monster:'Stone Slime',dungeon:'Beginner Cave'}
+    ],catalog:1,reward:'Field Catalogue I — Fur and Leather equipment.'},
+    {name:'Comparative Survey — Mossy Grotto',dungeon:'Mossy Grotto',requirements:[
+      {id:v19MaterialId('Spore Sac'),qty:1,monster:'Sporeling',dungeon:'Mossy Grotto'},
+      {id:v19MaterialId('Beetle Carapace'),qty:1,monster:'Thorn Beetle',dungeon:'Mossy Grotto'},
+      {id:v19MaterialId('Glow Dust'),qty:1,monster:'Glow Moth',dungeon:'Mossy Grotto'}
+    ],catalog:2,reward:'Field Catalogue II — Studded Leather, improved weapons, and Hi-Potions.'},
+    {name:'Elite Specimen',requireClear:false,requirements:[
+      {id:v19MaterialId('Ironhide Fang'),qty:1,monster:'Ironhide Wolf',dungeon:'Beginner Cave'}
+    ],catalog:3,reward:'Field Catalogue III — Chainmail and runic equipment.'},
+    {name:'Advanced Field Survey — Flooded Cavern',dungeon:'Flooded Cavern',requirements:[
+      {id:v19MaterialId('Mire Toad Skin'),qty:1,monster:'Mire Toad',dungeon:'Flooded Cavern'},
+      {id:v19MaterialId('Serpent Scale'),qty:1,monster:'River Serpent',dungeon:'Flooded Cavern'},
+      {id:v19MaterialId('Bubble Slime Gel'),qty:1,monster:'Bubble Slime',dungeon:'Flooded Cavern'},
+      {id:v19MaterialId('Flooded Keystone'),qty:1,monster:'Flooded Dungeon Master',dungeon:'Flooded Cavern'}
+    ],catalog:4,reward:'Field Catalogue IV — Iron/Steel plate, advanced weapons, and Full Potions.'}
+  ];
+
+  function normalizeV19Profile(){
+    profile.inventory=profile.inventory&&typeof profile.inventory==='object'?profile.inventory:{};
+    profile.inventory.materials=profile.inventory.materials&&typeof profile.inventory.materials==='object'?profile.inventory.materials:{};
+    profile.guilds=profile.guilds&&typeof profile.guilds==='object'?profile.guilds:{};
+    profile.guilds.explorer=profile.guilds.explorer&&typeof profile.guilds.explorer==='object'?profile.guilds.explorer:{};
+    const g=profile.guilds.explorer;
+    g.mainAssignmentStage=Number.isFinite(g.mainAssignmentStage)?g.mainAssignmentStage:0;
+    g.catalogLevel=Number.isFinite(g.catalogLevel)?g.catalogLevel:0;
+    g.mainAssignmentComplete=!!g.mainAssignmentComplete;
+    if(!profile.abilityAllocation||typeof profile.abilityAllocation!=='object')profile.abilityAllocation=Object.fromEntries(STAT_NAMES.map(k=>[k,0]));
+    if(typeof profile.abilityFormCompleted!=='boolean')profile.abilityFormCompleted=!!profile.onboarding?.completed;
+    channel.membershipName=(typeof channel.membershipName==='string'&&channel.membershipName.trim())?channel.membershipName.trim().slice(0,28):'Members';
+    if(!Number.isFinite(channel.members))channel.members=0;
+  }
+  const _v18LoadProgressV19=loadProgress;
+  loadProgress=function(){_v18LoadProgressV19();normalizeV19Profile();};
+  const _v18PrepareFreshV19=prepareFreshV14Defaults;
+  prepareFreshV14Defaults=function(){
+    _v18PrepareFreshV19();
+    profile.baseStats=Object.fromEntries(STAT_NAMES.map(k=>[k,V19_BASE_STAT]));
+    profile.abilityAllocation=Object.fromEntries(STAT_NAMES.map(k=>[k,0]));
+    profile.abilityFormCompleted=false;
+    profile.inventory.materials={};
+    profile.guilds.explorer.mainAssignmentStage=0;profile.guilds.explorer.catalogLevel=0;profile.guilds.explorer.mainAssignmentComplete=false;
+    channel.membershipName='Members';
+  };
+
+  // All currently authored dungeons are visible/enterable once the Dungeon Board itself is unlocked.
+  // Difficulty, not arbitrary clear-count locks, is the deterrent for overreaching.
+  dungeonUnlocked=function(name){return !!DUNGEON_DEFS[name];};
+
+  // Registration now belongs explicitly to Pote and inserts a 20-point ability form immediately after naming.
+  function v19StatRemaining(){return V19_FREE_POINTS-STAT_NAMES.reduce((s,k)=>s+(profile.abilityAllocation?.[k]||0),0);}
+  function v19ApplyAbilityStats(){profile.baseStats=Object.fromEntries(STAT_NAMES.map(k=>[k,V19_BASE_STAT+(profile.abilityAllocation?.[k]||0)]));normalizeProfileHp();}
+  function v19Portraits(){const l=$('vnPortraitLeft'),r=$('vnPortraitRight');if(l)l.dataset.character='POTE';if(r)r.dataset.character='PLAYER';}
+  function v19SetGuildChrome(kicker='Explorer\'s Guild Services',location='Explorer\'s Guild — Service Desk'){$('vnKicker').textContent=kicker;$('vnLocation').textContent=location;const visual=document.querySelector('.vn-visual');if(visual)visual.dataset.locationTitle=location.toUpperCase();v19Portraits();}
+  renderRegistrationV14=function(){
+    normalizeV19Profile();showOnlyScreen('story');$('settingsPopup').classList.remove('show');v19SetGuildChrome('Day 1 · Explorer\'s Guild Registration','Explorer\'s Guild — Registration Hall');
+    const o=profile.onboarding;const step=Number(o.registrationStep)||0;
+    if(step===0){setVnV14('Pote','"Registration desk. I\'m <b>Pote</b>, the receptionist assigned to your Explorer file. If you need guild services later, you\'ll be dealing with me."');vnButtonV14('Begin Registration',()=>{o.registrationStep=1;saveProgress();renderRegistrationV14();});}
+    else if(step===1){setVnV14('Pote','"First, I need the name you want on your guild license and Scrying Orb channel."',{focus:'right'});const input=document.createElement('input');input.className='vn-input';input.id='vnNameInput';input.maxLength=24;input.placeholder='Enter adventurer name';input.value=profile.playerName||'';$('vnActions').appendChild(input);vnButtonV14('Confirm Name',()=>{const name=input.value.trim();if(!name){input.focus();return;}profile.playerName=name;o.registrationStep=2;saveProgress();renderRegistrationV14();});setTimeout(()=>input.focus(),0);}
+    else if(step===2){
+      setVnV14('Pote','"Please fill out this form to describe your abilities. Every category starts at <b>1</b>; distribute <b>20 additional points</b> however you like. Yes, putting all twenty into one thing is allowed."',{focus:'right'});
+      const form=document.createElement('div');form.className='v19-stat-form';
+      form.innerHTML=STAT_NAMES.map(k=>`<div class="v19-stat-row"><span class="stat-name">${k}</span><span class="stat-desc">${V19_STAT_DESCRIPTIONS[k]}</span><button data-stat-minus="${k}" ${(profile.abilityAllocation[k]||0)<=0?'disabled':''}>−</button><span class="stat-value">${V19_BASE_STAT+(profile.abilityAllocation[k]||0)}</span><button data-stat-plus="${k}" ${v19StatRemaining()<=0?'disabled':''}>+</button></div>`).join('')+`<div class="v19-points"><span>Unassigned points</span><b>${v19StatRemaining()} / ${V19_FREE_POINTS}</b></div>`;
+      $('vnText').appendChild(form);
+      form.querySelectorAll('[data-stat-minus]').forEach(b=>b.onclick=()=>{const k=b.dataset.statMinus;profile.abilityAllocation[k]=Math.max(0,(profile.abilityAllocation[k]||0)-1);v19ApplyAbilityStats();saveProgress();renderRegistrationV14();});
+      form.querySelectorAll('[data-stat-plus]').forEach(b=>b.onclick=()=>{if(v19StatRemaining()<=0)return;const k=b.dataset.statPlus;profile.abilityAllocation[k]=(profile.abilityAllocation[k]||0)+1;v19ApplyAbilityStats();saveProgress();renderRegistrationV14();});
+      const confirm=vnButtonV14('Confirm Ability Form',()=>{if(v19StatRemaining()!==0)return;v19ApplyAbilityStats();profile.abilityFormCompleted=true;o.registrationStep=3;saveProgress();renderRegistrationV14();});confirm.disabled=v19StatRemaining()!==0;
+    }
+    else if(step===3){setVnV14('Pote',`"All right, <b>${escV14(profile.playerName)}</b>. The guild registration package is <b>9,900 money</b>. That covers your Explorer license, starter equipment, a guild-standard Personal Terminal and PT Core registration."`,{centerHtml:`<b>Registration Package</b><div class="vn-receipt"><span>Starting savings</span><b>10,000</b><span>Explorer registration package</span><b>−9,900</b><span class="total">Remaining after registration</span><b class="total">100</b></div>`});vnButtonV14('Continue',()=>{o.registrationStep=4;saveProgress();renderRegistrationV14();});}
+    else if(step===4){setVnV14('Pote','"Pick your starter set. It does not lock you into a class; your ability form and future equipment are completely independent."',{focus:'right'});const grid=document.createElement('div');grid.className='starter-kit-grid';for(const [id,kit] of Object.entries(V14_STARTER_KITS)){const card=document.createElement('button');card.className='starter-kit'+(o.starterKit===id?' selected':'');card.innerHTML=`<b>${escV14(kit.name)}</b><small>${escV14(kit.summary)}<br>${kit.items.map(x=>ITEM_DEFS[x].name).join(' · ')}</small>`;card.onclick=()=>{o.starterKit=id;saveProgress();renderRegistrationV14();};grid.appendChild(card);}$('vnText').appendChild(grid);vnButtonV14('Confirm Starter Set',()=>{if(!o.starterKit)return;o.registrationStep=5;saveProgress();renderRegistrationV14();});}
+    else if(step===5){const kit=V14_STARTER_KITS[o.starterKit]||V14_STARTER_KITS.vanguard;setVnV14('Pote',`"Everything checks out. <b>${escV14(kit.name)}</b>, guild license, PT, PT Core. Once I process this, your balance goes from <b>10,000</b> to <b>100 money</b>."`,{centerHtml:`<b>Final Registration Receipt</b><div class="vn-receipt"><span>Explorer's Guild license & services</span><b>Included</b><span>${escV14(kit.name)}</span><b>Included</b><span>Guild Standard Slate PT + PT Core</span><b>Included</b><span class="total">Package total</span><b class="total">9,900</b></div><div class="vn-money-drop">10,000 → 100</div>`});vnButtonV14('Pay 9,900 & Register',()=>{completeRegistrationPaymentV14();normalizeV19Profile();profile.guilds.explorer.catalogLevel=0;o.registrationStep=6;saveProgress();renderRegistrationV14();});}
+    else if(step===6){setVnV14('Pote','"This is your PT. It talks over the <b>Resonance Communication Network</b>—RCN officially, <b>ResoNet</b> to everyone else. The PT is just one convenient endpoint."',{centerHtml:'<b>Guild Standard Slate PT</b><p class="compact-meta">PT Core registered · RCN / ResoNet access active</p>'});vnButtonV14('Continue',()=>{o.registrationStep=7;saveProgress();renderRegistrationV14();});}
+    else if(step===7){setVnV14('Pote','"I also initialized your <span class="scrying-brand">Scrying Orb</span> channel. Exploration footage is useful, people like watching adventurers work, and a successful channel can become a second source of income."');vnButtonV14('Continue',()=>{o.registrationStep=8;saveProgress();renderRegistrationV14();});}
+    else{setVnV14('Pote',`"Registration complete, <b>${escV14(profile.playerName)}</b>. You have <b>100 money</b> left. Start with the Training Dojo; I\'ve marked it as your first orientation assignment."`,{centerHtml:'<b>EXPLORER\'S GUILD REGISTRATION COMPLETE</b><p class="compact-meta">License active · ability record filed · PT registered · Scrying Orb channel created</p>'});vnButtonV14('Enter Hub',()=>{o.completed=true;profile.guilds.explorer.tutorialStep=1;normalizeV19Profile();saveProgress();refreshHubButtonsV14();syncPlayerIdentityV14();showOnlyScreen('hub');renderHubPanel('guild');});}
+  };
+
+  // Monster materials are layered on top of existing crystals/items.
+  const _v18GenerateLootV19=generateLoot;
+  generateLoot=function(enemy){
+    normalizeV19Profile();const drops=_v18GenerateLootV19(enemy);const ids=V19_MONSTER_MATERIALS[enemy.name]||[];
+    ids.forEach((id,index)=>{
+      let chance=[1,.55,.20][index],min=1,max=index===0?2:1;
+      if(enemy.tier==='elite'){chance=[1,.85,.45][index];min=index===0?2:1;max=index===0?4:index===1?2:1;}
+      if(enemy.tier==='boss'){chance=1;min=index===0?2:1;max=index===0?3:index===1?2:1;}
+      if(Math.random()>chance)return;const qty=randInt(min,max);profile.inventory.materials[id]=(profile.inventory.materials[id]||0)+qty;
+      if(game?.runLootSummary){game.runLootSummary.materials=game.runLootSummary.materials||{};game.runLootSummary.materials[id]=(game.runLootSummary.materials[id]||0)+qty;}
+      drops.push({label:V19_MATERIAL_DEFS[id]?.name||id,qty,kind:'material',id});
+    });
+    return drops;
+  };
+  const _v18DungeonSummaryV19=dungeonSummaryHtml;
+  dungeonSummaryHtml=function(){const base=_v18DungeonSummaryV19();const mats=Object.entries(game?.runLootSummary?.materials||{}).map(([id,q])=>`${V19_MATERIAL_DEFS[id]?.name||id} ×${q}`).join(', ')||'None';return base.replace('</div></div>',`<span>Monster materials</span><b>${mats}</b></div></div>`);};
+
+  // Guild main assignment utilities. v19.1 uses exact named samples so the player always knows what to hunt.
+  function v191MaterialRequirementLabel(req){
+    const d=V19_MATERIAL_DEFS[req.id],name=d?.name||req.id,qty=Math.max(1,req.qty||1);
+    return `${qty} × ${name} — dropped by ${req.monster} in ${req.dungeon}`;
+  }
+  function v191MaterialRequirementHtml(req,showState=true){
+    const d=V19_MATERIAL_DEFS[req.id],name=d?.name||req.id,qty=Math.max(1,req.qty||1),owned=profile.inventory.materials?.[req.id]||0,ok=owned>=qty;
+    return `<div class="v191-requirement ${showState&&ok?'done':''}"><span class="mark">${showState?(ok?'✓':'·'):'•'}</span><span><b>${qty} × ${escV14(name)}</b><span class="v191-source">Dropped by ${escV14(req.monster)} in ${escV14(req.dungeon)}${showState?` · Held ${owned}/${qty}`:''}</span></span></div>`;
+  }
+  function v191QuestDescriptionHtml(q){
+    const base=escV14(q.description||'');
+    if(!Array.isArray(q.materialRequirements)||!q.materialRequirements.length)return base;
+    return `${base}<div class="v191-requirements">${q.materialRequirements.map(r=>v191MaterialRequirementHtml(r,false)).join('')}</div>`;
+  }
+  function v19AssignmentStatus(){
+    const g=explorerStateV14(),idx=Math.min(g.mainAssignmentStage||0,V19_ASSIGNMENT_STAGES.length);
+    if(idx>=V19_ASSIGNMENT_STAGES.length)return {complete:true,idx};
+    const s=V19_ASSIGNMENT_STAGES[idx],requirements=s.requirements||[];
+    const clear=s.requireClear===false?true:!!s.dungeon&&(profile.dungeonClears?.[s.dungeon]||0)>0;
+    const materialChecks=requirements.map(r=>{const qty=Math.max(1,r.qty||1),owned=profile.inventory.materials?.[r.id]||0;return [v191MaterialRequirementLabel(r),owned>=qty,r];});
+    const checks=[...(s.requireClear===false?[]:[[`${s.dungeon} cleared`,clear,null]]),...materialChecks];
+    return {complete:false,idx,stage:s,ready:clear&&materialChecks.every(x=>x[1]),checks,requirements};
+  }
+  function v19CompleteAssignmentStage(){
+    const st=v19AssignmentStatus();if(st.complete||!st.ready)return false;const g=explorerStateV14(),s=st.stage;
+    for(const req of s.requirements||[]){const qty=Math.max(1,req.qty||1);profile.inventory.materials[req.id]=Math.max(0,(profile.inventory.materials[req.id]||0)-qty);}
+    g.mainAssignmentStage=(g.mainAssignmentStage||0)+1;g.catalogLevel=Math.max(g.catalogLevel||0,s.catalog);g.reputation=(g.reputation||0)+15;g.missionsCompleted=(g.missionsCompleted||0)+1;if(g.mainAssignmentStage>=V19_ASSIGNMENT_STAGES.length)g.mainAssignmentComplete=true;saveProgress();return true;
+  }
+
+  function v19LeaveGuild(){lastHubPanel='guild';$('vnActions').classList.remove('v19-service-actions');showOnlyScreen('hub');renderHubPanel('guild');}
+  function v19GuildAction(label,fn,wide=false){const b=vnButtonV14(label,fn);if(wide)b.classList.add('wide');return b;}
+  function v19Pote(text,centerHtml='',focus='left'){showOnlyScreen('story');v19SetGuildChrome('Explorer\'s Guild Services',"Explorer's Guild — Pote's Service Desk");setVnV14('Pote',text,{focus,centerHtml,location:"Explorer's Guild — Pote's Service Desk"});$('vnActions').classList.add('v19-service-actions');}
+  function v19GoHubService(kind){$('vnActions').classList.remove('v19-service-actions');showOnlyScreen('hub');renderHubPanel(kind);}
+
+  function openGuildV19(){
+    normalizeV19Profile();reconcileTutorialV14();const step=tutorialStepV14();lastHubPanel='guild';
+    if(step<6){
+      const mission=V14_TUTORIAL_MISSIONS[step]||V14_TUTORIAL_MISSIONS[6];
+      v19Pote(`"Welcome back, <b>${escV14(profile.playerName||'Explorer')}</b>. Your orientation file is still open. What do you need?"`,`<b>Current Orientation</b><h3>${escV14(mission.name)}</h3><p>${escV14(mission.description)}</p><p class="compact-meta"><b>Progress:</b> ${escV14(guildMissionProgressV14(step))}<br><b>Reward:</b> ${escV14(mission.unlock)}</p>`);
+      v19GuildAction('Current Orientation',()=>v19RenderOrientation(step));
+      v19GuildAction('Turn In Materials',v19RenderMaterialDesk);
+      v19GuildAction('Dungeon Information',v19RenderDungeonInfo);
+      v19GuildAction('Adventurer Record',v19RenderRecord);
+      v19GuildAction('Leave Guild',v19LeaveGuild,true);return;
+    }
+    const g=explorerStateV14(),catalog=V19_CATALOG_NAMES[g.catalogLevel||0];
+    v19Pote(`"Welcome back, <b>${escV14(profile.playerName||'Explorer')}</b>. I have your file. What guild service do you need?"`,`<b>${escV14(explorerStandingV14())}</b><p class="compact-meta">Explorer Reputation ${g.reputation||0} · ${escV14(catalog)}</p>`);
+    v19GuildAction('Main Assignment',v19RenderMainAssignment);
+    v19GuildAction('Jobs / Quest Board',v19RenderJobs);
+    v19GuildAction('Turn In Materials',v19RenderMaterialDesk);
+    v19GuildAction('Dungeon Information',v19RenderDungeonInfo);
+    v19GuildAction('Adventurer Record',v19RenderRecord);
+    v19GuildAction('Guild Services',v19RenderServices);
+    v19GuildAction('Leave Guild',v19LeaveGuild,true);
+  }
+  function v19RenderOrientation(step=tutorialStepV14()){
+    const mission=V14_TUTORIAL_MISSIONS[step]||V14_TUTORIAL_MISSIONS[6];v19Pote(`"Your current orientation assignment is <b>${escV14(mission.name)}</b>."`,`<b>${escV14(mission.name)}</b><p>${escV14(mission.description)}</p><p class="compact-meta"><b>Progress:</b> ${escV14(guildMissionProgressV14(step))}<br><b>Reward:</b> ${escV14(mission.unlock)}</p>`);
+    if(step===1)v19GuildAction('Go to Training Dojo',()=>v19GoHubService('dojo'));
+    if(step===2||step===4)v19GuildAction('Go to Dungeon Board',()=>v19GoHubService('dungeon'));
+    if(step===5)v19GuildAction('Open Channel Dashboard',()=>v19GoHubService('channel'));
+    v19GuildAction('Back to Guild Services',openGuildV19,true);
+  }
+  function v19RenderMainAssignment(){
+    const st=v19AssignmentStatus();if(st.complete){v19Pote('"The <b>Local Dungeon Survey</b> is complete. Your field certification is current, and the full Explorer supplier catalogue is authorized for your file."','<b>LOCAL DUNGEON SURVEY — COMPLETE</b><p class="compact-meta">Field Catalogue IV active · all current shop tiers authorized</p>');v19GuildAction('Back to Guild Services',openGuildV19,true);return;}
+    const s=st.stage,checks=st.checks.map(([label,ok,req])=>req?v191MaterialRequirementHtml(req,true):`<div class="v191-requirement ${ok?'done':''}"><span class="mark">${ok?'✓':'·'}</span><span><b>${escV14(label)}</b></span></div>`).join('');
+    v19Pote(`"Your Explorer main assignment is one continuing survey: <b>Local Dungeon Survey</b>. Right now I need the exact samples listed in the field report."`,`<div class="mission-kicker">Local Dungeon Survey · Stage ${st.idx+1}/${V19_ASSIGNMENT_STAGES.length}</div><h3>${escV14(s.name)}</h3><div class="v191-requirements">${checks}</div><p class="compact-meta"><b>Reward:</b> ${escV14(s.reward)}<br>Submitting a stage consumes exactly the listed material samples.</p>`);
+    const b=v19GuildAction(st.ready?'Submit Report & Samples':'Requirements Not Met',()=>{if(!v19CompleteAssignmentStage())return;const finished=explorerStateV14().mainAssignmentComplete;v19Pote(finished?'"That completes the Local Dungeon Survey. Nice work. I\'ve authorized the full supplier catalogue on your file."':`"Report accepted. I\'ve authorized <b>${escV14(V19_CATALOG_NAMES[explorerStateV14().catalogLevel])}</b>. The next survey stage is ready whenever you are."`,`<b>${escV14(s.reward)}</b><p class="compact-meta">Explorer Reputation +15</p>`);v19GuildAction('Continue',v19RenderMainAssignment,true);});b.disabled=!st.ready;
+    v19GuildAction('Back to Guild Services',openGuildV19,true);
+  }
+  function v19RenderJobs(){
+    const cards=Object.values(QUEST_DEFS).map(q=>{const selected=profile.selectedQuests.includes(q.id);return `<div class="v19-guild-card"><div class="compact-title"><div class="item-name">${escV14(q.name)}</div><button data-v19-quest="${q.id}">${selected?'Remove':'Accept'}</button></div><div class="compact-meta">${v191QuestDescriptionHtml(q)}<br><b>Reward:</b> ${q.money} money + ${q.crystals} dungeon-rank crystal${q.crystals===1?'':'s'}</div></div>`;}).join('');
+    v19Pote('"These are optional paid jobs for your next stream. Take as many as you want; incomplete jobs simply fail when the stream ends."',`<div class="v19-scroll-card">${cards}</div>`);
+    $('vnCenterCard').querySelectorAll('[data-v19-quest]').forEach(b=>b.onclick=()=>{const id=b.dataset.v19Quest;profile.selectedQuests=profile.selectedQuests.includes(id)?profile.selectedQuests.filter(x=>x!==id):profile.selectedQuests.concat(id);saveProgress();v19RenderJobs();});
+    v19GuildAction('Back to Guild Services',openGuildV19,true);
+  }
+  function v19MaterialRows(){
+    const crystal=CRYSTAL_RANKS.filter(r=>(profile.inventory.crystals[r]||0)>0).map(r=>`<div class="v19-service-row"><span><b>${r} Magic Crystal</b><br><span class="compact-meta">${CRYSTAL_SELL[r]} money each</span></span><span class="value">×${profile.inventory.crystals[r]}</span><button data-v19-crystal-one="${r}">Sell 1</button><button data-v19-crystal-all="${r}">Sell All</button></div>`).join('');
+    const mats=Object.entries(profile.inventory.materials||{}).filter(([,q])=>q>0).sort((a,b)=>(V19_MATERIAL_DEFS[a[0]]?.name||'').localeCompare(V19_MATERIAL_DEFS[b[0]]?.name||'')).map(([id,q])=>{const d=V19_MATERIAL_DEFS[id];return `<div class="v19-service-row"><span><b>${escV14(d.name)}</b><br><span class="compact-meta">${escV14(d.rarity)} · ${d.sellValue} money each</span></span><span class="value">×${q}</span><button data-v19-mat-one="${id}">Sell 1</button><button data-v19-mat-all="${id}">Sell All</button></div>`;}).join('');
+    return `<div class="v19-scroll-card"><h3>Magic Crystals</h3>${crystal||'<p class="compact-meta">No Magic Crystals held.</p>'}<h3>Monster Materials</h3>${mats||'<p class="compact-meta">No monster materials held.</p>'}</div>`;
+  }
+  function v19RenderMaterialDesk(){
+    v19Pote('"I can process Magic Crystals and monster materials here. Guild purchasing rates are listed beside each item."',v19MaterialRows());const c=$('vnCenterCard');
+    c.querySelectorAll('[data-v19-crystal-one]').forEach(b=>b.onclick=()=>v19SellCrystal(b.dataset.v19CrystalOne,1));c.querySelectorAll('[data-v19-crystal-all]').forEach(b=>b.onclick=()=>v19SellCrystal(b.dataset.v19CrystalAll,'all'));
+    c.querySelectorAll('[data-v19-mat-one]').forEach(b=>b.onclick=()=>v19SellMaterial(b.dataset.v19MatOne,1));c.querySelectorAll('[data-v19-mat-all]').forEach(b=>b.onclick=()=>v19SellMaterial(b.dataset.v19MatAll,'all'));
+    v19GuildAction('Back to Guild Services',openGuildV19,true);
+  }
+  function v19SellCrystal(rank,amount){const have=profile.inventory.crystals[rank]||0;if(!have)return;const qty=amount==='all'?have:Math.min(have,Number(amount)||1);profile.inventory.crystals[rank]-=qty;profile.money+=CRYSTAL_SELL[rank]*qty;saveProgress();v19RenderMaterialDesk();}
+  function v19SellMaterial(id,amount){const have=profile.inventory.materials[id]||0,d=V19_MATERIAL_DEFS[id];if(!have||!d)return;const qty=amount==='all'?have:Math.min(have,Number(amount)||1);profile.inventory.materials[id]-=qty;profile.money+=d.sellValue*qty;saveProgress();v19RenderMaterialDesk();}
+  function v19RenderDungeonInfo(){
+    const html=Object.entries(DUNGEON_DEFS).map(([name,d])=>`<div class="v19-guild-card"><div class="compact-title"><b>${escV14(name)}</b><span class="rank-pill">${d.rank} RANK</span></div><div class="compact-meta">${escV14(d.description)}<br>Known normals: ${d.normalEnemies.map(escV14).join(', ')}<br>Known elites: ${d.eliteEnemies.map(escV14).join(', ')}<br>Recorded clears: ${profile.dungeonClears[name]||0}</div></div>`).join('');
+    v19Pote('"The Guild does not stop you from entering a dungeon above your experience. We do keep records so you know what you are volunteering to fight."',`<div class="v19-scroll-card">${html}</div>`);v19GuildAction('Open Dungeon Board',()=>v19GoHubService('dungeon'));v19GuildAction('Back to Guild Services',openGuildV19,true);
+  }
+  function v19RenderRecord(){const mats=Object.values(profile.inventory.materials||{}).reduce((a,b)=>a+(b||0),0),g=explorerStateV14();v19Pote('"Here is the current record attached to your Explorer license."',`<b>${escV14(profile.playerName||'Explorer')}</b><div class="vn-receipt"><span>Total dungeon clears</span><b>${totalDungeonClears()}</b><span>Explorer reputation</span><b>${g.reputation||0}</b><span>Guild missions completed</span><b>${g.missionsCompleted||0}</b><span>Monster materials held</span><b>${mats}</b><span>Supplier authorization</span><b>${escV14(V19_CATALOG_NAMES[g.catalogLevel||0])}</b></div>`);v19GuildAction('Back to Guild Services',openGuildV19,true);}
+  function v19RenderServices(){const g=explorerStateV14();v19Pote('"Explorer membership is meant to be useful outside of jobs. Your current services are listed here."',`<div class="v19-guild-grid"><div class="v19-guild-card"><b>Supplier Authorization</b><p class="compact-meta">${escV14(V19_CATALOG_NAMES[g.catalogLevel||0])}. Main-assignment reports unlock better shop stock.</p></div><div class="v19-guild-card"><b>Material Purchasing</b><p class="compact-meta">The Guild buys Magic Crystals and registered monster materials directly through this desk.</p></div><div class="v19-guild-card"><b>Dungeon Records</b><p class="compact-meta">Known enemy rosters, ranks, and your clear history are maintained here.</p></div><div class="v19-guild-card"><b>Future Services</b><p class="compact-meta">Appraisal, referrals, recovery coverage, and additional guild networks can plug into this desk later.</p></div></div>`);v19GuildAction('Back to Guild Services',openGuildV19,true);}
+
+  // Shop catalogue rendering and enforcement.
+  function v19CatalogLevel(){return Math.max(0,Math.min(4,explorerStateV14()?.catalogLevel||0));}
+  function v19ItemUnlocked(id){return (ITEM_DEFS[id]?.guildCatalog||0)<=v19CatalogLevel();}
+  function v19ShopCard(id){const d=ITEM_DEFS[id],unlocked=v19ItemUnlocked(id),need=d.guildCatalog||0;return `<div class="compact-card ${unlocked?'':'v19-locked'}"><div class="compact-title"><div class="item-name">${escV14(d.name)}</div><span class="compact-price">${d.price} money</span><button data-buy="${id}" ${unlocked?'':'disabled'}>${unlocked?'Buy':`Catalogue ${need}`}</button></div><div class="compact-meta">${escV14(d.description)}${unlocked?'':`<br><span class="v19-lock">Requires ${escV14(V19_CATALOG_NAMES[need])}</span>`}</div></div>`;}
+  function v19RenderEquipmentShop(){
+    const panel=$('hubPanel'),groups=['Everyday','Cloth','Fur','Leather','Studded Leather','Chainmail','Iron Plate','Steel Plate','Studded / Mystic','Chainmail / Heavy','Runic Armor','Accessories'];
+    const armorGroups=groups.map(t=>{const ids=ARMOR_SHOP_IDS.filter(id=>(ITEM_DEFS[id]?.gearTier||'Accessories')===t);return ids.length?`<div class="v19-catalog-group"><h3>${t}</h3>${ids.map(v19ShopCard).join('')}</div>`:'';}).join('');
+    const weapons=[0,1,2,3,4].map(l=>{const ids=WEAPON_SHOP_IDS.filter(id=>(ITEM_DEFS[id]?.guildCatalog||0)===l);return ids.length?`<div class="v19-catalog-group"><h3>${escV14(V19_CATALOG_NAMES[l])} Weapons</h3>${ids.map(v19ShopCard).join('')}</div>`:'';}).join('');
+    panel.innerHTML=`<h2>Equipment Shop</h2><p>Explorer's Guild supplier authorization controls which stock the shop can sell you. Dungeon entry itself is never gated by this catalogue.</p><div class="catalog-columns"><section class="catalog-section">${weapons}</section><section class="catalog-section">${armorGroups}</section></div>`;panel.querySelectorAll('[data-buy]').forEach(b=>b.onclick=()=>buyItem(b.dataset.buy,'shop'));
+  }
+  function v19RenderItemShop(){const panel=$('hubPanel');panel.innerHTML=`<h2>Item Shop</h2><p>Higher-grade field supplies require Explorer supplier authorization.</p><div class="catalog-section" style="max-width:620px">${ITEM_SHOP_IDS.map(v19ShopCard).join('')}</div>`;panel.querySelectorAll('[data-buy]').forEach(b=>b.onclick=()=>buyItem(b.dataset.buy,'itemshop'));}
+  const _v18BuyItemV19=buyItem;
+  buyItem=function(id,returnPanel='shop'){if(!v19ItemUnlocked(id))return;return _v18BuyItemV19(id,returnPanel);};
+
+  // Membership branding: paid members keep their usernames, rendered gold in Live Chat.
+  function v19ApplyMemberFlags(){if(!game?.chatUsers)return;const count=Math.min(game.chatUsers.length,Math.max(0,Math.min(channel.members||0,Math.ceil(game.chatUsers.length*.35))));game.chatUsers.forEach((u,i)=>u.member=i<count);}
+  const _v18SyncChatUsersV19=syncChatUsers;
+  syncChatUsers=function(){_v18SyncChatUsersV19();v19ApplyMemberFlags();};
+  addChat=function(text,preferredGenre=null){
+    if(!text||!game||game.viewers<=0)return false;syncChatUsers();if(!game.chatUsers.length)return false;let pool=preferredGenre?game.chatUsers.filter(u=>u.genre===preferredGenre):game.chatUsers;if(!pool.length)pool=game.chatUsers;const chatter=choice(pool),row=document.createElement('div');row.className='chat-message';const dot=document.createElement('span');dot.className='chat-genre';dot.style.background=GENRES[chatter.genre]?.css||'#768296';const user=document.createElement('span');user.className='chat-user'+(chatter.member?' member':'');user.textContent=chatter.name;const msg=document.createElement('span');msg.className='chat-text';msg.textContent=text;row.append(dot,user,msg);const chat=$('chatMessages');chat.appendChild(row);while(chat.children.length>110)chat.firstElementChild.remove();chat.scrollTop=chat.scrollHeight;return true;
+  };
+  const _v18AddSuperChatV19=addSuperChat;
+  addSuperChat=function(amount,message='nice'){const chat=$('chatMessages'),before=chat?.children.length||0;const r=_v18AddSuperChatV19(amount,message);if(chat&&chat.children.length>before){const row=chat.lastElementChild,name=row?.querySelector('.chat-user')?.textContent,u=game?.chatUsers?.find(x=>x.name===name);if(u?.member)row.querySelector('.chat-user')?.classList.add('member');}return r;};
+  const donationRuleV19=MONETIZATION_RULES.find(r=>r.id==='donations');if(donationRuleV19)donationRuleV19.label='Donation Messages';
+
+  // Rest Zone: deterministic-choice Just Chatting or sequential Donation Message Q&A.
+  const V19_JUST_CHAT=[
+    {label:'Explain your combat strategy',effect:{engagement:2,satisfaction:5,genres:{technical:4,efficient:2}},text:'You break down what you have been doing and why.'},
+    {label:'Tell an embarrassing story',effect:{engagement:7,satisfaction:1,genres:{chaos:4,cool:-1}},text:'It is not flattering, which is precisely why chat loves it.'},
+    {label:'Talk about the dungeon so far',effect:{engagement:3,satisfaction:4,genres:{technical:2,risk:2}},text:'You recap the run and point out what has surprised you.'},
+    {label:'Talk about your equipment',effect:{engagement:2,satisfaction:4,genres:{technical:3,efficient:2}},text:'You explain what you are carrying and what you would replace first.'},
+    {label:'Ask chat about their day',effect:{engagement:4,satisfaction:5,genres:{cool:1}},text:'The stream slows down and chat gets unusually conversational.'},
+    {label:'Complain about the last enemy',effect:{engagement:6,satisfaction:-1,genres:{chaos:3,risk:2}},text:'The rant gets increasingly specific. Chat starts taking sides.'},
+    {label:'Share an adventuring tip',effect:{engagement:2,satisfaction:6,genres:{technical:4,efficient:3}},text:'It is practical advice, which turns out to be exactly what several viewers wanted.'},
+    {label:'Talk about food',effect:{engagement:3,satisfaction:3,genres:{cool:1,chaos:1}},text:'A harmless food discussion immediately becomes an argument in chat.'}
+  ];
+  function v19EffectText(e){const parts=[];if(e.satisfaction)parts.push(`${e.satisfaction>0?'+':''}${e.satisfaction} Satisfaction`);if(e.engagement)parts.push(`${e.engagement>0?'+':''}${e.engagement} Engagement`);for(const [k,v] of Object.entries(e.genres||{}))parts.push(`${GENRES[k]?.short||k} ${v>0?'+':''}${v}`);return parts.join(' · ')||'No numerical change';}
+  function v19ApplyRestEffect(e){if(e.engagement)addEngagement(e.engagement);if(e.satisfaction>0)game.satisfactionBonus+=e.satisfaction;if(e.satisfaction<0)game.satisfactionPenalty+=Math.abs(e.satisfaction);for(const [k,v] of Object.entries(e.genres||{})){if(game.genreTotal[k]!=null){game.genreTotal[k]+=v;game.genreRecent[k]+=v;}}updateStreamStats();}
+  function v19EquippedWeaponName(){const inst=findEquipment(profile.equipment.weapon);return inst?ITEM_DEFS[inst.id]?.name||'Unknown weapon':'No weapon';}
+  function v19DonationLibrary(){
+    const weapon=v19EquippedWeaponName(),decoys=['Iron Sword','Rapier','Apprentice Wand','Greatsword','Battle Staff'].filter(x=>x!==weapon);const correctEffect={engagement:2,satisfaction:4,genres:{technical:1}},wrongEffect={engagement:3,satisfaction:-4,genres:{chaos:2}};
+    return [
+      {q:`hey what kind of weapon do you use?`,answers:shuffle([{text:weapon,effect:correctEffect,follow:'oh nice, thanks!',correct:true},{text:decoys[0]||'A sword',effect:wrongEffect,follow:"eh, that doesn't look right..."},{text:'My bare hands.',effect:{engagement:5,satisfaction:-2,genres:{chaos:3}},follow:'you are literally holding a weapon'}])},
+      {q:'what kind of dungeon do you actually like?',answers:[{text:'Anything dangerous.',effect:{engagement:3,satisfaction:1,genres:{risk:4,cool:2}},follow:'okay danger streamer'},{text:'Whichever one has the best loot.',effect:{engagement:2,satisfaction:3,genres:{efficient:4}},follow:'honestly valid'},{text:'Somewhere quiet where nothing eats me.',effect:{engagement:4,satisfaction:3,genres:{chaos:2}},follow:'wrong profession maybe?'}]},
+      {q:'do you actually enjoy fighting monsters?',answers:[{text:'Yeah. That is why I am here.',effect:{engagement:2,satisfaction:3,genres:{power:3,cool:3}},follow:'based'},{text:'I enjoy winning. Fighting is incidental.',effect:{engagement:2,satisfaction:4,genres:{efficient:4,technical:2}},follow:'cold answer lol'},{text:'Absolutely not. I am terrified.',effect:{engagement:6,satisfaction:2,genres:{chaos:3,risk:2}},follow:'PLEASE survive then'}]},
+      {q:'what stat should a new adventurer focus on?',answers:[{text:'VIT. Staying alive comes first.',effect:{engagement:1,satisfaction:4,genres:{efficient:3}},follow:'taking notes'},{text:'Whatever supports how you want to fight.',effect:{engagement:2,satisfaction:6,genres:{technical:3}},follow:'actually useful answer, thanks'},{text:'PHY. Hit it until the problem stops existing.',effect:{engagement:5,satisfaction:1,genres:{power:5}},follow:'the subtle school of adventuring'}]},
+      {q:'could you beat the Dungeon Master with one hand?',answers:[{text:'Obviously.',effect:{engagement:7,satisfaction:-1,genres:{power:3,risk:3}},follow:'CLIPPED. no backing out now'},{text:'No.',effect:{engagement:-1,satisfaction:4,genres:{efficient:2}},follow:'at least you are honest'},{text:'Donate again and I will consider demonstrating.',effect:{engagement:6,satisfaction:0,genres:{chaos:4}},follow:'bro is monetizing the challenge'}]},
+      {q:'what do you eat before a dungeon?',answers:[{text:'Whatever is cheap.',effect:{engagement:2,satisfaction:2,genres:{efficient:2}},follow:'real'},{text:'Something with a lot of protein.',effect:{engagement:2,satisfaction:3,genres:{power:2}},follow:'adventurer meal prep arc'},{text:'I forgot to eat.',effect:{engagement:5,satisfaction:-1,genres:{chaos:4}},follow:'PLEASE take care of yourself'}]},
+      {q:'why do you keep using the same attack?',answers:[{text:'Because it keeps working.',effect:{engagement:3,satisfaction:1,genres:{efficient:4}},follow:'cant argue with results'},{text:'Fair point. I will mix things up.',effect:{engagement:1,satisfaction:5,genres:{technical:2}},follow:'W streamer'},{text:'You paid money just to complain?',effect:{engagement:8,satisfaction:-3,genres:{chaos:4}},follow:'yes and i would do it again'}]},
+      {q:'what is the best part of dungeon streaming?',answers:[{text:'The fights.',effect:{engagement:2,satisfaction:2,genres:{power:3}},follow:'expected answer'},{text:'Chat seeing something nobody has seen before.',effect:{engagement:4,satisfaction:5,genres:{cool:3,risk:1}},follow:'okay that was kinda cool'},{text:'Getting paid to go somewhere dangerous.',effect:{engagement:5,satisfaction:1,genres:{efficient:3,chaos:2}},follow:'at least you admit it'}]},
+      {q:'are you actually reading chat during fights?',answers:[{text:'As much as I safely can.',effect:{engagement:2,satisfaction:5,genres:{technical:2}},follow:'good answer'},{text:'Only when you people start screaming.',effect:{engagement:5,satisfaction:2,genres:{chaos:2}},follow:'AAAAAAAAA'},{text:'No.',effect:{engagement:3,satisfaction:-2,genres:{efficient:2}},follow:'then who are you talking to right now'}]},
+      {q:'what would make you retreat from a run?',answers:[{text:'When continuing stops being worth the risk.',effect:{engagement:1,satisfaction:5,genres:{efficient:4}},follow:'responsible adventurer spotted'},{text:'Nothing. We finish.',effect:{engagement:6,satisfaction:-1,genres:{risk:4,power:3}},follow:'famous last words'},{text:'When chat tells me to.',effect:{engagement:5,satisfaction:2,genres:{chaos:3}},follow:'CHAT HAS COMMAND AUTHORITY'}]},
+      {q:'do you read every donation message?',answers:[{text:'I try to.',effect:{engagement:2,satisfaction:5,genres:{cool:1}},follow:'thank you streamer'},{text:'Only the good ones.',effect:{engagement:4,satisfaction:0,genres:{chaos:2}},follow:'define good??'},{text:'Apparently I am reading this one.',effect:{engagement:5,satisfaction:3,genres:{cool:2}},follow:'gottem'}]},
+      {q:'what matters more, a clean clear or a big moment?',answers:[{text:'A clean clear.',effect:{engagement:1,satisfaction:5,genres:{efficient:4,technical:2}},follow:'efficiency gang'},{text:'The big moment.',effect:{engagement:5,satisfaction:2,genres:{cool:4,risk:2}},follow:'CLIP FARMER'},{text:'Whichever gets us home alive.',effect:{engagement:2,satisfaction:5,genres:{efficient:2,risk:1}},follow:'fair enough'}]}
+    ];
+  }
+  function v19DonationAmount(){return Math.max(1,Math.round(1+Math.sqrt(Math.max(1,game.viewers))*.35+Math.random()*3));}
+  function v19DonationChatter(){syncChatUsers();return game.chatUsers.length?choice(game.chatUsers):{name:'viewer',genre:'cool',member:false};}
+  function v19RecordDonation(amount){profile.money+=amount;game.streamIncome=game.streamIncome||{ads:0,donations:0,members:0,sponsor:0};game.streamIncome.donations=(game.streamIncome.donations||0)+amount;channel.lifetimeStreamIncome=(channel.lifetimeStreamIncome||0)+amount;saveProgress();}
+  function v19FinishRest(node){advanceMapNode(node);saveProgress();$('nodeContinue').style.display='inline-block';$('nodeContinue').textContent='Continue';nodeContinueAction=async()=>{$('nodeOverlay').classList.remove('show');$('streamShell').classList.remove('resting');actionChatEnd();await wipeSwitch(()=>showOnlyScreen('dungeon'));renderDungeonMap();};}
+  function v19SponsorReadButtonHtml(){const sid=game.sponsorId||channel.activeSponsor,s=v17Sponsor?.(sid);return s?.success==='adread'&&!game.sponsorProgress.adRead?`<button class="v19-rest-choice" id="v19SponsorRead"><b>Read Sponsor Message</b><span class="v19-rest-effect">Required for ${escV14(s.name)} contract · does not consume this Rest Zone segment</span></button>`:'';}
+  function v19BindSponsorRead(rerender){const b=$('v19SponsorRead');if(!b)return;b.onclick=()=>{const sid=game.sponsorId||channel.activeSponsor,s=v17Sponsor(sid);if(!s)return;game.sponsorProgress.adRead=true;showSpeech(s.adLine,1800);saveProgress();rerender();};}
+  function v19RenderJustChat(node){const topics=shuffle(V19_JUST_CHAT).slice(0,3);$('nodeOverlayTitle').textContent='Rest Zone — Just Chatting';$('nodeOverlayText').innerHTML=`<div>HP restored to full. Pick a topic; the effects are shown before you commit.</div>${v19SponsorReadButtonHtml()}<div class="v19-rest-options">${topics.map((t,i)=>`<button class="v19-rest-choice" data-v19-topic="${i}"><b>${escV14(t.label)}</b><span class="v19-rest-effect">${escV14(v19EffectText(t.effect))}</span></button>`).join('')}</div>`;v19BindSponsorRead(()=>v19RenderJustChat(node));$('nodeOverlayText').querySelectorAll('[data-v19-topic]').forEach(b=>b.onclick=()=>{const t=topics[Number(b.dataset.v19Topic)];v19ApplyRestEffect(t.effect);showSpeech(`So, ${t.label.toLowerCase()}...`,1400);$('nodeOverlayTitle').textContent='Just Chatting';$('nodeOverlayText').innerHTML=`<div class="outcome-positive"><b>${escV14(t.label)}</b></div><p>${escV14(t.text)}</p><p>${escV14(v19EffectText(t.effect))}</p>`;v19FinishRest(node);});}
+  function v19RenderDonationSequence(node){
+    const library=shuffle(v19DonationLibrary()),total=randInt(4,5);let index=0,current=null;
+    const renderCurrent=()=>{
+      if(index>=total){$('nodeOverlayTitle').textContent='Donation Messages — Segment Complete';$('nodeOverlayText').innerHTML='<p>You finish the stack of paid viewer messages and get ready to move on.</p>';v19FinishRest(node);return;}
+      if(!current){current={entry:library[index%library.length],chatter:v19DonationChatter(),amount:v19DonationAmount()};v19RecordDonation(current.amount);}
+      const {entry,chatter,amount}=current;
+      $('nodeOverlayTitle').textContent=`Donation Messages — ${index+1}/${total}`;
+      $('nodeOverlayText').innerHTML=`${v19SponsorReadButtonHtml()}<div class="v19-donation-card"><div class="v19-donation-head">${chatter.member?'★ MEMBER · ':''}${escV14(chatter.name)} · ${amount} money</div><div>${escV14(entry.q)}</div></div><div class="v19-rest-options">${entry.answers.map((a,i)=>`<button class="v19-rest-choice" data-v19-answer="${i}"><b>${escV14(a.text)}</b><span class="v19-rest-effect">${escV14(v19EffectText(a.effect))}</span></button>`).join('')}</div>`;
+      v19BindSponsorRead(renderCurrent);
+      $('nodeOverlayText').querySelectorAll('[data-v19-answer]').forEach(b=>b.onclick=()=>{
+        const a=entry.answers[Number(b.dataset.v19Answer)];v19ApplyRestEffect(a.effect);
+        const row=document.createElement('div');row.className='chat-message super-chat';row.innerHTML=`<span class="chat-genre" style="background:${GENRES[chatter.genre]?.css||'var(--accent)'}"></span><span class="chat-user${chatter.member?' member':''}">${escV14(chatter.name)}</span><span class="chat-text"><b>donated ${amount} money:</b> ${escV14(entry.q)}</span>`;$('chatMessages').appendChild(row);$('chatMessages').scrollTop=$('chatMessages').scrollHeight;
+        $('nodeOverlayText').innerHTML=`<div class="v19-donation-card"><div class="v19-donation-head">Your reply</div><div>${escV14(a.text)}</div></div><div class="v19-followup"><b>${escV14(chatter.name)}:</b> ${escV14(a.follow||'thanks!')}</div><p class="compact-meta">${escV14(v19EffectText(a.effect))}</p><button class="v19-rest-choice" id="v19NextDonation"><b>${index+1>=total?'Finish Donation Messages':'Next Donation Message'}</b></button>`;
+        index++;current=null;$('v19NextDonation').onclick=renderCurrent;
+      });
+    };
+    renderCurrent();
+  }
+  // v19.2: Donation Messages must actually surface once unlocked. The first eligible Rest Zone is guaranteed
+  // to demonstrate the feature, then selection returns to random with streak protection so Just Chatting
+  // can never hide Donation Messages for more than two eligible Rest Zones in a row.
+  function v192ChooseRestSegment(){
+    if(!channel.unlocks?.donations)return 'chat';
+    const raw=(channel.restSegmentState&&typeof channel.restSegmentState==='object')?channel.restSegmentState:{};
+    const state={seenDonation:!!raw.seenDonation,justChatStreak:Math.max(0,Number(raw.justChatStreak)||0)};
+    let segment;
+    if(!state.seenDonation)segment='donation';
+    else if(state.justChatStreak>=2)segment='donation';
+    else segment=Math.random()<.5?'donation':'chat';
+    if(segment==='donation'){state.seenDonation=true;state.justChatStreak=0;}else state.justChatStreak+=1;
+    channel.restSegmentState=state;saveProgress();return segment;
+  }
+  resolveRest=async function(node){
+    game.player.hp=game.player.maxHp;profile.hp=game.player.hp;if(game.statusEffects){game.statusEffects={player:[],enemy:[]};renderStatusesV12?.();}systemLog?.('<span class="system-log-actor">Player</span> rested. HP restored and temporary status effects cleared.');saveProgress();await wipeSwitch(()=>{showOnlyScreen('combat');$('streamShell').classList.add('resting');$('turnLabel').textContent='REST ZONE';$('roundLabel').textContent='BREAK';$('statusText').textContent='Resting restores HP. The stream takes a short interaction break.';updateHp();updateStreamStats();});actionChatStart();const introCount=Math.min(4,Math.max(1,Math.ceil(Math.max(1,game.viewers)/4)));for(let i=0;i<introCount;i++){if(game.viewers>0)addChat(choice(CHAT_REST));await sleep(randInt(120,260));}$('nodeContinue').style.display='none';$('nodeOverlay').classList.add('show');const segment=v192ChooseRestSegment();if(segment==='donation')v19RenderDonationSequence(node);else v19RenderJustChat(node);
+  };
+
+  // Final render interception: Pote owns Guild/Jobs/turn-ins; shops use catalogue gates; Dashboard gains membership naming.
+  const _v18RenderHubPanelV19=renderHubPanel;
+  renderHubPanel=function(kind){
+    normalizeV19Profile();
+    if(profile.onboarding?.completed&&kind!=='guild'&&kind!=='guild_explorer'&&typeof hubUnlockedV14==='function'&&!hubUnlockedV14(kind)){openGuildV19();return;}
+    if(kind==='guild'||kind==='guild_explorer'){openGuildV19();return;}
+    if(kind==='quests'){openGuildV19();v19RenderJobs();return;}
+    if(kind==='shop'){lastHubPanel='shop';updateHubHeader();v19RenderEquipmentShop();refreshHubButtonsV14();return;}
+    if(kind==='itemshop'){lastHubPanel='itemshop';updateHubHeader();v19RenderItemShop();refreshHubButtonsV14();return;}
+    const r=_v18RenderHubPanelV19(kind),panel=$('hubPanel');
+    if(kind==='equipment'&&panel){
+      panel.querySelectorAll('[data-sell-crystal],[data-sell-all-crystal]').forEach(b=>b.remove());
+      const crystalHeading=[...panel.querySelectorAll('h3')].find(h=>h.textContent.trim()==='Magic Crystals');if(crystalHeading){const note=document.createElement('p');note.className='compact-meta';note.textContent="Pote at the Explorer's Guild handles crystal and monster-material purchasing.";crystalHeading.insertAdjacentElement('afterend',note);}
+      let sec=panel.querySelector('.v19-inventory-materials');if(!sec){sec=document.createElement('section');sec.className='v19-inventory-materials';panel.appendChild(sec);}const mats=Object.entries(profile.inventory.materials||{}).filter(([,q])=>q>0);sec.innerHTML=`<h3>Monster Materials</h3>${mats.length?mats.map(([id,q])=>`<span class="v19-material-chip"><b>${escV14(V19_MATERIAL_DEFS[id]?.name||id)}</b> ×${q}</span>`).join(''):'<p class="compact-meta">No monster materials currently held.</p>'}`;
+    }
+    if(kind==='channel'&&panel){
+      const name=channel.membershipName||'Members',section=document.createElement('section');section.className='v19-membership compact-card';section.innerHTML=`<b>Membership Branding</b><div class="compact-meta" style="margin:5px 0 10px">Current members: <b>${channel.members||0}</b>. Members keep their usernames and appear in gold in Live Chat.</div><div class="v19-membership-row"><input id="v19MembershipName" maxlength="28" value="${escV14(name)}" aria-label="Membership name"><button class="small-btn" id="v19MembershipSave">Rename Membership</button></div><div class="compact-meta" style="margin-top:7px">Collective paid-member name: <b>${escV14(name)}</b>. You can rename it at any time.</div>`;panel.appendChild(section);$('v19MembershipSave').onclick=()=>{const v=$('v19MembershipName').value.trim().slice(0,28);if(!v)return;channel.membershipName=v;saveProgress();renderHubPanel('channel');};
+    }
+    refreshHubButtonsV14();return r;
+  };
+
+  // Registration completion/tutorial helpers should refer to Pote and v19 state after legacy wrappers run.
+  const _v18CompleteRegistrationV19=completeRegistrationPaymentV14;
+  completeRegistrationPaymentV14=function(){const r=_v18CompleteRegistrationV19();normalizeV19Profile();profile.guilds.explorer.catalogLevel=profile.guilds.explorer.catalogLevel||0;saveProgress();return r;};
+  const _v18RefreshHubButtonsV19=refreshHubButtonsV14;
+  refreshHubButtonsV14=function(){_v18RefreshHubButtonsV19();const q=document.querySelector('[data-hub="quests"]');if(q)q.style.display='none';};
+  $('sponsorshipTestButton')?.addEventListener('click',()=>{if(!profile.abilityFormCompleted){profile.abilityAllocation={PHY:4,MAG:2,DEF:3,MND:2,AGI:3,TEC:3,VIT:3};v19ApplyAbilityStats();profile.abilityFormCompleted=true;saveProgress();}});
+
+  // Expose focused diagnostics for v19 regression tests.
+  window.__DSC_V19={
+    materialCount:()=>Object.keys(V19_MATERIAL_DEFS).length,
+    monstersWithThreeDrops:()=>ENEMY_TYPES.filter(e=>(V19_MONSTER_MATERIALS[e.name]||[]).length===3).length,
+    catalogLevel:()=>v19CatalogLevel(),
+    assignment:()=>v19AssignmentStatus(),
+    statRemaining:()=>v19StatRemaining(),
+    materialDefs:()=>V19_MATERIAL_DEFS,
+    openGuild:()=>openGuildV19(),
+    renderRestJustChat:(node)=>v19RenderJustChat(node),
+    membershipName:()=>channel.membershipName,
+    setMembers:(n)=>{channel.members=Math.max(0,Number(n)||0);saveProgress();},
+    setCatalogLevel:(n)=>{profile.guilds.explorer.catalogLevel=clamp(Number(n)||0,0,4);saveProgress();},
+    grantMaterial:(idOrName,qty=1)=>{const id=V19_MATERIAL_DEFS[idOrName]?idOrName:Object.keys(V19_MATERIAL_DEFS).find(id=>V19_MATERIAL_DEFS[id].name===idOrName);if(!id)return false;profile.inventory.materials[id]=(profile.inventory.materials[id]||0)+Math.max(1,Number(qty)||1);saveProgress();return true;},
+    setDungeonClear:(name,n=1)=>{profile.dungeonClears=profile.dungeonClears||{};profile.dungeonClears[name]=Math.max(0,Number(n)||0);saveProgress();},
+    dungeonUnlocked:(name)=>dungeonUnlocked(name),
+    donationLibrary:()=>v19DonationLibrary(),
+    renderDonationTest:()=>v19RenderDonationSequence({id:'v19_test_rest'}),
+    emitChat:(text='test chat')=>addChat(text),
+    setDonationsUnlocked:(v=true)=>{channel.unlocks=channel.unlocks||{};channel.unlocks.donations=!!v;saveProgress();},
+    sampleLoot:(enemyName)=>{const t=ENEMY_TYPES.find(e=>e.name===enemyName);if(!t)return [];const oldGame=game,rank=V19_FAMILY_RANK[t.family]||'F';game={dungeon:{rank,nodes:{v19_test:{type:t.tier==='boss'?'boss':t.tier==='elite'?'elite':'monster'}}},currentNodeId:'v19_test',runLootSummary:{money:0,crystals:Object.fromEntries(CRYSTAL_RANKS.map(r=>[r,0])),items:{},materials:{}}};try{return generateLoot({...t});}finally{game=oldGame;}}
+  };
+
+
+  // ===== v19.1: Guild directory/overview flow, VN typewriting, exact sample wording, ranking slowdown =====
+
+  // Keep a rolling five-stream viewership history. Old saves seed it from the last known stream once.
+  function v191NormalizeRecentCCV(){
+    channel.recentCCV=Array.isArray(channel.recentCCV)?channel.recentCCV.filter(x=>x&&Number.isFinite(Number(x.average))&&Number.isFinite(Number(x.peak))).map(x=>({average:Math.max(0,Number(x.average)||0),peak:Math.max(0,Number(x.peak)||0)})).slice(-5):[];
+    if(!channel.recentCCV.length&&((channel.lastAverageCCV||0)>0||(channel.lastPeakCCV||0)>0))channel.recentCCV.push({average:Math.max(0,Number(channel.lastAverageCCV)||0),peak:Math.max(0,Number(channel.lastPeakCCV)||0)});
+  }
+  function v191RecordRecentCCV(average,peak){
+    channel.recentCCV=Array.isArray(channel.recentCCV)?channel.recentCCV.filter(x=>x&&Number.isFinite(Number(x.average))&&Number.isFinite(Number(x.peak))).map(x=>({average:Math.max(0,Number(x.average)||0),peak:Math.max(0,Number(x.peak)||0)})).slice(-5):[];
+    channel.recentCCV.push({average:Math.max(0,Number(average)||0),peak:Math.max(0,Number(peak)||0)});channel.recentCCV=channel.recentCCV.slice(-5);
+  }
+  function v191RecentCCVMetrics(){
+    v191NormalizeRecentCCV();const rows=channel.recentCCV;if(!rows.length)return {average:0,peak:0,count:0};
+    return {average:rows.reduce((s,x)=>s+x.average,0)/rows.length,peak:rows.reduce((s,x)=>s+x.peak,0)/rows.length,count:rows.length};
+  }
+  const _v19NormalizeChannelV191=normalizeChannelV15;
+  normalizeChannelV15=function(){_v19NormalizeChannelV191();v191NormalizeRecentCCV();if(channel.rankingVersion!==191){channel.rankingVersion=191;channel.lastRank=null;channel.previousRank=null;}};
+
+  // Popularity is the primary ranking signal. Recent viewership matters, but no longer launches tiny channels tens of thousands of places per clear.
+  rankingFameV15=function(){normalizeChannelV15();const m=v191RecentCCVMetrics();return channel.popularity+2*Math.sqrt(Math.max(0,m.average))+.5*Math.sqrt(Math.max(0,m.peak));};
+  streamerRankV15=function(){const score=rankingFameV15(),rank=Math.round(V15_TOTAL_STREAMERS/(1+Math.pow(Math.max(0,score)/35,4)));return clamp(rank,1,V15_TOTAL_STREAMERS);};
+  renderRankingV15=function(){
+    normalizeChannelV15();const panel=$('hubPanel'),rank=streamerRankV15(),prev=channel.previousRank||channel.lastRank||rank,delta=prev-rank,m=v191RecentCCVMetrics();
+    const movement=delta>0?`↑ ${delta.toLocaleString()}`:delta<0?`↓ ${Math.abs(delta).toLocaleString()}`:'—';
+    const top=V15_TOP_STREAMERS.slice(0,5).map(([r,n,c])=>`<div class="ranking-row"><div class="ranking-rank">${r}</div><div class="ranking-name">${n}</div><div class="ranking-meta">${c}</div></div>`).join('');
+    const news=(channel.news.length?channel.news:[{tag:'ORB NEWS',text:'Your channel is new. Finish streams and set records to start appearing in the news.'}]).slice(0,6).map(n=>`<div class="news-card"><b>${escV14(n.tag)}</b> — ${escV14(n.text)}</div>`).join('');
+    panel.innerHTML=`<h2>Streamer's Ranking</h2><p>Scrying Orb's platform-wide ranking among roughly ${V15_TOTAL_STREAMERS.toLocaleString()} active streamer profiles. Popularity is the main ranking signal; your rolling recent viewership provides a secondary boost.</p><div class="ranking-hero"><div class="slot-card wide"><b>Your Current Position</b><div class="ranking-position">#${rank.toLocaleString()}</div><div class="compact-meta">${movement} since the previous recorded ranking</div></div><div class="slot-card"><b>Popularity</b><div>Lv. ${channel.popularity}</div></div><div class="slot-card"><b>Recent Avg CCV</b><div>${Math.round(m.average)}</div><small>${m.count}-stream rolling sample</small></div><div class="slot-card"><b>Recent Peak CCV</b><div>${Math.round(m.peak)}</div><small>${m.count}-stream rolling sample</small></div></div><div class="compact-card" style="margin-top:12px"><b>Ranking metric</b><div class="compact-meta">Popularity + recent Average CCV + recent Peak CCV. Stream count and mastery feat points do not directly add ranking score.</div></div><h3>Around You</h3><div class="ranking-list">${nearbyRankingHtmlV15(rank)}</div><h3>Top Streamers</h3><div class="ranking-list">${top}</div><h3>Recent Orb News</h3><div class="news-feed">${news}</div>`;
+  };
+
+  // Guild button -> directory -> Explorer overview -> Talk to Pote. Pote's Leave Guild returns to the directory.
+  function v191AssignmentOverviewHtml(){
+    const step=tutorialStepV14();
+    if(step<6){const m=V14_TUTORIAL_MISSIONS[step]||V14_TUTORIAL_MISSIONS[6];return `<div class="mission-kicker">Current Orientation</div><h3>${escV14(m.name)}</h3><p>${escV14(m.description)}</p><div class="compact-meta"><b>Progress:</b> ${escV14(guildMissionProgressV14(step))}<br><b>Reward:</b> ${escV14(m.unlock)}</div>`;}
+    const st=v19AssignmentStatus();if(st.complete)return `<div class="mission-kicker">Main Assignment</div><h3>Local Dungeon Survey — Complete</h3><p class="compact-meta">All current field reports are filed. Field Catalogue IV is authorized.</p>`;
+    const s=st.stage,checks=st.checks.map(([label,ok,req])=>req?v191MaterialRequirementHtml(req,true):`<div class="v191-requirement ${ok?'done':''}"><span class="mark">${ok?'✓':'·'}</span><span><b>${escV14(label)}</b></span></div>`).join('');
+    return `<div class="mission-kicker">Main Assignment · Local Dungeon Survey · Stage ${st.idx+1}/${V19_ASSIGNMENT_STAGES.length}</div><h3>${escV14(s.name)}</h3><div class="v191-requirements">${checks}</div><p class="compact-meta"><b>Reward:</b> ${escV14(s.reward)}</p>`;
+  }
+  function v191RenderGuildDirectory(){
+    reconcileTutorialV14();const g=explorerStateV14(),step=tutorialStepV14(),mission=step<6?(V14_TUTORIAL_MISSIONS[step]||V14_TUTORIAL_MISSIONS[6]):(v19AssignmentStatus().complete?{name:'Local Dungeon Survey — Complete'}:{name:v19AssignmentStatus().stage.name}),panel=$('hubPanel');
+    lastHubPanel='guild';updateHubHeader();panel.innerHTML=`<h2>Guilds</h2><p>Guild memberships are tracked independently. You can belong to multiple guilds as more organizations are introduced.</p><div class="guild-directory"><div class="guild-card"><div><h3>Explorer's Guild</h3><div class="guild-meta">${escV14(explorerStandingV14())} · Reputation ${g.reputation||0}<br>Current assignment: <b>${escV14(mission.name)}</b></div></div><button class="small-btn" data-guild-open="explorer">Open Guild</button></div><div class="guild-card placeholder"><div><h3>Additional Guilds</h3><div class="guild-meta">No other guild memberships are available in this prototype yet. Future guilds will appear here and provide their own services.</div></div><button class="small-btn" disabled>Not Available</button></div></div>`;
+    panel.querySelector('[data-guild-open="explorer"]').onclick=()=>renderHubPanel('guild_explorer');refreshHubButtonsV14();
+  }
+  function v191RenderExplorerGuildOverview(){
+    normalizeV19Profile();reconcileTutorialV14();const g=explorerStateV14(),panel=$('hubPanel'),catalog=V19_CATALOG_NAMES[g.catalogLevel||0];lastHubPanel='guild';updateHubHeader();
+    panel.innerHTML=`<button class="small-btn guild-back" data-guild-back>← Guild List</button><h2>Explorer's Guild</h2><p>Your general-purpose adventurer guild. Pote is the receptionist assigned to your file and handles guild services directly.</p><div class="guild-status-grid"><div class="slot-card"><b>Member</b><div>${escV14(profile.playerName||'Player')}</div></div><div class="slot-card"><b>Standing</b><div>${escV14(explorerStandingV14())}</div></div><div class="slot-card"><b>Explorer Reputation</b><div>${g.reputation||0}</div></div><div class="slot-card"><b>Supplier Authorization</b><div>${escV14(catalog)}</div></div></div><div class="guild-mission v191-guild-summary">${v191AssignmentOverviewHtml()}</div><div class="v191-overview-actions"><button class="small-btn" data-talk-pote>Talk to Pote</button></div>`;
+    panel.querySelector('[data-guild-back]').onclick=()=>renderHubPanel('guild');panel.querySelector('[data-talk-pote]').onclick=()=>openGuildV19();refreshHubButtonsV14();
+  }
+
+  // Final v19.1 Hub routing overrides v19's direct-to-Pote behavior.
+  const _v19RenderHubPanelV191=renderHubPanel;
+  renderHubPanel=function(kind){
+    normalizeV19Profile();
+    if(kind==='guild'){showOnlyScreen('hub');v191RenderGuildDirectory();return;}
+    if(kind==='guild_explorer'){showOnlyScreen('hub');v191RenderExplorerGuildOverview();return;}
+    if(profile.onboarding?.completed&&typeof hubUnlockedV14==='function'&&!hubUnlockedV14(kind)&&kind!=='quests'){showOnlyScreen('hub');v191RenderExplorerGuildOverview();return;}
+    if(kind==='quests'){openGuildV19();v19RenderJobs();return;}
+    return _v19RenderHubPanelV191(kind);
+  };
+
+  // VN dialogue typewriter. Markup stays intact while text nodes reveal progressively.
+  let v191Typewriter=null;
+  function v191RevealActions(){document.querySelectorAll('#vnActions .v191-pending-action').forEach(b=>b.classList.remove('v191-pending-action'));document.querySelector('.vn-dialogue')?.classList.remove('v191-typing');}
+  function v191FinishTypewriter(){
+    const st=v191Typewriter;if(!st)return false;if(st.timer)clearTimeout(st.timer);for(const seg of st.segments)seg.node.textContent=seg.text;v191Typewriter=null;v191RevealActions();return true;
+  }
+  function v191StartTypewriter(el,html){
+    v191FinishTypewriter();const tpl=document.createElement('template');tpl.innerHTML=html;el.innerHTML='';const segments=[];
+    const clone=(node,parent)=>{if(node.nodeType===Node.TEXT_NODE){const out=document.createTextNode('');parent.appendChild(out);segments.push({node:out,text:node.textContent||''});return;}if(node.nodeType===Node.ELEMENT_NODE){const out=node.cloneNode(false);parent.appendChild(out);for(const child of node.childNodes)clone(child,out);}};
+    for(const node of tpl.content.childNodes)clone(node,el);if(!segments.length){v191RevealActions();return;}
+    const speed=window.__DSC_FAST?0:12;if(speed<=0){for(const seg of segments)seg.node.textContent=seg.text;v191RevealActions();return;}
+    const st={segments,si:0,ci:0,timer:null};v191Typewriter=st;document.querySelector('.vn-dialogue')?.classList.add('v191-typing');
+    const tick=()=>{if(v191Typewriter!==st)return;let budget=2;while(budget-->0&&st.si<segments.length){const seg=segments[st.si];if(st.ci<seg.text.length){seg.node.textContent+=seg.text[st.ci++];}else{st.si++;st.ci=0;budget++;}}if(st.si>=segments.length){v191Typewriter=null;v191RevealActions();return;}st.timer=setTimeout(tick,speed);};st.timer=setTimeout(tick,speed);
+  }
+  const _v19VnButtonV191=vnButtonV14;
+  vnButtonV14=function(label,fn,cls=''){const b=_v19VnButtonV191(label,fn,cls);if(v191Typewriter)b.classList.add('v191-pending-action');return b;};
+  setVnV14=function(speaker,text,{focus='left',centerHtml='',location='Explorer\'s Guild — Registration Hall'}={}){
+    v191FinishTypewriter();$('vnSpeaker').textContent=speaker;$('vnActions').innerHTML='';$('vnLocation').textContent=location;const vnMoney=$('vnMoney');if(vnMoney)vnMoney.textContent=Number(profile.money||0).toLocaleString();setVnPortraitFocusV14(focus);const c=$('vnCenterCard');c.innerHTML=centerHtml;c.classList.toggle('show',!!centerHtml);v191StartTypewriter($('vnText'),text);
+  };
+  document.querySelector('.vn-dialogue')?.addEventListener('click',e=>{if(e.target.closest('button,input,textarea,select'))return;if(v191FinishTypewriter()){e.preventDefault();return;}const buttons=[...$('vnActions').querySelectorAll('button')].filter(b=>!b.disabled&&getComputedStyle(b).visibility!=='hidden');if(buttons.length===1)buttons[0].click();});
+  document.addEventListener('keydown',e=>{if(!$('storyScreen')?.classList.contains('show')||!(e.code==='Space'||e.code==='Enter'))return;if(e.target.matches?.('input,textarea,select,[contenteditable="true"]'))return;if(v191FinishTypewriter()){e.preventDefault();return;}const buttons=[...$('vnActions').querySelectorAll('button')].filter(b=>!b.disabled&&getComputedStyle(b).visibility!=='hidden');if(buttons.length===1){e.preventDefault();buttons[0].click();}});
+
+  window.__DSC_V191={
+    finishTypewriter:()=>v191FinishTypewriter(),
+    recentMetrics:()=>v191RecentCCVMetrics(),
+    rankingScore:()=>rankingFameV15(),
+    rank:()=>streamerRankV15(),
+    directionScore:(correct,avg)=>clamp(Math.round(1+(Math.max(0,Math.min(10,correct))/10)*15.5+Math.max(0,4.5-Math.max(0,avg)/200)),1,20),
+    assignmentRequirements:()=>V19_ASSIGNMENT_STAGES.map(s=>(s.requirements||[]).map(r=>({name:V19_MATERIAL_DEFS[r.id]?.name||r.id,qty:r.qty,monster:r.monster,dungeon:r.dungeon}))),
+    openDirectory:()=>{showOnlyScreen('hub');v191RenderGuildDirectory();},
+    openOverview:()=>{showOnlyScreen('hub');v191RenderExplorerGuildOverview();},
+    recordRecent:(avg,peak)=>{v191RecordRecentCCV(avg,peak);saveProgress();},
+    setRankingState:(pop,avg,peak)=>{channel.popularity=Math.max(0,Number(pop)||0);channel.recentCCV=[{average:Math.max(0,Number(avg)||0),peak:Math.max(0,Number(peak)||0)}];channel.lastAverageCCV=Math.max(0,Number(avg)||0);channel.lastPeakCCV=Math.max(0,Number(peak)||0);},
+    setLegacyRankNoise:(streams,featPoints)=>{channel.streams=Math.max(0,Number(streams)||0);channel.featPoints=Math.max(0,Number(featPoints)||0);}
+  };
+
+
+  // Focused diagnostics for the v19.2 Rest Zone selection regression.
+  window.__DSC_V192={
+    chooseRestSegment:()=>v192ChooseRestSegment(),
+    resetRestSegments:()=>{channel.restSegmentState={seenDonation:false,justChatStreak:0};saveProgress();},
+    restSegmentState:()=>({...((channel.restSegmentState&&typeof channel.restSegmentState==='object')?channel.restSegmentState:{})})
+  };
+
+
+  // ===== v20: Istana, specialist rankings, Explorer expedition insurance =====
+  const V20_ISTANA={
+    name:'Istana',
+    network:'Bluebell Media Network',
+    show:'Orb Dungeon Weekly',
+    overallRank:342,
+    dungeonRank:18740,
+    description:'A cheerful, baby-faced Bluebell idol and dungeon-news presenter. Reporting is her main job; she also does light, low-level dungeon crawls on stream.',
+    rumor:'Her age is officially undisclosed. A persistent rumor claims she is over 35. Most fan spaces bury the rumor almost immediately, except for a small and extremely devoted group who insist that a 35+ idol acting cute would only make her better.'
+  };
+
+  // Give the existing Bluebell broadcast host a real identity and a little more personality.
+  renderBroadcastPageV16=function(){
+    const data=activeBroadcastV16||{rank:streamerRankV15()},rank=data.rank||streamerRankV15();
+    showOnlyScreen('story');
+    if(broadcastPageV16===0){
+      setVnV14('Istana',`"Hi, everyone! Welcome back to <b>Orb Dungeon Weekly</b>! I’m <b>Istana</b> from the Bluebell dungeon desk, and I’ve got ranking movement, dungeon stories, and clips worth knowing about!"`,{focus:'left',centerHtml:'<div class="broadcast-board"><div class="broadcast-logo">ORB DUNGEON WEEKLY</div><div class="broadcast-sub">Istana · A Bluebell Media Network program</div></div>'});
+      applyBroadcastChromeV16();vnButtonV14('Continue',()=>{broadcastPageV16++;renderBroadcastPageV16();});
+    }else if(broadcastPageV16===1){
+      setVnV14('Istana','"First, the top of the board! These are still the channels everybody else is chasing."',{focus:'left',centerHtml:`<div class="broadcast-board"><div class="broadcast-logo">STREAMER'S RANKING · TOP 5</div><div class="broadcast-rank-list">${bluebellTopBoardV16()}</div></div>`});
+      applyBroadcastChromeV16();vnButtonV14('Continue',()=>{broadcastPageV16++;renderBroadcastPageV16();});
+    }else if(broadcastPageV16===2){
+      const line=playerBroadcastLineV16(data);setVnV14('Istana',`"${line}"`,{focus:'left',centerHtml:`<div class="broadcast-board"><div class="broadcast-logo">RANKING WATCH</div><div class="broadcast-player-highlight"><b>${escV14(profile.playerName||'Player')}</b><br>#${rank.toLocaleString()} · Popularity Lv. ${channel.popularity}</div></div>`});
+      applyBroadcastChromeV16();vnButtonV14('Continue',()=>{broadcastPageV16++;renderBroadcastPageV16();});
+    }else{
+      const n=(channel.streams||0)%15;
+      let fieldLine='"That’s it for the board today! I do crawl sometimes too, but nice low-level dungeons are plenty for me. I like coming back to the studio in one piece!"';
+      if(n===0)fieldLine='"I’m doing another little field stream soon! Light dungeon, sensible route, no heroic nonsense. I have a news desk to come back to!"';
+      else if(n===5)fieldLine='"And no, chat, we are <b>not</b> doing the age rumor again! Dungeon news only! ...Why are there so many hearts in chat now?"';
+      setVnV14('Istana',fieldLine,{focus:'left',centerHtml:'<div class="broadcast-board"><div class="broadcast-logo">ISTANA · BLUEBELL DUNGEON DESK</div><div class="broadcast-sub">Dungeon news · rankings · cheerful low-level field streams</div></div>'});
+      applyBroadcastChromeV16();vnButtonV14('Return to Hub',async()=>{channel.lastBroadcastStream=channel.streams||0;channel.pendingBroadcast=null;saveProgress();restoreStoryChromeV16();await wipeSwitch(()=>goHub());});
+    }
+  };
+
+  // Keep Bluebell world copy aligned with Istana's finalized identity.
+  for(const row of V16_WORLD_NEWS){
+    if(row[0]==='FIELD DAY')row[1]='Istana says she may do another light dungeon crawl after this week’s Orb Dungeon Weekly broadcast.';
+    if(row[0]==='BLUEBELL')row[1]='Istana and the Bluebell Dungeon Desk are preparing the next Orb Dungeon Weekly broadcast.';
+  }
+
+  const V20_SPECIALIST_TOTALS={dungeon:65000,power:30000,technical:30000,dungeonRank:65000,speed:25000,clash:25000};
+  const V20_SPECIALIST_LEADERS={dungeon:'VantaVale',power:'MiraVolt',technical:'SaintSignal',dungeonRank:'AstraLily',speed:'RookRush',clash:'QuietTitan'};
+  const V20_RANK_LABELS=['F','E','D','C','B','A','S'];
+
+  function v20NormalizeSpecialist(){
+    const old=channel.specialist&&typeof channel.specialist==='object'?channel.specialist:{};
+    const genres=old.genreTotals&&typeof old.genreTotals==='object'?old.genreTotals:{};
+    channel.specialist={
+      genreTotals:Object.fromEntries(GENRE_KEYS.map(k=>[k,Math.max(0,Number(genres[k])||0)])),
+      streamsTracked:Math.max(0,Number(old.streamsTracked)||0),
+      completedRuns:Math.max(0,Number(old.completedRuns)||0),
+      highestRankIndex:Math.max(-1,Math.min(6,Number.isFinite(Number(old.highestRankIndex))?Number(old.highestRankIndex):-1)),
+      rankClears:{...(old.rankClears||{})},
+      fastestClearMs:Number.isFinite(Number(old.fastestClearMs))&&Number(old.fastestClearMs)>0?Number(old.fastestClearMs):null,
+      fastestClearDungeon:old.fastestClearDungeon||null,
+      highestClashPower:Math.max(0,Number(old.highestClashPower)||0),
+      flawlessFights:Math.max(0,Number(old.flawlessFights)||0),
+      bestCounterStreak:Math.max(0,Number(old.bestCounterStreak)||0)
+    };
+    // Existing saves can at least seed their dungeon-rank record from clears earned before v20.
+    for(const [name,countRaw] of Object.entries(profile.dungeonClears||{})){
+      const count=Math.max(0,Number(countRaw)||0);if(!count)continue;const rank=DUNGEON_DEFS[name]?.rank||'F',idx=V20_RANK_LABELS.indexOf(rank);
+      if(idx>=0){channel.specialist.highestRankIndex=Math.max(channel.specialist.highestRankIndex,idx);channel.specialist.rankClears[rank]=Math.max(Number(channel.specialist.rankClears[rank])||0,count);}
+    }
+  }
+  const _v191NormalizeChannelV20=normalizeChannelV15;
+  normalizeChannelV15=function(){_v191NormalizeChannelV20();v20NormalizeSpecialist();};
+  const _v19LoadProgressV20=loadProgress;
+  loadProgress=function(){_v19LoadProgressV20();v20NormalizeSpecialist();v20NormalizeInsurance();};
+
+  function v20RankCurve(score,total,mid,exp=3){
+    const s=Math.max(0,Number(score)||0);return clamp(Math.round(total/(1+Math.pow(s/Math.max(.001,mid),exp))),1,total);
+  }
+  function v20HighestCleared(){
+    v20NormalizeSpecialist();const idx=channel.specialist.highestRankIndex;return idx>=0?V20_RANK_LABELS[idx]:'—';
+  }
+  function v20SpecialistMetrics(){
+    normalizeChannelV15();const sp=channel.specialist,m=v191RecentCCVMetrics(),clears=Math.max(totalDungeonClears(),sp.completedRuns||0),highestIdx=Math.max(-1,sp.highestRankIndex);
+    const dungeonScore=channel.popularity*.75+Math.max(0,highestIdx)*15+Math.sqrt(clears)*4+Math.sqrt(Math.max(0,m.average))*1.2;
+    const powerScore=channel.popularity*.7+Math.sqrt(sp.genreTotals.power||0)*2+Math.sqrt(sp.highestClashPower||0)*.8;
+    const technicalScore=channel.popularity*.7+Math.sqrt(sp.genreTotals.technical||0)*2.15+Math.sqrt(sp.flawlessFights||0)*3+Math.sqrt(sp.bestCounterStreak||0)*2;
+    let dungeonRankPlacement=V20_SPECIALIST_TOTALS.dungeonRank;
+    if(highestIdx>=0){
+      const starts=[50000,38000,24000,12000,4000,800,1],floors=[38001,24001,12001,4001,801,2,1],rank=V20_RANK_LABELS[highestIdx],same=Math.max(1,Number(sp.rankClears[rank])||1);
+      dungeonRankPlacement=Math.max(floors[highestIdx],starts[highestIdx]-Math.round(Math.min(starts[highestIdx]-floors[highestIdx],same*320+channel.popularity*55)));
+    }
+    let speedRank=null,speedSeconds=null;
+    if(sp.fastestClearMs){speedSeconds=sp.fastestClearMs/1000;const speedScore=240/Math.max(15,speedSeconds);speedRank=v20RankCurve(speedScore,V20_SPECIALIST_TOTALS.speed,2.5,3);}
+    const clashRank=sp.highestClashPower>0?v20RankCurve(sp.highestClashPower,V20_SPECIALIST_TOTALS.clash,500,3):null;
+    return {
+      dungeon:{rank:v20RankCurve(dungeonScore,V20_SPECIALIST_TOTALS.dungeon,60,3.2),score:dungeonScore,metric:`${clears} clears · highest ${v20HighestCleared()}`},
+      power:{rank:v20RankCurve(powerScore,V20_SPECIALIST_TOTALS.power,65,3),score:powerScore,metric:`Power signal ${Math.round(sp.genreTotals.power||0)} · best Clash ${Math.round(sp.highestClashPower||0)}`},
+      technical:{rank:v20RankCurve(technicalScore,V20_SPECIALIST_TOTALS.technical,65,3),score:technicalScore,metric:`Technical signal ${Math.round(sp.genreTotals.technical||0)} · flawless fights ${sp.flawlessFights||0}`},
+      dungeonRank:{rank:dungeonRankPlacement,metric:highestIdx>=0?`Highest clear: ${V20_RANK_LABELS[highestIdx]} rank`:'No completed dungeon recorded'},
+      speed:{rank:speedRank,metric:speedSeconds!=null?`Best: ${v20FormatTime(sp.fastestClearMs)} · ${sp.fastestClearDungeon||'Dungeon'}`:'No completed clear timed yet'},
+      clash:{rank:clashRank,metric:sp.highestClashPower>0?`Record Clash Power: ${Math.round(sp.highestClashPower)}`:'No Clash Power record yet'}
+    };
+  }
+  function v20FormatTime(ms){const total=Math.max(0,Math.round((Number(ms)||0)/1000)),m=Math.floor(total/60),s=total%60;return `${m}:${String(s).padStart(2,'0')}`;}
+  function v20RankText(rank){return rank==null?'Unranked':`#${Number(rank).toLocaleString()}`;}
+  function v20SpecialistCard(title,key,data){return `<div class="v20-specialist-card"><b>${escV14(title)}</b><div class="rank">${v20RankText(data.rank)}</div><div class="metric">${escV14(data.metric||'')}</div><div class="leader">Current #1: <b>${escV14(V20_SPECIALIST_LEADERS[key])}</b></div></div>`;}
+
+  const _v191RenderRankingV20=renderRankingV15;
+  renderRankingV15=function(){
+    _v191RenderRankingV20();const panel=$('hubPanel');if(!panel)return;const metrics=v20SpecialistMetrics();
+    const newsHeading=[...panel.querySelectorAll('h3')].find(h=>h.textContent.trim()==='Recent Orb News');
+    const specialist=document.createElement('section');specialist.className='v20-specialists';specialist.innerHTML=`<h3>Specialist Rankings</h3><p class="compact-meta">Overall Streamer's Ranking measures broad channel reach. Specialist boards separately reward what kind of dungeon streamer you are and the records you have actually set.</p><div class="v20-specialist-grid">${v20SpecialistCard('Dungeon Streamer Ranking','dungeon',metrics.dungeon)}${v20SpecialistCard('Power Content Ranking','power',metrics.power)}${v20SpecialistCard('Technical Content Ranking','technical',metrics.technical)}${v20SpecialistCard('Highest Dungeon Rank Cleared','dungeonRank',metrics.dungeonRank)}${v20SpecialistCard('Fastest Clear','speed',metrics.speed)}${v20SpecialistCard('Highest Clash Power','clash',metrics.clash)}</div>`;
+    if(newsHeading)newsHeading.before(specialist);else panel.appendChild(specialist);
+    const oldBlue=panel.querySelector('.bluebell-desk-card');if(oldBlue)oldBlue.remove();
+    const istana=document.createElement('section');istana.className='v20-istana-card';istana.innerHTML=`<div class="v20-istana-head"><div><div class="v20-istana-name">Istana</div><div class="compact-meta">Bluebell Media Network · Orb Dungeon Weekly</div></div><span class="v20-istana-badge">IDOL / NEWS</span></div><div>${escV14(V20_ISTANA.description)}</div><div class="v20-istana-ranks"><span>Overall Ranking #${V20_ISTANA.overallRank.toLocaleString()}</span><span>Dungeon Streamer #${V20_ISTANA.dungeonRank.toLocaleString()}</span><span>Age: undisclosed</span></div><div class="compact-meta" style="margin-top:8px">Rumor mill: ${escV14(V20_ISTANA.rumor)}</div>`;
+    if(specialist.nextSibling)specialist.parentNode.insertBefore(istana,specialist.nextSibling);else specialist.after(istana);
+  };
+
+  // Record player Clash Power whenever the player side produces a clash total (attack or defense).
+  const _v191MakeRollFromDieV20=makeRollFromDie;
+  makeRollFromDie=function(stat,factor,die){const r=_v191MakeRollFromDieV20(stat,factor,die);v20NormalizeSpecialist();if(r&&Number(r.total)>channel.specialist.highestClashPower)channel.specialist.highestClashPower=Number(r.total);return r;};
+
+  // Start timing each expedition. The timer measures actual play time from entering the dungeon until completion.
+  const V20_INSURANCE_PLANS=[
+    {id:'none',name:'No Insurance',grade:'—',premium:0,coverage:0},
+    {id:'F',name:'F-Grade Recovery',grade:'F',premium:15,coverage:400},
+    {id:'E',name:'E-Grade Recovery',grade:'E',premium:35,coverage:900},
+    {id:'D',name:'D-Grade Recovery',grade:'D',premium:80,coverage:2000},
+    {id:'C',name:'C-Grade Recovery',grade:'C',premium:150,coverage:4000},
+    {id:'B',name:'B-Grade Recovery',grade:'B',premium:275,coverage:7500},
+    {id:'A',name:'A-Grade Recovery',grade:'A',premium:500,coverage:14000},
+    {id:'S',name:'S-Grade Recovery',grade:'S',premium:900,coverage:30000}
+  ];
+  function v20Plan(id){return V20_INSURANCE_PLANS.find(x=>x.id===id)||V20_INSURANCE_PLANS[0];}
+  function v20NormalizeInsurance(){
+    const raw=profile.expeditionInsurance&&typeof profile.expeditionInsurance==='object'?profile.expeditionInsurance:{};
+    profile.expeditionInsurance={planId:v20Plan(raw.planId).id,activePlanId:v20Plan(raw.activePlanId).id,claims:Math.max(0,Number(raw.claims)||0),savedMoney:Math.max(0,Number(raw.savedMoney)||0),lastPremium:Math.max(0,Number(raw.lastPremium)||0),lastClaim:raw.lastClaim||null};
+  }
+  function v20EquipmentRecoveryValue(){
+    let total=0;for(const uid of allEquippedUids()){const inst=findEquipment(uid),def=inst&&ITEM_DEFS[inst.id];if(!inst||!def)continue;total+=Math.round((Number(def.price)||0)*(1+Math.max(0,Number(inst.enhance)||0)*.20));}return Math.max(0,total);
+  }
+  function v20InsuranceQuote(value=v20EquipmentRecoveryValue(),planId=profile.expeditionInsurance?.planId||'none'){
+    const plan=v20Plan(planId),gear=Math.max(0,Number(value)||0),covered=Math.min(gear,plan.coverage),uncovered=Math.max(0,gear-plan.coverage),recoveryFee=Math.ceil(uncovered*.15),noInsuranceFee=Math.ceil(gear*.15);return {planId:plan.id,planName:plan.name,premium:plan.premium,coverage:plan.coverage,gearValue:gear,covered,uncovered,recoveryFee,noInsuranceFee,savedOnClaim:Math.max(0,noInsuranceFee-recoveryFee)};
+  }
+  function v20SelectInsurance(id){v20NormalizeInsurance();profile.expeditionInsurance.planId=v20Plan(id).id;saveProgress();v20RenderInsurance();}
+  function v20RenderInsurance(){
+    v20NormalizeInsurance();const value=v20EquipmentRecoveryValue(),selected=v20Plan(profile.expeditionInsurance.planId),quote=v20InsuranceQuote(value,selected.id);
+    const plans=V20_INSURANCE_PLANS.map(p=>{const q=v20InsuranceQuote(value,p.id),sel=p.id===selected.id;return `<div class="v20-insurance-plan ${sel?'selected':''}"><div><b>${escV14(p.name)}</b> ${p.id==='none'?'':`<span class="v20-policy-pill">${p.grade} plan</span>`}<div class="compact-meta">Premium ${p.premium} money / expedition · covers ${p.coverage.toLocaleString()} equipment value${p.id==='none'?'':' · current defeat fee '+q.recoveryFee+' money'}</div></div><button class="small-btn" data-v20-insurance="${p.id}" ${sel?'disabled':''}>${sel?'Selected':'Select'}</button></div>`;}).join('');
+    v19Pote('"Expedition insurance is optional. Pick the recovery coverage that fits the equipment you are actually carrying. The premium is charged when you enter a dungeon; if you are defeated, the Guild covers recovery up to that value limit."',`<div class="v20-insurance-summary"><div class="slot-card"><b>Equipped value</b><div>${value.toLocaleString()} money</div></div><div class="slot-card"><b>Selected plan</b><div>${escV14(selected.name)}</div></div><div class="slot-card"><b>Coverage</b><div>${selected.coverage.toLocaleString()}</div></div><div class="slot-card"><b>Defeat recovery fee</b><div>${quote.recoveryFee.toLocaleString()} money</div></div></div><div class="v20-insurance-plans">${plans}</div><div class="v20-insurance-note">Equipment is not destroyed on defeat. Without enough coverage, the Explorer's Guild charges a recovery fee equal to 15% of the uncovered equipped value, limited to the money you currently have. Enhancement adds 20% of an item's shop value per + level for insurance valuation.</div>`);
+    $('vnCenterCard').querySelectorAll('[data-v20-insurance]').forEach(b=>b.onclick=()=>v20SelectInsurance(b.dataset.v20Insurance));v19GuildAction('Back to Guild Services',openGuildV19,true);
+  }
+
+  // Add insurance to Pote's actual service desk rather than turning it into another hub page.
+  openGuildV19=function(){
+    normalizeV19Profile();v20NormalizeInsurance();reconcileTutorialV14();const step=tutorialStepV14();lastHubPanel='guild';
+    if(step<6){
+      const mission=V14_TUTORIAL_MISSIONS[step]||V14_TUTORIAL_MISSIONS[6];
+      v19Pote(`"Welcome back, <b>${escV14(profile.playerName||'Explorer')}</b>. Your orientation file is still open. What do you need?"`,`<b>Current Orientation</b><h3>${escV14(mission.name)}</h3><p>${escV14(mission.description)}</p><p class="compact-meta"><b>Progress:</b> ${escV14(guildMissionProgressV14(step))}<br><b>Reward:</b> ${escV14(mission.unlock)}</p>`);
+      v19GuildAction('Current Orientation',()=>v19RenderOrientation(step));v19GuildAction('Turn In Materials',v19RenderMaterialDesk);v19GuildAction('Dungeon Information',v19RenderDungeonInfo);v19GuildAction('Adventurer Record',v19RenderRecord);v19GuildAction('Leave Guild',v19LeaveGuild,true);return;
+    }
+    const g=explorerStateV14(),catalog=V19_CATALOG_NAMES[g.catalogLevel||0],policy=v20Plan(profile.expeditionInsurance.planId);
+    v19Pote(`"Welcome back, <b>${escV14(profile.playerName||'Explorer')}</b>. I have your file. What guild service do you need?"`,`<b>${escV14(explorerStandingV14())}</b><p class="compact-meta">Explorer Reputation ${g.reputation||0} · ${escV14(catalog)}<br>Expedition insurance: <b>${escV14(policy.name)}</b></p>`);
+    v19GuildAction('Main Assignment',v19RenderMainAssignment);v19GuildAction('Jobs / Quest Board',v19RenderJobs);v19GuildAction('Turn In Materials',v19RenderMaterialDesk);v19GuildAction('Dungeon Information',v19RenderDungeonInfo);v19GuildAction('Expedition Insurance',v20RenderInsurance);v19GuildAction('Adventurer Record',v19RenderRecord);v19GuildAction('Guild Services',v19RenderServices);v19GuildAction('Leave Guild',v19LeaveGuild,true);
+  };
+  v19RenderServices=function(){const g=explorerStateV14(),p=v20Plan(profile.expeditionInsurance?.planId||'none');v19Pote('"Explorer membership is supposed to be useful even when you are not taking a Guild job. These are the services currently attached to your file."',`<div class="v19-guild-grid"><div class="v19-guild-card"><b>Supplier Authorization</b><p class="compact-meta">${escV14(V19_CATALOG_NAMES[g.catalogLevel||0])}. Main-assignment reports unlock better shop stock.</p></div><div class="v19-guild-card"><b>Material Purchasing</b><p class="compact-meta">The Guild buys Magic Crystals and registered monster materials directly through this desk.</p></div><div class="v19-guild-card"><b>Expedition Insurance</b><p class="compact-meta">Selected: ${escV14(p.name)}. Recovery coverage protects your cash from equipment-recovery fees after a defeat.</p></div><div class="v19-guild-card"><b>Dungeon Records</b><p class="compact-meta">Known enemy rosters, ranks, and your clear history are maintained here.</p></div><div class="v19-guild-card"><b>Future Services</b><p class="compact-meta">Appraisal, referrals, and additional guild networks can plug into this desk later.</p></div></div>`);v19GuildAction('Manage Expedition Insurance',v20RenderInsurance);v19GuildAction('Back to Guild Services',openGuildV19,true);};
+
+  const _v17StartDungeonV20=startDungeon;
+  startDungeon=async function(name){
+    v20NormalizeInsurance();const valid=!!DUNGEON_DEFS[name]&&dungeonUnlocked(name)&&hubUnlockedV14('dungeon');normalizeProfileHp();if(!valid||profile.hp<=0)return _v17StartDungeonV20(name);
+    const selected=v20Plan(profile.expeditionInsurance.planId);let active=selected;
+    if(selected.premium>0){if(profile.money>=selected.premium){profile.money-=selected.premium;profile.expeditionInsurance.lastPremium=selected.premium;}else active=v20Plan('none');}
+    profile.expeditionInsurance.activePlanId=active.id;saveProgress();const started=Date.now();await _v17StartDungeonV20(name);if(game&&!game.finished){game.v20StartedAt=started;game.v20InsurancePlanId=active.id;saveProgress();}
+  };
+
+  // Track lifetime specialist data and settle recovery coverage after a defeat.
+  const _v16FinalEndStreamV20=endStream;
+  endStream=async function(reason='retreat'){
+    if(!game||game.finished)return _v16FinalEndStreamV20(reason);
+    v20NormalizeSpecialist();v20NormalizeInsurance();const sp=channel.specialist;
+    const snap={genres:{...game.genreTotal},mastery:game.mastery?{...game.mastery}:null,rank:game.dungeon?.rank||'F',dungeon:game.dungeon?.name||game.dungeon?.definition||'Dungeon',elapsed:game.v20StartedAt?Math.max(1,Date.now()-game.v20StartedAt):null,planId:game.v20InsurancePlanId||profile.expeditionInsurance.activePlanId||'none',gearValue:v20EquipmentRecoveryValue()};
+    await _v16FinalEndStreamV20(reason);
+    v20NormalizeSpecialist();const spNow=channel.specialist;for(const k of GENRE_KEYS)spNow.genreTotals[k]=(spNow.genreTotals[k]||0)+Math.max(0,Number(snap.genres[k])||0);spNow.streamsTracked++;
+    if(snap.mastery){spNow.flawlessFights+=(Number(snap.mastery.flawlessFights)||0);spNow.bestCounterStreak=Math.max(spNow.bestCounterStreak||0,Number(snap.mastery.maxCounterStreak)||0);}
+    if(reason==='complete'){
+      spNow.completedRuns++;const idx=V20_RANK_LABELS.indexOf(snap.rank);if(idx>=0)spNow.highestRankIndex=Math.max(spNow.highestRankIndex,idx);spNow.rankClears[snap.rank]=Math.max(Number(spNow.rankClears[snap.rank])||0,Number(profile.dungeonClears?.[snap.dungeon])||1);
+      if(snap.elapsed&&(!spNow.fastestClearMs||snap.elapsed<spNow.fastestClearMs)){spNow.fastestClearMs=snap.elapsed;spNow.fastestClearDungeon=snap.dungeon;addNewsV15('SPEED RECORD',`${profile.playerName||'Player'} set a personal fastest clear: ${v20FormatTime(snap.elapsed)} in ${snap.dungeon}.`);}
+    }
+    let insuranceResult=null;
+    if(reason==='death'){
+      const quote=v20InsuranceQuote(snap.gearValue,snap.planId),fee=Math.min(Math.max(0,profile.money),quote.recoveryFee);profile.money-=fee;profile.expeditionInsurance.claims++;profile.expeditionInsurance.savedMoney+=quote.savedOnClaim;profile.expeditionInsurance.lastClaim={planId:snap.planId,gearValue:snap.gearValue,covered:quote.covered,uncovered:quote.uncovered,fee,saved:quote.savedOnClaim};insuranceResult={...quote,fee};
+      addNewsV15('GUILD RECOVERY',`${profile.playerName||'Player'} was recovered after a failed expedition. ${v20Plan(snap.planId).name} handled the equipment recovery.`);
+    }
+    profile.expeditionInsurance.activePlanId='none';saveProgress();updateHubHeader();
+    if(insuranceResult){let box=$('v20InsuranceResult');if(!box){box=document.createElement('div');box.id='v20InsuranceResult';box.className='compact-card v20-insurance-result';$('againButton').before(box);}box.innerHTML=`<b>Explorer's Guild Recovery</b><div class="compact-meta">Policy: ${escV14(insuranceResult.planName)} · Equipped value ${insuranceResult.gearValue.toLocaleString()}<br>Covered ${insuranceResult.covered.toLocaleString()} · Uncovered ${insuranceResult.uncovered.toLocaleString()}<br>Recovery fee: <span class="fee">${insuranceResult.fee.toLocaleString()} money</span>${insuranceResult.savedOnClaim?` · Insurance avoided up to <span class="saved">${insuranceResult.savedOnClaim.toLocaleString()} money</span> in recovery fees`:''}</div>`;}
+  };
+
+  // Explorer overview also shows the currently selected recovery policy.
+  const _v191RenderExplorerGuildOverviewV20=v191RenderExplorerGuildOverview;
+  v191RenderExplorerGuildOverview=function(){_v191RenderExplorerGuildOverviewV20();v20NormalizeInsurance();const grid=$('hubPanel')?.querySelector('.guild-status-grid');if(grid&&!grid.querySelector('[data-v20-policy-card]')){const p=v20Plan(profile.expeditionInsurance.planId),c=document.createElement('div');c.className='slot-card';c.dataset.v20PolicyCard='1';c.innerHTML=`<b>Expedition Insurance</b><div>${escV14(p.name)}</div><small>${p.coverage.toLocaleString()} equipment value</small>`;grid.appendChild(c);}};
+
+  // Automated-test/debug surface kept pure where possible.
+  window.__DSC_V20={
+    istana:()=>({...V20_ISTANA}),
+    specialist:()=>v20SpecialistMetrics(),
+    specialistState:()=>{v20NormalizeSpecialist();return JSON.parse(JSON.stringify(channel.specialist));},
+    setSpecialistState:(x={})=>{v20NormalizeSpecialist();Object.assign(channel.specialist,x);if(x.genreTotals)channel.specialist.genreTotals={...channel.specialist.genreTotals,...x.genreTotals};saveProgress();},
+    equipmentValue:()=>v20EquipmentRecoveryValue(),
+    insurancePlans:()=>V20_INSURANCE_PLANS.map(x=>({...x})),
+    insuranceQuote:(value,id)=>v20InsuranceQuote(value,id),
+    selectInsurance:(id)=>{v20NormalizeInsurance();profile.expeditionInsurance.planId=v20Plan(id).id;saveProgress();},
+    insuranceState:()=>{v20NormalizeInsurance();return JSON.parse(JSON.stringify(profile.expeditionInsurance));},
+    openInsurance:()=>v20RenderInsurance(),
+    setFastest:(ms,name='Test Dungeon')=>{v20NormalizeSpecialist();channel.specialist.fastestClearMs=Math.max(1,Number(ms)||1);channel.specialist.fastestClearDungeon=name;saveProgress();},
+    setClash:(n)=>{v20NormalizeSpecialist();channel.specialist.highestClashPower=Math.max(0,Number(n)||0);saveProgress();}
+  };
+
+
+
+
+  // ===== v20.1: Pote revision, UI continuity, field supplies, enhancement craft skill, specialist wall =====
+  const V201_POTE_TEXT={"registration.intro":"Welcome to the Explorer's guild. I'm Pote, the receptionist assigned to your Explorer file. If you need guild services later, you'll be dealing with me.","registration.name":"First, I need the name you want on your guild license and Scrying Orb channel.","registration.abilities":"Please fill out this form to describe your abilities. Every category starts at 1; distribute 20 additional points however you like. Yes, putting all twenty into one thing is allowed.","registration.package":"All right, {{playerName}}. The guild registration package is 9,900 money. That covers your Explorer license, starter equipment, a guild-standard Personal Terminal and PT Core registration.","registration.starter_set":"Pick your starter set. It does not lock you into a class; your ability form and future equipment are completely independent.","registration.final_receipt":"Everything checks out. {{starterSetName}}, guild license, PT, PT Core. Once I process this, your balance goes from 10,000 to 100 money.","registration.pt":"This is your PT. It talks over the Resonance Communication Network, or as we call it, ResoNet. The PT acts like a mobile phone from ancient times.","registration.scrying_orb":"I also initialized your Scrying Orb channel. Exploration footage is useful, people like watching adventurers work, and a successful channel can become a second source of income.","registration.complete":"Registration complete, {{playerName}}. Start with the Training Dojo; I've marked it as your first orientation assignment.","service.orientation_greeting":"Welcome back, {{playerName}}. Your orientation file is still open. What do you need?","service.main_greeting":"Welcome back, {{playerName}}. I have your file. What do you need?","service.orientation":"Your current orientation assignment is {{missionName}}.","service.assignment_complete":"The Local Dungeon Survey is complete. Your field certification is up to date, and the full Explorer supplier catalogue is authorized for your file.","service.assignment_active":"Your Explorer main assignment is one continuous survey: Local Dungeon Survey. Right now I need the exact samples listed in the field report.","service.assignment_stage_accepted":"Report accepted. I've authorized {{catalogName}}. The next survey stage is ready whenever you are.","service.assignment_final_accepted":"That completes the Local Dungeon Survey. Nice work. I've authorized the full supplier catalogue on your file.","service.jobs":"These are optional paid jobs for your next stream. Take as many as you want. However, incomplete jobs fail when the stream ends.","service.materials":"I can process Magic Crystals and monster materials here. Guild purchasing rates are listed beside each item.","service.dungeon_information":"The Guild does not stop you from entering a dungeon above your experience. We do keep records so you know what you are volunteering to fight.","service.adventurer_record":"Here is the current record attached to your Explorer license.","service.guild_services":"Explorer membership is supposed to be useful even when you are not taking a Guild job. These are the services currently attached to your file.","service.expedition_insurance":"Expedition insurance is optional. Pick the recovery coverage that fits the equipment you are actually carrying. The premium is charged when you enter a dungeon; if you are defeated, the Guild covers recovery up to that value limit."};
+  function v201PoteLine(id,vars={}){
+    let s=V201_POTE_TEXT[id]||'';
+    for(const [k,v] of Object.entries(vars))s=s.replaceAll(`{{${k}}}`,String(v));
+    return s;
+  }
+
+  // New early field supplies and weapon lines for AGI / TEC focused builds.
+  Object.assign(ITEM_DEFS,{
+    bandage:{name:'Bandage',type:'consumable',price:12,guildCatalog:0,description:'Cures Bleed. Using it in combat consumes your action.'},
+    antidote:{name:'Antidote',type:'consumable',price:14,guildCatalog:0,description:'Cures Poison. Using it in combat consumes your action.'},
+    twin_daggers:{name:'Twin Daggers',type:'equipment',slot:'weapon',rarity:'common',price:90,bonuses:{AGI:3,TEC:1},primary:'AGI',description:'AGI +3, TEC +1. Built for rapid Flurry-focused fighting.',gearTier:'Basic Weapon',guildCatalog:0},
+    estoc:{name:'Estoc',type:'equipment',slot:'weapon',rarity:'common',price:90,bonuses:{TEC:3,AGI:1},primary:'TEC',description:'TEC +3, AGI +1. A precise thrusting weapon for technical attacks.',gearTier:'Basic Weapon',guildCatalog:0},
+    windfang_knives:{name:'Windfang Knives',type:'equipment',slot:'weapon',rarity:'rare',price:255,bonuses:{AGI:6,TEC:2},primary:'AGI',description:'AGI +6, TEC +2. Lightweight advanced knives for relentless Flurry pressure.',gearTier:'Runic Weapon',guildCatalog:3},
+    precision_estoc:{name:'Precision Estoc',type:'equipment',slot:'weapon',rarity:'rare',price:265,bonuses:{TEC:6,AGI:2},primary:'TEC',description:'TEC +6, AGI +2. A specialist weapon built around exact placement and Precision Cut.',gearTier:'Runic Weapon',guildCatalog:3}
+  });
+  for(const id of ['bandage','antidote'])if(!ITEM_SHOP_IDS.includes(id))ITEM_SHOP_IDS.push(id);
+  for(const id of ['twin_daggers','estoc','windfang_knives','precision_estoc'])if(!WEAPON_SHOP_IDS.includes(id))WEAPON_SHOP_IDS.push(id);
+
+  const _v20NormalizeV19ProfileV201=normalizeV19Profile;
+  normalizeV19Profile=function(){
+    _v20NormalizeV19ProfileV201();
+    profile.inventory.bandage=Math.max(0,Number(profile.inventory.bandage)||0);
+    profile.inventory.antidote=Math.max(0,Number(profile.inventory.antidote)||0);
+  };
+
+  // Re-rendering a value inside the same Hub page should never throw the player back to the top.
+  // The old v17 helper intentionally scrolled every Hub render to zero; v20.1 owns that behavior now.
+  try{scrollHubTopV17=function(){};}catch(_){ }
+  function v201CaptureHubUi(){
+    const shell=document.querySelector('.hub-shell');
+    const active=document.activeElement;
+    return {top:shell?.scrollTop||0,focusId:active?.id||'',focusData:active?.dataset?Object.entries(active.dataset):[]};
+  }
+  function v201RestoreHubUi(snap,preserve){
+    requestAnimationFrame(()=>{
+      const shell=document.querySelector('.hub-shell');if(shell)shell.scrollTop=preserve?snap.top:0;
+      if(!preserve)return;
+      let target=snap.focusId?document.getElementById(snap.focusId):null;
+      if(!target&&snap.focusData.length){const [k,v]=snap.focusData[0];target=document.querySelector(`[data-${k.replace(/[A-Z]/g,m=>'-'+m.toLowerCase())}="${CSS.escape(v)}"]`);}
+      target?.focus?.({preventScroll:true});
+    });
+  }
+  const _v20RenderHubPanelV201=renderHubPanel;
+  renderHubPanel=function(kind){
+    const before=lastHubPanel,snap=v201CaptureHubUi(),same=(kind===before)||(kind==='inventory'&&before==='equipment');
+    const r=_v20RenderHubPanelV201(kind);v201RestoreHubUi(snap,same);return r;
+  };
+  function v201PreserveVnScroller(fn,selector='#vnCenterCard .v19-scroll-card, #vnCenterCard .v20-insurance-plans'){
+    const old=document.querySelector(selector),top=old?.scrollTop||0;const r=fn();requestAnimationFrame(()=>{const next=document.querySelector(selector);if(next)next.scrollTop=top;});return r;
+  }
+
+  // Use the user's revised Pote copy as the dialogue source of truth.
+  renderRegistrationV14=function(){
+    normalizeV19Profile();showOnlyScreen('story');$('settingsPopup').classList.remove('show');v19SetGuildChrome('Day 1 · Explorer\'s Guild Registration','Explorer\'s Guild — Registration Hall');
+    const o=profile.onboarding,step=Number(o.registrationStep)||0;
+    if(step===0){setVnV14('Pote',v201PoteLine('registration.intro'));vnButtonV14('Begin Registration',()=>{o.registrationStep=1;saveProgress();renderRegistrationV14();});}
+    else if(step===1){setVnV14('Pote',v201PoteLine('registration.name'),{focus:'right'});const input=document.createElement('input');input.className='vn-input';input.id='vnNameInput';input.maxLength=24;input.placeholder='Enter adventurer name';input.value=profile.playerName||'';$('vnActions').appendChild(input);vnButtonV14('Confirm Name',()=>{const name=input.value.trim();if(!name){input.focus();return;}profile.playerName=name;o.registrationStep=2;saveProgress();renderRegistrationV14();});setTimeout(()=>input.focus(),0);}
+    else if(step===2){
+      setVnV14('Pote',v201PoteLine('registration.abilities'),{focus:'right'});
+      const form=document.createElement('div');form.className='v19-stat-form';form.innerHTML=STAT_NAMES.map(k=>`<div class="v19-stat-row"><span class="stat-name">${k}</span><span class="stat-desc">${V19_STAT_DESCRIPTIONS[k]}</span><button data-stat-minus="${k}" ${(profile.abilityAllocation[k]||0)<=0?'disabled':''}>−</button><span class="stat-value">${V19_BASE_STAT+(profile.abilityAllocation[k]||0)}</span><button data-stat-plus="${k}" ${v19StatRemaining()<=0?'disabled':''}>+</button></div>`).join('')+`<div class="v19-points"><span>Unassigned points</span><b>${v19StatRemaining()} / ${V19_FREE_POINTS}</b></div>`;$('vnText').appendChild(form);
+      form.querySelectorAll('[data-stat-minus]').forEach(b=>b.onclick=()=>{const k=b.dataset.statMinus;profile.abilityAllocation[k]=Math.max(0,(profile.abilityAllocation[k]||0)-1);v19ApplyAbilityStats();saveProgress();renderRegistrationV14();});
+      form.querySelectorAll('[data-stat-plus]').forEach(b=>b.onclick=()=>{if(v19StatRemaining()<=0)return;const k=b.dataset.statPlus;profile.abilityAllocation[k]=(profile.abilityAllocation[k]||0)+1;v19ApplyAbilityStats();saveProgress();renderRegistrationV14();});
+      const confirm=vnButtonV14('Confirm Ability Form',()=>{if(v19StatRemaining()!==0)return;v19ApplyAbilityStats();profile.abilityFormCompleted=true;o.registrationStep=3;saveProgress();renderRegistrationV14();});confirm.disabled=v19StatRemaining()!==0;
+    }
+    else if(step===3){setVnV14('Pote',v201PoteLine('registration.package',{playerName:escV14(profile.playerName)}),{centerHtml:`<b>Registration Package</b><div class="vn-receipt"><span>Starting savings</span><b>10,000</b><span>Explorer registration package</span><b>−9,900</b><span class="total">Remaining after registration</span><b class="total">100</b></div>`});vnButtonV14('Continue',()=>{o.registrationStep=4;saveProgress();renderRegistrationV14();});}
+    else if(step===4){setVnV14('Pote',v201PoteLine('registration.starter_set'),{focus:'right'});const grid=document.createElement('div');grid.className='starter-kit-grid';for(const [id,kit] of Object.entries(V14_STARTER_KITS)){const card=document.createElement('button');card.className='starter-kit'+(o.starterKit===id?' selected':'');card.innerHTML=`<b>${escV14(kit.name)}</b><small>${escV14(kit.summary)}<br>${kit.items.map(x=>ITEM_DEFS[x].name).join(' · ')}</small>`;card.onclick=()=>{o.starterKit=id;saveProgress();renderRegistrationV14();};grid.appendChild(card);}$('vnText').appendChild(grid);vnButtonV14('Confirm Starter Set',()=>{if(!o.starterKit)return;o.registrationStep=5;saveProgress();renderRegistrationV14();});}
+    else if(step===5){const kit=V14_STARTER_KITS[o.starterKit]||V14_STARTER_KITS.vanguard;setVnV14('Pote',v201PoteLine('registration.final_receipt',{starterSetName:escV14(kit.name)}),{centerHtml:`<b>Final Registration Receipt</b><div class="vn-receipt"><span>Explorer's Guild license & services</span><b>Included</b><span>${escV14(kit.name)}</span><b>Included</b><span>Guild Standard Slate PT + PT Core</span><b>Included</b><span class="total">Package total</span><b class="total">9,900</b></div><div class="vn-money-drop">10,000 → 100</div>`});vnButtonV14('Pay 9,900 & Register',()=>{completeRegistrationPaymentV14();normalizeV19Profile();profile.guilds.explorer.catalogLevel=0;o.registrationStep=6;saveProgress();renderRegistrationV14();});}
+    else if(step===6){setVnV14('Pote',v201PoteLine('registration.pt'),{centerHtml:'<b>Guild Standard Slate PT</b><p class="compact-meta">PT Core registered · RCN / ResoNet access active</p>'});vnButtonV14('Continue',()=>{o.registrationStep=7;saveProgress();renderRegistrationV14();});}
+    else if(step===7){setVnV14('Pote',v201PoteLine('registration.scrying_orb'));vnButtonV14('Continue',()=>{o.registrationStep=8;saveProgress();renderRegistrationV14();});}
+    else{setVnV14('Pote',v201PoteLine('registration.complete',{playerName:escV14(profile.playerName)}),{centerHtml:'<b>EXPLORER\'S GUILD REGISTRATION COMPLETE</b><p class="compact-meta">License active · ability record filed · PT registered · Scrying Orb channel created</p>'});vnButtonV14('Enter Hub',()=>{o.completed=true;profile.guilds.explorer.tutorialStep=1;normalizeV19Profile();saveProgress();refreshHubButtonsV14();syncPlayerIdentityV14();showOnlyScreen('hub');renderHubPanel('guild');});}
+  };
+
+  openGuildV19=function(){
+    normalizeV19Profile();v20NormalizeInsurance();reconcileTutorialV14();const step=tutorialStepV14();lastHubPanel='guild';
+    if(step<6){const mission=V14_TUTORIAL_MISSIONS[step]||V14_TUTORIAL_MISSIONS[6];v19Pote(v201PoteLine('service.orientation_greeting',{playerName:escV14(profile.playerName||'Explorer')}),`<b>Current Orientation</b><h3>${escV14(mission.name)}</h3><p>${escV14(mission.description)}</p><p class="compact-meta"><b>Progress:</b> ${escV14(guildMissionProgressV14(step))}<br><b>Reward:</b> ${escV14(mission.unlock)}</p>`);v19GuildAction('Current Orientation',()=>v19RenderOrientation(step));v19GuildAction('Turn In Materials',v19RenderMaterialDesk);v19GuildAction('Dungeon Information',v19RenderDungeonInfo);v19GuildAction('Adventurer Record',v19RenderRecord);v19GuildAction('Leave Guild',v19LeaveGuild,true);return;}
+    const g=explorerStateV14(),catalog=V19_CATALOG_NAMES[g.catalogLevel||0],policy=v20Plan(profile.expeditionInsurance.planId);v19Pote(v201PoteLine('service.main_greeting',{playerName:escV14(profile.playerName||'Explorer')}),`<b>${escV14(explorerStandingV14())}</b><p class="compact-meta">Explorer Reputation ${g.reputation||0} · ${escV14(catalog)}<br>Expedition insurance: <b>${escV14(policy.name)}</b></p>`);v19GuildAction('Main Assignment',v19RenderMainAssignment);v19GuildAction('Jobs / Quest Board',v19RenderJobs);v19GuildAction('Turn In Materials',v19RenderMaterialDesk);v19GuildAction('Dungeon Information',v19RenderDungeonInfo);v19GuildAction('Expedition Insurance',v20RenderInsurance);v19GuildAction('Adventurer Record',v19RenderRecord);v19GuildAction('Guild Services',v19RenderServices);v19GuildAction('Leave Guild',v19LeaveGuild,true);
+  };
+  v19RenderOrientation=function(step=tutorialStepV14()){const mission=V14_TUTORIAL_MISSIONS[step]||V14_TUTORIAL_MISSIONS[6];v19Pote(v201PoteLine('service.orientation',{missionName:escV14(mission.name)}),`<b>${escV14(mission.name)}</b><p>${escV14(mission.description)}</p><p class="compact-meta"><b>Progress:</b> ${escV14(guildMissionProgressV14(step))}<br><b>Reward:</b> ${escV14(mission.unlock)}</p>`);if(step===1)v19GuildAction('Go to Training Dojo',()=>v19GoHubService('dojo'));if(step===2||step===4)v19GuildAction('Go to Dungeon Board',()=>v19GoHubService('dungeon'));if(step===5)v19GuildAction('Open Channel Dashboard',()=>v19GoHubService('channel'));v19GuildAction('Back to Guild Services',openGuildV19,true);};
+  v19RenderMainAssignment=function(){
+    const st=v19AssignmentStatus();if(st.complete){v19Pote(v201PoteLine('service.assignment_complete'),'<b>LOCAL DUNGEON SURVEY — COMPLETE</b><p class="compact-meta">Field Catalogue IV active · all current shop tiers authorized</p>');v19GuildAction('Back to Guild Services',openGuildV19,true);return;}
+    const s=st.stage,checks=st.checks.map(([label,ok,req])=>req?v191MaterialRequirementHtml(req,true):`<div class="v191-requirement ${ok?'done':''}"><span class="mark">${ok?'✓':'·'}</span><span><b>${escV14(label)}</b></span></div>`).join('');v19Pote(v201PoteLine('service.assignment_active'),`<div class="mission-kicker">Local Dungeon Survey · Stage ${st.idx+1}/${V19_ASSIGNMENT_STAGES.length}</div><h3>${escV14(s.name)}</h3><div class="v191-requirements">${checks}</div><p class="compact-meta"><b>Reward:</b> ${escV14(s.reward)}<br>Submitting a stage consumes exactly the listed material samples.</p>`);
+    const b=v19GuildAction(st.ready?'Submit Report & Samples':'Requirements Not Met',()=>{if(!v19CompleteAssignmentStage())return;const finished=explorerStateV14().mainAssignmentComplete;v19Pote(finished?v201PoteLine('service.assignment_final_accepted'):v201PoteLine('service.assignment_stage_accepted',{catalogName:escV14(V19_CATALOG_NAMES[explorerStateV14().catalogLevel])}),`<b>${escV14(s.reward)}</b><p class="compact-meta">Explorer Reputation +15</p>`);v19GuildAction('Continue',v19RenderMainAssignment,true);});b.disabled=!st.ready;v19GuildAction('Back to Guild Services',openGuildV19,true);
+  };
+  v19RenderJobs=function(){const previous=document.querySelector('#vnCenterCard .v19-scroll-card')?.scrollTop||0;const cards=Object.values(QUEST_DEFS).map(q=>{const selected=profile.selectedQuests.includes(q.id);return `<div class="v19-guild-card"><div class="compact-title"><div class="item-name">${escV14(q.name)}</div><button data-v19-quest="${q.id}">${selected?'Remove':'Accept'}</button></div><div class="compact-meta">${v191QuestDescriptionHtml(q)}<br><b>Reward:</b> ${q.money} money + ${q.crystals} dungeon-rank crystal${q.crystals===1?'':'s'}</div></div>`;}).join('');v19Pote(v201PoteLine('service.jobs'),`<div class="v19-scroll-card">${cards}</div>`);const scroller=document.querySelector('#vnCenterCard .v19-scroll-card');if(scroller)scroller.scrollTop=previous;$('vnCenterCard').querySelectorAll('[data-v19-quest]').forEach(b=>b.onclick=()=>v201PreserveVnScroller(()=>{const id=b.dataset.v19Quest;profile.selectedQuests=profile.selectedQuests.includes(id)?profile.selectedQuests.filter(x=>x!==id):profile.selectedQuests.concat(id);saveProgress();v19RenderJobs();}));v19GuildAction('Back to Guild Services',openGuildV19,true);};
+  v19RenderMaterialDesk=function(){v19Pote(v201PoteLine('service.materials'),v19MaterialRows());const c=$('vnCenterCard');c.querySelectorAll('[data-v19-crystal-one]').forEach(b=>b.onclick=()=>v201PreserveVnScroller(()=>v19SellCrystal(b.dataset.v19CrystalOne,1)));c.querySelectorAll('[data-v19-crystal-all]').forEach(b=>b.onclick=()=>v201PreserveVnScroller(()=>v19SellCrystal(b.dataset.v19CrystalAll,'all')));c.querySelectorAll('[data-v19-mat-one]').forEach(b=>b.onclick=()=>v201PreserveVnScroller(()=>v19SellMaterial(b.dataset.v19MatOne,1)));c.querySelectorAll('[data-v19-mat-all]').forEach(b=>b.onclick=()=>v201PreserveVnScroller(()=>v19SellMaterial(b.dataset.v19MatAll,'all')));v19GuildAction('Back to Guild Services',openGuildV19,true);};
+
+  // Guild dungeon intelligence describes enemy tendencies rather than copying the Dungeon Board pitch.
+  function v201DungeonIntel(name,d){
+    const names=[...(d.normalEnemies||[]),...(d.eliteEnemies||[]),d.bossEnemy].filter(Boolean),enemies=names.map(n=>ENEMY_TYPES.find(e=>e.name===n)).filter(Boolean);if(!enemies.length)return {defense:'Unknown',pressure:'Unknown',tempo:'No reliable field report yet.'};
+    const avg=k=>enemies.reduce((s,e)=>s+(Number(e.stats?.[k])||0),0)/enemies.length,def=avg('DEF'),mnd=avg('MND'),agi=avg('AGI'),vit=avg('VIT');
+    let defense=Math.abs(def-mnd)<1.5?'Mixed physical and magical defenses':def>mnd?'Physical defenses trend higher; magic usually finds easier openings':'Magical defenses trend higher; physical attacks usually find easier openings';
+    const counts={physical:0,magic:0,mixed:0};for(const e of enemies)counts[e.ai]=(counts[e.ai]||0)+1;let pressure;if(counts.physical>counts.magic+counts.mixed)pressure='Incoming pressure is mostly physical';else if(counts.magic>counts.physical+counts.mixed)pressure='Incoming pressure is mostly magical';else pressure='Expect both physical and magical attacks';
+    const rankIdx=Math.max(0,V20_RANK_LABELS.indexOf(d.rank)),speedRef=7+rankIdx*1.8,durRef=9+rankIdx*2.2;const tempo=`${agi>speedRef+2?'Fast-moving roster; reaction checks matter':'Movement speed is generally manageable'} · ${vit>durRef+2?'many enemies are durable and fights can run long':'durability is moderate for the rank'}.`;
+    return {defense,pressure,tempo};
+  }
+  v19RenderDungeonInfo=function(){const html=Object.entries(DUNGEON_DEFS).map(([name,d])=>{const intel=v201DungeonIntel(name,d);return `<div class="v19-guild-card"><div class="compact-title"><b>${escV14(name)}</b><span class="rank-pill">${d.rank} RANK</span></div><div class="v201-dungeon-intel"><div class="v201-intel-line"><b>Defense profile</b><span>${escV14(intel.defense)}</span></div><div class="v201-intel-line"><b>Attack profile</b><span>${escV14(intel.pressure)}</span></div><div class="v201-intel-line"><b>Field note</b><span>${escV14(intel.tempo)}</span></div><div class="v201-intel-line"><b>Known enemies</b><span>${d.normalEnemies.map(escV14).join(', ')}; elites: ${d.eliteEnemies.map(escV14).join(', ')}</span></div><div class="v201-intel-line"><b>Your clears</b><span>${profile.dungeonClears[name]||0}</span></div></div></div>`;}).join('');v19Pote(v201PoteLine('service.dungeon_information'),`<div class="v19-scroll-card">${html}</div>`);v19GuildAction('Open Dungeon Board',()=>v19GoHubService('dungeon'));v19GuildAction('Back to Guild Services',openGuildV19,true);};
+  v19RenderRecord=function(){const mats=Object.values(profile.inventory.materials||{}).reduce((a,b)=>a+(b||0),0),g=explorerStateV14();v19Pote(v201PoteLine('service.adventurer_record'),`<b>${escV14(profile.playerName||'Explorer')}</b><div class="vn-receipt"><span>Total dungeon clears</span><b>${totalDungeonClears()}</b><span>Explorer reputation</span><b>${g.reputation||0}</b><span>Guild missions completed</span><b>${g.missionsCompleted||0}</b><span>Monster materials held</span><b>${mats}</b><span>Supplier authorization</span><b>${escV14(V19_CATALOG_NAMES[g.catalogLevel||0])}</b></div>`);v19GuildAction('Back to Guild Services',openGuildV19,true);};
+  v19RenderServices=function(){const g=explorerStateV14(),p=v20Plan(profile.expeditionInsurance?.planId||'none');v19Pote(v201PoteLine('service.guild_services'),`<div class="v19-guild-grid"><div class="v19-guild-card"><b>Supplier Authorization</b><p class="compact-meta">${escV14(V19_CATALOG_NAMES[g.catalogLevel||0])}. Main-assignment reports unlock better shop stock.</p></div><div class="v19-guild-card"><b>Material Purchasing</b><p class="compact-meta">The Guild buys Magic Crystals and registered monster materials directly through this desk.</p></div><div class="v19-guild-card"><b>Expedition Insurance</b><p class="compact-meta">Selected: ${escV14(p.name)}. Recovery coverage protects your cash from equipment-recovery fees after a defeat.</p></div><div class="v19-guild-card"><b>Dungeon Records</b><p class="compact-meta">Enemy tendencies, ranks, and your clear history are maintained here.</p></div><div class="v19-guild-card"><b>Future Services</b><p class="compact-meta">Appraisal, referrals, and additional guild networks can plug into this desk later.</p></div></div>`);v19GuildAction('Manage Expedition Insurance',v20RenderInsurance);v19GuildAction('Back to Guild Services',openGuildV19,true);};
+  v20RenderInsurance=function(){v20NormalizeInsurance();const value=v20EquipmentRecoveryValue(),selected=v20Plan(profile.expeditionInsurance.planId),quote=v20InsuranceQuote(value,selected.id),plans=V20_INSURANCE_PLANS.map(p=>{const q=v20InsuranceQuote(value,p.id),sel=p.id===selected.id;return `<div class="v20-insurance-plan ${sel?'selected':''}"><div><b>${escV14(p.name)}</b> ${p.id==='none'?'':`<span class="v20-policy-pill">${p.grade} plan</span>`}<div class="compact-meta">Premium ${p.premium} money / expedition · covers ${p.coverage.toLocaleString()} equipment value${p.id==='none'?'':' · current defeat fee '+q.recoveryFee+' money'}</div></div><button class="small-btn" data-v20-insurance="${p.id}" ${sel?'disabled':''}>${sel?'Selected':'Select'}</button></div>`;}).join('');v19Pote(v201PoteLine('service.expedition_insurance'),`<div class="v20-insurance-summary"><div class="slot-card"><b>Equipped value</b><div>${value.toLocaleString()} money</div></div><div class="slot-card"><b>Selected plan</b><div>${escV14(selected.name)}</div></div><div class="slot-card"><b>Coverage</b><div>${selected.coverage.toLocaleString()}</div></div><div class="slot-card"><b>Defeat recovery fee</b><div>${quote.recoveryFee.toLocaleString()} money</div></div></div><div class="v20-insurance-plans">${plans}</div><div class="v20-insurance-note">Equipment is not destroyed on defeat. Without enough coverage, the Explorer's Guild charges a recovery fee equal to 15% of the uncovered equipped value, limited to the money you currently have. Enhancement adds 20% of an item's shop value per + level for insurance valuation.</div>`);$('vnCenterCard').querySelectorAll('[data-v20-insurance]').forEach(b=>b.onclick=()=>v201PreserveVnScroller(()=>v20SelectInsurance(b.dataset.v20Insurance),'#vnCenterCard .v20-insurance-plans'));v19GuildAction('Back to Guild Services',openGuildV19,true);};
+
+  // Owned consumables include status cures. They are never shown in combat when quantity is zero.
+  function v201ConsumableDefs(){return [
+    ['healing_potion','Healing Potion','Restore 14 HP.'],['hi_potion','Hi-Potion','Restore 28 HP.'],['full_potion','Full Potion','Restore HP to full.'],['bandage','Bandage','Cure Bleed.'],['antidote','Antidote','Cure Poison.']
+  ];}
+  potionInventoryHtmlV15=function(){const owned=v201ConsumableDefs().filter(([id])=>(profile.inventory[id]||0)>0);if(!owned.length)return '<p class="compact-meta">No consumables currently owned.</p>';return `<div class="potion-grid">${owned.map(([id,name,desc])=>`<div class="compact-card"><div class="compact-title"><div class="item-name">${name}</div><b>×${profile.inventory[id]}</b></div><div class="compact-meta">${desc}</div></div>`).join('')}</div>`;};
+  function v201HasStatus(type){return !!game?.statusEffects?.player?.some(e=>e.type===type);}
+  async function v201UseStatusCure(id,type){
+    if(busy||game.finished||(profile.inventory[id]||0)<=0||!v201HasStatus(type))return;
+    if(game?.statusEffects?.player?.length){const alive=await tickStatusesV12('player');if(!alive){await endStream('death');return;}}
+    if(!v201HasStatus(type))return;
+    busy=true;$('itemMenu').classList.remove('show');setMoveButtonsEnabled(false);actionChatStart();beginActionAccounting();profile.inventory[id]--;game.statusEffects.player=game.statusEffects.player.filter(e=>e.type!==type);renderStatusesV12();game.playerActions++;game.actionHistory.push({moveId:'item',encounter:game.encounter,enemyName:game.enemy?.name||''});$('turnLabel').textContent='USE ITEM';$('statusText').textContent=`${ITEM_DEFS[id].name} cures ${type}.`;systemLog(`<span class="system-log-actor">Player</span> used <b>${ITEM_DEFS[id].name}</b>. <span class="effect-pill ${type}">${type[0].toUpperCase()+type.slice(1)}</span> was cured.`);showSpeech(type==='bleed'?'Bleeding stopped.':'Poison cleared.');updateAudiencePerTurn(0);saveProgress();await sleep(450);await enemyTurn();if(!game.finished)finishRound();busy=false;
+  }
+  renderCombatItems=function(){const root=$('combatItemList');root.innerHTML='';const owned=v201ConsumableDefs().filter(([id])=>(profile.inventory[id]||0)>0);if(!owned.length){root.innerHTML='<div class="combat-item-row"><div><b>No usable items</b><div class="item-desc">You are not carrying any consumables.</div></div></div>';return;}for(const [id,name,desc] of owned){const count=profile.inventory[id]||0,row=document.createElement('div');row.className='combat-item-row';let applicable=true,extra='';if(id==='bandage'){applicable=v201HasStatus('bleed');extra=applicable?'':' No Bleed to cure.';}if(id==='antidote'){applicable=v201HasStatus('poison');extra=applicable?'':' No Poison to cure.';}row.innerHTML=`<div><b>${name}</b><div class="item-desc">${desc}${extra} Consumes your turn.</div></div><b>×${count}</b><button class="small-btn" ${applicable?'':'disabled'}>Use</button>`;row.querySelector('button').onclick=()=>id==='bandage'?v201UseStatusCure(id,'bleed'):id==='antidote'?v201UseStatusCure(id,'poison'):usePotionV15(id);root.appendChild(row);}};
+
+  // Compact Equipment & Inventory: narrow slot column + owned weapons + armor/accessories, then consumables below.
+  function v201EquipmentPanel(){
+    normalizeV19Profile();lastHubPanel='equipment';updateHubHeader();const panel=$('hubPanel'),weapons=profile.inventory.equipment.filter(x=>ITEM_DEFS[x.id]?.slot==='weapon'),armor=profile.inventory.equipment.filter(x=>ITEM_DEFS[x.id]?.slot!=='weapon');const slots=[['Weapon',profile.equipment.weapon],['Head',profile.equipment.head],['Body',profile.equipment.body],['Hands',profile.equipment.hands],['Legs',profile.equipment.legs],...profile.equipment.accessories.map((u,i)=>[`Accessory ${i+1}`,u])];const crystals=CRYSTAL_RANKS.filter(r=>(profile.inventory.crystals[r]||0)>0).map(r=>`<span class="v201-crystal-chip"><b>${r}</b> ×${profile.inventory.crystals[r]}</span>`).join('')||'<span class="compact-meta">No Magic Crystals held.</span>';const mats=Object.entries(profile.inventory.materials||{}).filter(([,q])=>q>0).sort((a,b)=>(V19_MATERIAL_DEFS[a[0]]?.name||'').localeCompare(V19_MATERIAL_DEFS[b[0]]?.name||''));panel.innerHTML=`<h2>Equipment &amp; Inventory</h2><div class="v201-equipment-top"><section class="v201-equipment-column"><h3>Equipment Slots</h3><div class="v201-slot-list">${slots.map(([n,u])=>`<div class="v201-slot"><b>${n}</b><span>${escV14(equippedLabel(u))}</span></div>`).join('')}</div></section><section class="v201-equipment-column"><h3>Weapons</h3><div class="v201-owned-list">${weapons.map(equipmentInventoryCardV11).join('')||'<p class="compact-meta">No weapons.</p>'}</div></section><section class="v201-equipment-column"><h3>Armor &amp; Accessories</h3><div class="v201-owned-list">${armor.map(equipmentInventoryCardV11).join('')||'<p class="compact-meta">No armor or accessories.</p>'}</div></section></div><section class="v201-consumables"><h3>Consumables</h3>${potionInventoryHtmlV15()}<h3>Magic Crystals</h3><p class="compact-meta">Pote at the Explorer's Guild handles crystal and monster-material purchasing.</p><div class="v201-passive-crystals">${crystals}</div><h3>Monster Materials</h3>${mats.length?mats.map(([id,q])=>`<span class="v19-material-chip"><b>${escV14(V19_MATERIAL_DEFS[id]?.name||id)}</b> ×${q}</span>`).join(''):'<p class="compact-meta">No monster materials currently held.</p>'}</section>`;panel.querySelectorAll('[data-equip]').forEach(b=>b.onclick=()=>equipItem(b.dataset.equip));panel.querySelectorAll('[data-sell-equipment]').forEach(b=>b.onclick=()=>sellEquipment(b.dataset.sellEquipment));refreshHubButtonsV14();
+  }
+
+  // Enhancement now consumes crystals first, then asks for a 15-beat rhythm performance.
+  // Perfect x15 = +2, 11+ non-miss hits = +1, five or more misses = failure (crystals remain spent).
+  function v201EnhancementOutcome(grades){const g=Array.isArray(grades)?grades:[];const perfect=g.filter(x=>x==='perfect').length,miss=g.filter(x=>x==='miss').length,hits=g.length-miss;if(g.length===15&&perfect===15)return {levels:2,label:'Exceptional Enhancement',className:'exceptional',perfect,miss,hits};if(g.length===15&&hits>=11)return {levels:1,label:'Enhancement Successful',className:'',perfect,miss,hits};return {levels:0,label:'Enhancement Failed',className:'failed',perfect,miss,hits};}
+  function v201EnhancementRhythm(tier=0){
+    const overlay=$('skillOverlay'),area=$('skillArea'),readout=$('skillReadout'),speed=.082+clamp(Number(tier)||0,0,6)*.013;
+    $('skillTitle').textContent='Enhancement — Rhythm Timing';$('skillInstruction').textContent='Hit 15 beats as the marker crosses the green center band. All 15 Perfect grants +2. Up to 4 misses still grants +1; 5+ misses fails and the crystals are lost.';v18SetHorizontalSkillMode(true);overlay.classList.add('show');area.innerHTML=`<div><div class="v201-enhance-beats">${Array.from({length:15},(_,i)=>`<span class="v201-enhance-beat" id="v201Beat${i}"></span>`).join('')}</div><div class="skill-track"><div class="v201-enhance-target"></div><div class="skill-marker" id="v201EnhanceMarker"></div></div><button class="skill-action" id="v201EnhanceHit">HIT</button><div class="v18-speed-note">Higher enhancement levels move the marker faster. Space / Enter also work.</div></div>`;readout.textContent='Beat 1 / 15';
+    if(Array.isArray(window.__DSC_TEST_ENHANCEMENT)){const grades=window.__DSC_TEST_ENHANCEMENT.slice(0,15);while(grades.length<15)grades.push('miss');for(let i=0;i<15;i++)$(`v201Beat${i}`)?.classList.add(grades[i]);const out=v201EnhancementOutcome(grades);readout.textContent=`${out.label} · ${out.perfect} Perfect · ${out.miss} Miss`;return sleep(40).then(()=>{overlay.classList.remove('show');area.innerHTML='';v18SetHorizontalSkillMode(false);return out;});}
+    return new Promise(resolve=>{let idx=0,pos=0,last=performance.now(),raf=0,done=false,canHit=false;const grades=[];const marker=$('v201EnhanceMarker');const key=e=>{if(e.code==='Space'||e.code==='Enter'){e.preventDefault();hit();}};const gradeAt=()=>{const d=Math.abs(pos-50);return d<=5?'perfect':d<=16?(pos<50?'early':'late'):'miss';};const record=grade=>{if(done)return;grades.push(grade);$(`v201Beat${idx}`)?.classList.add(grade==='perfect'?'perfect':grade==='miss'?'miss':'good');idx++;pos=0;canHit=false;if(idx>=15)finish();else readout.textContent=`Beat ${idx+1} / 15 · ${grade==='perfect'?'Perfect':grade==='miss'?'Miss':grade[0].toUpperCase()+grade.slice(1)}`;};const hit=()=>{if(done||!canHit)return;record(gradeAt());};const tick=now=>{if(done)return;const dt=Math.min(40,now-last);last=now;pos+=dt*speed;if(pos>=8)canHit=true;if(pos>=100){record('miss');}if(marker)marker.style.left=`${clamp(pos,0,100)}%`;raf=requestAnimationFrame(tick);};const finish=async()=>{if(done)return;done=true;cancelAnimationFrame(raf);document.removeEventListener('keydown',key);const out=v201EnhancementOutcome(grades);readout.innerHTML=`<span class="v201-enhance-result ${out.className}">${out.label}</span> · ${out.perfect} Perfect · ${out.miss} Miss`;await sleep(650);overlay.classList.remove('show');area.innerHTML='';v18SetHorizontalSkillMode(false);resolve(out);};document.addEventListener('keydown',key);$('v201EnhanceHit').onclick=hit;raf=requestAnimationFrame(tick);});
+  }
+  enhanceItem=async function(uid){const inst=findEquipment(uid);if(!inst)return;const d=ITEM_DEFS[inst.id],max=MAX_ENHANCE[d.rarity]||3;if(inst.enhance>=max)return;const c=ENHANCE_COSTS[inst.enhance];if(!c||(profile.inventory.crystals[c.rank]||0)<c.qty)return;profile.inventory.crystals[c.rank]-=c.qty;saveProgress();const before=inst.enhance,out=await v201EnhancementRhythm(before);inst.enhance=Math.min(max,before+out.levels);normalizeProfileHp();saveProgress();if(out.levels===2)showGuildToastV14('Exceptional Enhancement',`${d.name} +${before} → +${inst.enhance}`);else if(out.levels===1)showGuildToastV14('Enhancement Successful',`${d.name} +${before} → +${inst.enhance}`);else showGuildToastV14('Enhancement Failed',`${c.qty} ${c.rank} crystals were consumed.`);renderHubPanel('enhance');};
+  function v201EnhancementPanel(){lastHubPanel='enhance';updateHubHeader();const panel=$('hubPanel');panel.innerHTML=`<h2>Enhancement Workshop</h2><p>Enhancement consumes the required Magic Crystals before a 15-hit Rhythm Timing check. <b>15 Perfects</b> grants +2 levels, a normal successful performance grants +1, and 5 or more misses fails with no refund.</p>${crystalOwnedStrip()}<div class="catalog-columns">${allEquippedUids().map(uid=>{const inst=findEquipment(uid),d=ITEM_DEFS[inst.id],max=MAX_ENHANCE[d.rarity]||3,cost=ENHANCE_COSTS[inst.enhance],owned=cost?(profile.inventory.crystals[cost.rank]||0):0,speedPct=Math.round((.082+clamp(inst.enhance,0,6)*.013)*1000);return `<div class="compact-card"><div class="compact-title"><div class="item-name">${d.name} +${inst.enhance}</div><span class="compact-price">${inst.enhance>=max?'MAX':`${cost.rank} ×${cost.qty} · ${owned} owned`}</span><button data-enhance="${uid}" ${inst.enhance>=max||owned<(cost?.qty||0)?'disabled':''}>Enhance</button></div><div class="compact-meta">Current: ${itemBonusText(d,inst)}${inst.enhance<max?`<br><b>Normal success:</b> ${enhancedBonusPreviewV12(d,inst)}<br>Rhythm speed tier: ${inst.enhance+1} (${speedPct} relative units)`:''}</div></div>`;}).join('')}</div>`;panel.querySelectorAll('[data-enhance]').forEach(b=>b.onclick=()=>enhanceItem(b.dataset.enhance));refreshHubButtonsV14();}
+
+  // Specialist Dungeon Streamer Ranking: fast amateur movement, then a sharp professional wall at #50,000.
+  // Rank-equivalent experience weights higher-rank clears so difficult expeditions can substitute for F-rank volume.
+  V20_SPECIALIST_TOTALS.dungeon=100000;
+  function v201ProfessionalClearEquivalent(){const w={F:1,E:2,D:4,C:7,B:11,A:16,S:24};let total=0;for(const [name,n] of Object.entries(profile.dungeonClears||{})){const rank=DUNGEON_DEFS[name]?.rank||'F';total+=Math.max(0,Number(n)||0)*(w[rank]||1);}return total;}
+  function v201DungeonStreamerRank(){const eq=v201ProfessionalClearEquivalent(),sp=channel.specialist||{},highest=Math.max(-1,Number(sp.highestRankIndex)||-1);if(eq<=0)return 100000;if(eq<35){const fast=Math.min(1,eq/6),rank=100000-Math.round(49999*Math.pow(fast,.82));return clamp(rank,50001,99999);}const professionalScore=(eq-35)+Math.max(0,highest)*15;return clamp(Math.round(50000/(1+Math.pow(professionalScore/75,2.15))),1,50000);}
+  const _v20SpecialistMetricsV201=v20SpecialistMetrics;
+  v20SpecialistMetrics=function(){const metrics=_v20SpecialistMetricsV201();const eq=v201ProfessionalClearEquivalent(),rank=v201DungeonStreamerRank();metrics.dungeon.rank=rank;metrics.dungeon.score=eq;metrics.dungeon.metric=`${totalDungeonClears()} clears · rank-equivalent experience ${eq.toFixed(eq%1?1:0)} · highest ${v20HighestCleared()}`;metrics.dungeon.wall='';return metrics;};
+  v20SpecialistCard=function(title,key,data){const wall=key==='dungeon'?`<div class="v201-pro-wall">${escV14(data.wall||'')}</div>`:'';return `<div class="v20-specialist-card"><b>${escV14(title)}</b><div class="rank">${v20RankText(data.rank)}</div><div class="metric">${escV14(data.metric||'')}</div>${wall}<div class="leader">Current #1: <b>${escV14(V20_SPECIALIST_LEADERS[key])}</b></div></div>`;};
+
+  // Final Hub routing overrides for the redesigned inventory / enhancement panels.
+  const _v201BaseRenderHub=renderHubPanel;
+  renderHubPanel=function(kind){if(kind==='equipment'||kind==='inventory'){const snap=v201CaptureHubUi(),same=lastHubPanel==='equipment';v201EquipmentPanel();v201RestoreHubUi(snap,same);return;}if(kind==='enhance'){const snap=v201CaptureHubUi(),same=lastHubPanel==='enhance';v201EnhancementPanel();v201RestoreHubUi(snap,same);return;}return _v201BaseRenderHub(kind);};
+
+  // Version label and test/debug surfaces.
+  const _v20FinalizeBrandingV201=finalizeV15Branding;
+  finalizeV15Branding=function(){_v20FinalizeBrandingV201();const sub=document.querySelector('.hub-sub');if(sub&&sub.textContent.includes('Prototype Hub'))sub.textContent='Prototype Hub · v20.2';};
+  window.__DSC_V201={
+    poteText:(id,vars)=>v201PoteLine(id,vars),
+    dungeonIntel:(name)=>v201DungeonIntel(name,DUNGEON_DEFS[name]),
+    enhancementOutcome:(grades)=>v201EnhancementOutcome(grades),
+    runEnhancement:(tier=0)=>v201EnhancementRhythm(tier),
+    professionalEquivalent:()=>v201ProfessionalClearEquivalent(),
+    dungeonStreamerRank:()=>v201DungeonStreamerRank(),
+    setInventory:(id,n)=>{normalizeV19Profile();profile.inventory[id]=Math.max(0,Number(n)||0);saveProgress();},
+    grantCrystals:(rank,n)=>{profile.inventory.crystals[rank]=(profile.inventory.crystals[rank]||0)+Math.max(0,Number(n)||0);saveProgress();}
+  };
+
+
   // The hub title is the platform brand; dashboard is intentionally generic.
   function finalizeV15Branding(){
-    const h=document.querySelector('.hub-title');if(h)h.innerHTML='Scrying Orb™️ <span class="hub-title-divider">|</span> The Dungeon Streaming Service';
+    const h=document.querySelector('.hub-title');if(h)h.innerHTML='Scrying Orb<sup>TM</sup> <span class="hub-title-divider">|</span> The Dungeon Streaming Service';
   }
   finalizeV15Branding();
+
+
+  // ===== v20.2: portable saves, loadout inspection, ranking presentation cleanup =====
+  // Restore the original v20 specialist metric. The 35-clear figure in v20.1 was only a design comparator,
+  // not a literal professional threshold to expose or enforce in the ranking formula.
+  V20_SPECIALIST_TOTALS.dungeon=65000;
+  v20SpecialistMetrics=_v20SpecialistMetricsV201;
+  v20SpecialistCard=function(title,key,data){return `<div class="v20-specialist-card"><b>${escV14(title)}</b><div class="rank">${v20RankText(data.rank)}</div><div class="metric">${escV14(data.metric||'')}</div><div class="leader">Current #1: <b>${escV14(V20_SPECIALIST_LEADERS[key])}</b></div></div>`;};
+
+  // Istana remains part of the world and Orb Dungeon Weekly, but she does not get a permanent profile card
+  // on the rankings page. When Bluebell/Istana actually appears in Recent Orb News, that item gets its own tint.
+  const _v201RenderRankingV202=renderRankingV15;
+  renderRankingV15=function(){
+    _v201RenderRankingV202();
+    const panel=$('hubPanel');if(!panel)return;
+    panel.querySelectorAll('.v20-istana-card,.bluebell-desk-card').forEach(el=>el.remove());
+    panel.querySelectorAll('.news-card').forEach(card=>{
+      const txt=card.textContent||'';
+      card.classList.toggle('v202-istana-news',/\bIstana\b|\bBluebell\b/i.test(txt));
+    });
+  };
+
+  // Plain JSON save export/import. No encryption or obfuscation: exported files are intentionally readable.
+  const V202_SAVE_VERSION='20.2';
+  let v202PendingImport=null;
+  function v202SaveSettings(){
+    let mode=false,pos='bottom-right';
+    try{mode=localStorage.getItem('dsc_streamer_mode')==='1';pos=localStorage.getItem('dsc_streamer_position')||'bottom-right';}catch(_){ }
+    return {streamer_mode:mode,streamer_position:pos};
+  }
+  function v202ExportObject(){
+    saveProgress();
+    let data={profile,channel,uidCounter};
+    try{const raw=localStorage.getItem('dsc_v7_progress');if(raw)data=JSON.parse(raw);}catch(_){ }
+    return {format:'Dungeon Streamer Save',save_version:V202_SAVE_VERSION,exported_at:new Date().toISOString(),data:JSON.parse(JSON.stringify(data)),settings:v202SaveSettings()};
+  }
+  function v202ValidateImport(obj){
+    if(!obj||typeof obj!=='object'||Array.isArray(obj))throw new Error('The selected file is not a Dungeon Streamer save object.');
+    const wrapped=obj.data&&typeof obj.data==='object'?obj.data:obj;
+    if(!wrapped.profile||typeof wrapped.profile!=='object'||Array.isArray(wrapped.profile))throw new Error('Save file is missing a valid profile object.');
+    if(!wrapped.channel||typeof wrapped.channel!=='object'||Array.isArray(wrapped.channel))throw new Error('Save file is missing a valid channel object.');
+    const counter=Number(wrapped.uidCounter||1);if(!Number.isFinite(counter)||counter<1)throw new Error('Save file has an invalid equipment UID counter.');
+    const settings=obj.settings&&typeof obj.settings==='object'?obj.settings:null;
+    return {payload:{profile:wrapped.profile,channel:wrapped.channel,uidCounter:Math.floor(counter)},settings,sourceVersion:String(obj.save_version||'legacy/unversioned')};
+  }
+  function v202DownloadSave(){
+    const data=v202ExportObject(),json=JSON.stringify(data,null,2),blob=new Blob([json],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');
+    const safe=(profile.playerName||'player').replace(/[^a-z0-9_-]+/gi,'_').replace(/^_+|_+$/g,'')||'player';
+    a.href=url;a.download=`dungeon-streamer-${safe}-v20_2-save.json`;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),0);
+    $('settingsPopup')?.classList.remove('show');
+  }
+  function v202ImportSummary(valid){
+    const p=valid.payload.profile||{},c=valid.payload.channel||{};
+    return `<div class="v202-import-preview"><div class="v202-import-preview-row"><span>Save version</span><b>${escV14(valid.sourceVersion)}</b></div><div class="v202-import-preview-row"><span>Adventurer</span><b>${escV14(p.playerName||'Unknown')}</b></div><div class="v202-import-preview-row"><span>Money</span><b>${Number(p.money||0).toLocaleString()}</b></div><div class="v202-import-preview-row"><span>Popularity</span><b>Lv. ${Number(c.popularity||0)}</b></div><div class="v202-import-preview-row"><span>Completed streams</span><b>${Number(c.streams||0)}</b></div></div>`;
+  }
+  function v202ShowImport(valid){
+    v202PendingImport=valid;$('settingsPopup')?.classList.remove('show');$('saveImportText').innerHTML=`This will replace the active local save. The imported data will be loaded after the game reloads.${v202ImportSummary(valid)}`;$('saveImportError').textContent='';$('saveImportOverlay').classList.add('show');
+  }
+  function v202CommitImport(){
+    if(!v202PendingImport)return;
+    try{
+      localStorage.setItem('dsc_v7_progress',JSON.stringify(v202PendingImport.payload));
+      const s=v202PendingImport.settings;if(s){if(typeof s.streamer_mode==='boolean')localStorage.setItem('dsc_streamer_mode',s.streamer_mode?'1':'0');if(['top-left','bottom-left','top-right','bottom-right'].includes(s.streamer_position))localStorage.setItem('dsc_streamer_position',s.streamer_position);}
+      window.location.reload();
+    }catch(err){$('saveImportError').textContent=`Import failed: ${err?.message||err}`;}
+  }
+  function v202InstallSaveUi(){
+    const popup=$('settingsPopup'),resetRow=$('resetProgressButton')?.closest('.reset-progress-row');if(!popup||!resetRow)return;
+    if(!$('exportSaveButton')){
+      const row=document.createElement('div');row.className='reset-progress-row';row.innerHTML='<div class="v202-save-row"><button class="small-btn" id="exportSaveButton">Export Save</button><button class="small-btn" id="importSaveButton">Import Save</button></div>';popup.insertBefore(row,resetRow);
+      const input=document.createElement('input');input.type='file';input.accept='.json,application/json';input.id='saveImportInput';input.hidden=true;document.body.appendChild(input);
+      $('exportSaveButton').onclick=v202DownloadSave;$('importSaveButton').onclick=()=>input.click();
+      input.onchange=async()=>{const file=input.files?.[0];input.value='';if(!file)return;try{const obj=JSON.parse(await file.text());v202ShowImport(v202ValidateImport(obj));}catch(err){v202PendingImport=null;$('settingsPopup')?.classList.remove('show');$('saveImportText').textContent='The selected file could not be imported.';$('saveImportError').textContent=String(err?.message||err);$('saveImportOverlay').classList.add('show');}};
+    }
+    if(!$('saveImportOverlay')){
+      const modal=document.createElement('div');modal.className='modal-overlay';modal.id='saveImportOverlay';modal.setAttribute('role','dialog');modal.setAttribute('aria-modal','true');modal.innerHTML='<div class="modal-card"><h2>Import Save</h2><div id="saveImportText"></div><div id="saveImportError" class="v202-import-error"></div><div class="modal-actions"><button class="small-btn" id="saveImportCancel">Cancel</button><button class="small-btn danger-btn" id="saveImportConfirm">Import & Reload</button></div></div>';document.body.appendChild(modal);
+      $('saveImportCancel').onclick=()=>{v202PendingImport=null;modal.classList.remove('show');};$('saveImportConfirm').onclick=v202CommitImport;modal.addEventListener('click',e=>{if(e.target===modal){v202PendingImport=null;modal.classList.remove('show');}});
+    }
+  }
+
+  // Read-only equipment inspection inside Livestream Statistics.
+  let v202EquipmentOpen=false;
+  function v202ItemActualBonuses(uid){
+    const inst=uid?findEquipment(uid):null;if(!inst)return null;const def=ITEM_DEFS[inst.id];if(!def)return null;const b={...(def.bonuses||{})};if(inst.enhance>0&&def.primary)b[def.primary]=(b[def.primary]||0)+inst.enhance;return {inst,def,bonuses:b};
+  }
+  function v202BonusText(b){const parts=STAT_NAMES.filter(k=>Number.isFinite(Number(b?.[k]))&&Number(b[k])!==0).map(k=>`${k} ${Number(b[k])>0?'+':''}${Number(b[k])}`);return parts.length?parts.join(' · '):'No stat bonuses';}
+  function v202LoadoutRow(slot,uid){const item=v202ItemActualBonuses(uid);return `<div class="v202-loadout-row"><div class="slot">${escV14(slot)}</div><div>${item?`<div class="gear-name">${escV14(item.def.name)}${item.inst.enhance?` +${item.inst.enhance}`:''}</div><div class="gear-bonus">${escV14(v202BonusText(item.bonuses))}</div>`:'<div class="gear-name">Empty</div><div class="gear-bonus">No equipment bonus</div>'}</div></div>`;}
+  function v202RenderCombatEquipment(){
+    const root=$('v202CombatEquipment');if(!root)return;const eq=profile.equipment||{},acc=Array.isArray(eq.accessories)?eq.accessories:[],total=equipmentBonusMap();
+    root.innerHTML=`<div class="section-title">Equipped Loadout</div>${v202LoadoutRow('Weapon',eq.weapon)}${v202LoadoutRow('Head',eq.head)}${v202LoadoutRow('Body',eq.body)}${v202LoadoutRow('Hands',eq.hands)}${v202LoadoutRow('Legs',eq.legs)}${Array.from({length:5},(_,i)=>v202LoadoutRow(`Acc ${i+1}`,acc[i])).join('')}<div class="v202-equipment-total"><b>Total equipment bonuses</b><br>${escV14(v202BonusText(total))}</div>`;
+  }
+  function v202SetEquipmentInspect(open){
+    v202EquipmentOpen=!!open;const stats=document.querySelector('.stats-scroll'),panel=$('v202CombatEquipment'),btn=$('v202EquipmentInspect');if(!stats||!panel||!btn)return;
+    const ccv=stats.querySelector(':scope > .ccv-card');if(ccv)ccv.style.display=v202EquipmentOpen?'none':'';
+    stats.querySelectorAll(':scope > .stats-section').forEach(el=>el.style.display=v202EquipmentOpen?'none':'');
+    if(v202EquipmentOpen){v202RenderCombatEquipment();panel.classList.add('show');btn.textContent='Back to Statistics';}else{panel.classList.remove('show');btn.textContent='Equipment';renderAudienceList();renderGenreList();renderQuestTracker();}
+  }
+  function v202InstallCombatEquipmentUi(){
+    const statsPanel=document.querySelector('.stats-panel'),stats=document.querySelector('.stats-scroll');if(!statsPanel||!stats||$('v202EquipmentInspect'))return;
+    const wrap=document.createElement('div');wrap.className='v202-equipment-toggle-wrap';wrap.innerHTML='<button class="small-btn v202-equipment-toggle" id="v202EquipmentInspect">Equipment</button>';statsPanel.insertBefore(wrap,stats);
+    const panel=document.createElement('section');panel.className='v202-combat-equipment';panel.id='v202CombatEquipment';stats.prepend(panel);$('v202EquipmentInspect').onclick=()=>v202SetEquipmentInspect(!v202EquipmentOpen);
+  }
+  const _v201ShowOnlyScreenV202=showOnlyScreen;
+  showOnlyScreen=function(name){if(name==='combat')v202SetEquipmentInspect(false);return _v201ShowOnlyScreenV202(name);};
+
+  // Keep the version label in sync after older branding wrappers run.
+  const _v201FinalizeBrandingV202=finalizeV15Branding;
+  finalizeV15Branding=function(){_v201FinalizeBrandingV202();const sub=document.querySelector('.hub-sub');if(sub&&sub.textContent.includes('Prototype Hub'))sub.textContent='Prototype Hub · v20.2';};
+
+  v202InstallSaveUi();
+  v202InstallCombatEquipmentUi();
+  finalizeV15Branding();
+  window.__DSC_V202={
+    exportObject:()=>v202ExportObject(),
+    validateImport:(x)=>v202ValidateImport(x),
+    equipmentOpen:()=>v202EquipmentOpen,
+    openEquipment:()=>v202SetEquipmentInspect(true),
+    closeEquipment:()=>v202SetEquipmentInspect(false),
+    addNews:(tag,text)=>{addNewsV15(tag,text);saveProgress();},
+    renderRanking:()=>renderRankingV15(),
+    specialist:()=>v20SpecialistMetrics()
+  };
 
   initV14();
 })();
