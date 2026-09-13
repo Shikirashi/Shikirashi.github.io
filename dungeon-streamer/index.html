@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Scrying Orb: Dungeon Streaming Prototype v21</title>
+<title>Scrying Orb: Dungeon Streaming Prototype v21.1</title>
 <style>
   :root {
     --bg: #0f1116;
@@ -1602,6 +1602,118 @@
   .v21-live-leader { color:#b7f7ca; }
   .v21-top-note { color:var(--muted);font-size:11px;margin-top:7px; }
 
+
+
+  /* ===== v21.1: stacked story / guild presentation ===== */
+  .story-screen { overflow:hidden; }
+  .vn-shell {
+    width:min(1360px,100vw);
+    height:100dvh;
+    min-height:100vh;
+    margin:0 auto;
+    overflow-y:auto;
+    overflow-x:hidden;
+    display:flex;
+    flex-direction:column;
+    background:#000;
+    scrollbar-gutter:stable;
+  }
+  .vn-header {
+    flex:0 0 auto;
+    position:relative;
+    z-index:20;
+  }
+  .vn-visual {
+    flex:0 0 clamp(230px,36vh,390px);
+    min-height:230px;
+    overflow:hidden;
+    align-items:flex-end;
+    padding:28px clamp(18px,6vw,84px) 14px;
+    border-bottom:1px solid var(--line);
+  }
+  .vn-portrait {
+    width:min(25vw,260px);
+    max-height:100%;
+    aspect-ratio:3/4;
+  }
+  .vn-content {
+    width:min(1180px,calc(100% - 36px));
+    margin:0 auto;
+    padding:18px 0 28px;
+    display:grid;
+    gap:14px;
+  }
+  .vn-center-card {
+    position:static;
+    left:auto;
+    top:auto;
+    transform:none;
+    width:100%;
+    max-width:none;
+    padding:16px 18px;
+    border:1px solid var(--line);
+    border-radius:9px;
+    background:#000;
+    text-align:left;
+    display:none;
+    z-index:auto;
+  }
+  .vn-center-card.show { display:block; }
+  .vn-dialogue {
+    position:static;
+    z-index:auto;
+    margin:0;
+    min-height:0;
+    padding:16px 18px;
+    border:1px solid var(--line-strong);
+    border-radius:9px;
+    background:#000;
+    box-shadow:none;
+  }
+  .vn-text { min-height:0; }
+  .vn-actions {
+    margin:0;
+    padding:14px 0 0;
+    border-top:1px solid var(--line);
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:9px;
+    justify-content:stretch;
+    align-items:stretch;
+  }
+  .vn-actions button,.vn-choice {
+    width:100%;
+    min-height:44px;
+    text-align:left;
+  }
+  .vn-actions .vn-input {
+    width:100%;
+    min-width:0;
+    grid-column:1 / -1;
+  }
+  .vn-content .v19-scroll-card,
+  .vn-content .v20-insurance-plans {
+    max-height:none;
+    overflow:visible;
+    padding-right:0;
+  }
+  .vn-content .v20-insurance-summary { margin-top:0; }
+  @media(max-width:760px){
+    .vn-shell{width:100vw;}
+    .vn-header{align-items:flex-start;flex-direction:column;padding:11px 14px;gap:6px;}
+    .vn-balance{white-space:normal;}
+    .vn-visual{flex-basis:220px;min-height:220px;padding:24px 12px 10px;}
+    .vn-visual::before{font-size:16px;top:7%;white-space:normal;width:84%;}
+    .vn-portrait{width:min(42vw,165px);}
+    .vn-portrait::after{font-size:9px;bottom:10px;text-align:center;width:100%;}
+    .vn-content{width:calc(100% - 20px);padding:10px 0 18px;gap:10px;}
+    .vn-center-card,.vn-dialogue{padding:13px;}
+    .vn-actions{grid-template-columns:1fr;}
+    .starter-kit-grid{grid-template-columns:1fr;}
+    .v19-stat-row{grid-template-columns:minmax(34px,auto) minmax(0,1fr) auto auto auto;}
+    .v20-insurance-plan{grid-template-columns:1fr;}
+    .v20-insurance-plan button{width:100%;}
+  }
 </style>
 </head>
 <body>
@@ -1791,7 +1903,7 @@
   </div>
 </div>
 
-<!-- v14 reusable visual-novel presentation. Registration uses it first; later story/broadcast scenes can reuse it. -->
+<!-- v21.1 stacked story presentation. Visuals stay at the top, interaction content flows below, and choices live at the bottom. -->
 <div class="game-screen story-screen" id="storyScreen">
   <div class="vn-shell">
     <header class="vn-header">
@@ -1800,14 +1912,16 @@
     </header>
     <main class="vn-visual">
       <div class="vn-portrait active" id="vnPortraitLeft"><div class="vn-silhouette"></div></div>
-      <div class="vn-center-card" id="vnCenterCard"></div>
       <div class="vn-portrait player-placeholder" id="vnPortraitRight"><div class="vn-silhouette"></div></div>
     </main>
-    <section class="vn-dialogue">
-      <div class="vn-speaker" id="vnSpeaker">Guild Clerk</div>
-      <div class="vn-text" id="vnText"></div>
+    <div class="vn-content">
+      <div class="vn-center-card" id="vnCenterCard"></div>
+      <section class="vn-dialogue">
+        <div class="vn-speaker" id="vnSpeaker">Guild Clerk</div>
+        <div class="vn-text" id="vnText"></div>
+      </section>
       <div class="vn-actions" id="vnActions"></div>
-    </section>
+    </div>
   </div>
 </div>
 <div class="guild-toast" id="guildToast"></div>
@@ -1816,7 +1930,7 @@
 <div class="game-screen hub-screen" id="hubScreen">
   <div class="hub-shell">
     <header class="hub-header">
-      <div><div class="hub-title">Scrying Orb<sup>TM</sup> <span class="hub-title-divider">|</span> The Dungeon Streaming Service</div><div class="hub-sub">Prototype Hub · v21</div></div>
+      <div><div class="hub-title">Scrying Orb<sup>TM</sup> <span class="hub-title-divider">|</span> The Dungeon Streaming Service</div><div class="hub-sub">Prototype Hub · v21.1</div></div>
       <div class="hub-resources">
         <span>Money <b id="hubMoney">0</b></span>
         <span>Popularity <b id="hubPopularity">0</b></span>
@@ -6888,7 +7002,7 @@ Genres: ${lines}`;
 
 
   // ===== v21: living leaderboards and concrete specialist records =====
-  const V21_SAVE_VERSION='21';
+  const V21_SAVE_VERSION='21.1';
   const V21_BOARD_TOTALS={peak:120000,treasure:80000,flawless:60000};
   const V21_WORLD_TEMPLATES=[
     {name:'AstraLily',category:'Variety / Dungeon',overall:1000,pop:168,avg:18400,conqueror:285,speed:74500,power:1760,peak:48200,treasure:66500,flawless:38,focus:{overall:1.25,conqueror:1.10,audience:1.20}},
@@ -7092,7 +7206,7 @@ Genres: ${lines}`;
   prepareFreshV14Defaults=function(){_v202FreshV21();channel.v21World=null;v21NormalizeRecords();v21NormalizeWorld();};
 
   const _v202FinalizeBrandingV21=finalizeV15Branding;
-  finalizeV15Branding=function(){_v202FinalizeBrandingV21();const sub=document.querySelector('.hub-sub');if(sub&&sub.textContent.includes('Prototype Hub'))sub.textContent='Prototype Hub · v21';document.title='Scrying Orb: Dungeon Streaming Prototype v21';};
+  finalizeV15Branding=function(){_v202FinalizeBrandingV21();const sub=document.querySelector('.hub-sub');if(sub&&sub.textContent.includes('Prototype Hub'))sub.textContent='Prototype Hub · v21.1';document.title='Scrying Orb: Dungeon Streaming Prototype v21.1';};
   finalizeV15Branding();
   if($('exportSaveButton'))$('exportSaveButton').onclick=v202DownloadSave;
 
