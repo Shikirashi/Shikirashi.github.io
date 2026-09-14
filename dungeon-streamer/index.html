@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Scrying Orb: Dungeon Streaming Prototype v21.1</title>
+<title>Scrying Orb: Dungeon Streaming Prototype v21.2</title>
 <style>
   :root {
     --bg: #0f1116;
@@ -1714,6 +1714,20 @@
     .v20-insurance-plan{grid-template-columns:1fr;}
     .v20-insurance-plan button{width:100%;}
   }
+
+
+  /* ===== v21.2: discovered-material shop and transient UI hardening ===== */
+  .v212-material-summary{display:flex;gap:10px;flex-wrap:wrap;margin:10px 0 16px}
+  .v212-material-summary .slot-card{min-width:150px}
+  .v212-material-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:10px;align-items:start}
+  .v212-material-card{border:1px solid var(--line);border-radius:8px;background:var(--panel);padding:11px;display:grid;gap:7px}
+  .v212-material-card .title{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
+  .v212-material-card .price{color:var(--accent);font-weight:950;white-space:nowrap}
+  .v212-material-card .source{color:var(--muted);font-size:11px;line-height:1.4}
+  .v212-material-card .actions{display:flex;align-items:center;justify-content:space-between;gap:10px}
+  .v212-material-card .owned{font-size:11px;color:#d8e0ec}
+  @media(max-width:720px){.v212-material-grid{grid-template-columns:1fr}.v212-material-card .title,.v212-material-card .actions{align-items:stretch;flex-direction:column}.v212-material-card button{width:100%}}
+
 </style>
 </head>
 <body>
@@ -1930,7 +1944,7 @@
 <div class="game-screen hub-screen" id="hubScreen">
   <div class="hub-shell">
     <header class="hub-header">
-      <div><div class="hub-title">Scrying Orb<sup>TM</sup> <span class="hub-title-divider">|</span> The Dungeon Streaming Service</div><div class="hub-sub">Prototype Hub · v21.1</div></div>
+      <div><div class="hub-title">Scrying Orb<sup>TM</sup> <span class="hub-title-divider">|</span> The Dungeon Streaming Service</div><div class="hub-sub">Prototype Hub · v21.2</div></div>
       <div class="hub-resources">
         <span>Money <b id="hubMoney">0</b></span>
         <span>Popularity <b id="hubPopularity">0</b></span>
@@ -1942,6 +1956,7 @@
       <button data-hub="dungeon">Dungeon Board</button>
       <button data-hub="shop">Equipment Shop</button>
       <button data-hub="itemshop">Item Shop</button>
+      <button data-hub="materialshop">Materials Shop</button>
       <button data-hub="equipment">Equipment &amp; Inventory</button>
       <button data-hub="enhance">Enhancement Workshop</button>
       <button data-hub="dojo">Training Dojo</button>
@@ -6304,7 +6319,7 @@ Genres: ${lines}`;
   function v19FinishRest(node){advanceMapNode(node);saveProgress();$('nodeContinue').style.display='inline-block';$('nodeContinue').textContent='Continue';nodeContinueAction=async()=>{$('nodeOverlay').classList.remove('show');$('streamShell').classList.remove('resting');actionChatEnd();await wipeSwitch(()=>showOnlyScreen('dungeon'));renderDungeonMap();};}
   function v19SponsorReadButtonHtml(){const sid=game.sponsorId||channel.activeSponsor,s=v17Sponsor?.(sid);return s?.success==='adread'&&!game.sponsorProgress.adRead?`<button class="v19-rest-choice" id="v19SponsorRead"><b>Read Sponsor Message</b><span class="v19-rest-effect">Required for ${escV14(s.name)} contract · does not consume this Rest Zone segment</span></button>`:'';}
   function v19BindSponsorRead(rerender){const b=$('v19SponsorRead');if(!b)return;b.onclick=()=>{const sid=game.sponsorId||channel.activeSponsor,s=v17Sponsor(sid);if(!s)return;game.sponsorProgress.adRead=true;showSpeech(s.adLine,1800);saveProgress();rerender();};}
-  function v19RenderJustChat(node){const topics=shuffle(V19_JUST_CHAT).slice(0,3);$('nodeOverlayTitle').textContent='Rest Zone: Just Chatting';$('nodeOverlayText').innerHTML=`<div>HP restored to full. Pick a topic; the effects are shown before you commit.</div>${v19SponsorReadButtonHtml()}<div class="v19-rest-options">${topics.map((t,i)=>`<button class="v19-rest-choice" data-v19-topic="${i}"><b>${escV14(t.label)}</b><span class="v19-rest-effect">${escV14(v19EffectText(t.effect))}</span></button>`).join('')}</div>`;v19BindSponsorRead(()=>v19RenderJustChat(node));$('nodeOverlayText').querySelectorAll('[data-v19-topic]').forEach(b=>b.onclick=()=>{const t=topics[Number(b.dataset.v19Topic)];v19ApplyRestEffect(t.effect);showSpeech(`So, ${t.label.toLowerCase()}...`,1400);$('nodeOverlayTitle').textContent='Just Chatting';$('nodeOverlayText').innerHTML=`<div class="outcome-positive"><b>${escV14(t.label)}</b></div><p>${escV14(t.text)}</p><p>${escV14(v19EffectText(t.effect))}</p>`;v19FinishRest(node);});}
+  function v19RenderJustChat(node){const topics=shuffle(V19_JUST_CHAT).slice(0,3);$('nodeOverlayTitle').textContent='Rest Zone: Just Chatting';$('nodeOverlayText').innerHTML=`<div>HP restored to full. Pick a topic. The effects are shown before you commit.</div>${v19SponsorReadButtonHtml()}<div class="v19-rest-options">${topics.map((t,i)=>`<button class="v19-rest-choice" data-v19-topic="${i}"><b>${escV14(t.label)}</b><span class="v19-rest-effect">${escV14(v19EffectText(t.effect))}</span></button>`).join('')}</div>`;v19BindSponsorRead(()=>v19RenderJustChat(node));$('nodeOverlayText').querySelectorAll('[data-v19-topic]').forEach(b=>b.onclick=()=>{const t=topics[Number(b.dataset.v19Topic)];v19ApplyRestEffect(t.effect);showSpeech(`So, ${t.label.toLowerCase()}...`,1400);$('nodeOverlayTitle').textContent='Just Chatting';$('nodeOverlayText').innerHTML=`<div class="outcome-positive"><b>${escV14(t.label)}</b></div><p>${escV14(t.text)}</p><p>${escV14(v19EffectText(t.effect))}</p>`;v19FinishRest(node);});}
   function v19RenderDonationSequence(node){
     const library=shuffle(v19DonationLibrary()),total=randInt(4,5);let index=0,current=null;
     const renderCurrent=()=>{
@@ -6419,7 +6434,7 @@ Genres: ${lines}`;
     const movement=delta>0?`↑ ${delta.toLocaleString()}`:delta<0?`↓ ${Math.abs(delta).toLocaleString()}`:'-';
     const top=V15_TOP_STREAMERS.slice(0,5).map(([r,n,c])=>`<div class="ranking-row"><div class="ranking-rank">${r}</div><div class="ranking-name">${n}</div><div class="ranking-meta">${c}</div></div>`).join('');
     const news=(channel.news.length?channel.news:[{tag:'ORB NEWS',text:'Your channel is new. Finish streams and set records to start appearing in the news.'}]).slice(0,6).map(n=>`<div class="news-card"><b>${escV14(n.tag)}</b>: ${escV14(n.text)}</div>`).join('');
-    panel.innerHTML=`<h2>Streamer's Ranking</h2><p>Scrying Orb's platform-wide ranking among roughly ${V15_TOTAL_STREAMERS.toLocaleString()} active streamer profiles. Popularity is the main ranking signal; your rolling recent viewership provides a secondary boost.</p><div class="ranking-hero"><div class="slot-card wide"><b>Your Current Position</b><div class="ranking-position">#${rank.toLocaleString()}</div><div class="compact-meta">${movement} since the previous recorded ranking</div></div><div class="slot-card"><b>Popularity</b><div>Lv. ${channel.popularity}</div></div><div class="slot-card"><b>Recent Avg CCV</b><div>${Math.round(m.average)}</div><small>${m.count}-stream rolling sample</small></div><div class="slot-card"><b>Recent Peak CCV</b><div>${Math.round(m.peak)}</div><small>${m.count}-stream rolling sample</small></div></div><div class="compact-card" style="margin-top:12px"><b>Ranking metric</b><div class="compact-meta">Popularity + recent Average CCV + recent Peak CCV. Stream count and mastery feat points do not directly add ranking score.</div></div><h3>Around You</h3><div class="ranking-list">${nearbyRankingHtmlV15(rank)}</div><h3>Top Streamers</h3><div class="ranking-list">${top}</div><h3>Recent Orb News</h3><div class="news-feed">${news}</div>`;
+    panel.innerHTML=`<h2>Streamer's Ranking</h2><p>Scrying Orb's platform-wide ranking among roughly ${V15_TOTAL_STREAMERS.toLocaleString()} active streamer profiles. Popularity is the main ranking signal. Your rolling recent viewership provides a secondary boost.</p><div class="ranking-hero"><div class="slot-card wide"><b>Your Current Position</b><div class="ranking-position">#${rank.toLocaleString()}</div><div class="compact-meta">${movement} since the previous recorded ranking</div></div><div class="slot-card"><b>Popularity</b><div>Lv. ${channel.popularity}</div></div><div class="slot-card"><b>Recent Avg CCV</b><div>${Math.round(m.average)}</div><small>${m.count}-stream rolling sample</small></div><div class="slot-card"><b>Recent Peak CCV</b><div>${Math.round(m.peak)}</div><small>${m.count}-stream rolling sample</small></div></div><div class="compact-card" style="margin-top:12px"><b>Ranking metric</b><div class="compact-meta">Popularity + recent Average CCV + recent Peak CCV. Stream count and mastery feat points do not directly add ranking score.</div></div><h3>Around You</h3><div class="ranking-list">${nearbyRankingHtmlV15(rank)}</div><h3>Top Streamers</h3><div class="ranking-list">${top}</div><h3>Recent Orb News</h3><div class="news-feed">${news}</div>`;
   };
 
   // Guild button -> directory -> Explorer overview -> Talk to Pote. Pote's Leave Guild returns to the directory.
@@ -7002,7 +7017,7 @@ Genres: ${lines}`;
 
 
   // ===== v21: living leaderboards and concrete specialist records =====
-  const V21_SAVE_VERSION='21.1';
+  const V21_SAVE_VERSION='21.2';
   const V21_BOARD_TOTALS={peak:120000,treasure:80000,flawless:60000};
   const V21_WORLD_TEMPLATES=[
     {name:'AstraLily',category:'Variety / Dungeon',overall:1000,pop:168,avg:18400,conqueror:285,speed:74500,power:1760,peak:48200,treasure:66500,flawless:38,focus:{overall:1.25,conqueror:1.10,audience:1.20}},
@@ -7206,7 +7221,7 @@ Genres: ${lines}`;
   prepareFreshV14Defaults=function(){_v202FreshV21();channel.v21World=null;v21NormalizeRecords();v21NormalizeWorld();};
 
   const _v202FinalizeBrandingV21=finalizeV15Branding;
-  finalizeV15Branding=function(){_v202FinalizeBrandingV21();const sub=document.querySelector('.hub-sub');if(sub&&sub.textContent.includes('Prototype Hub'))sub.textContent='Prototype Hub · v21.1';document.title='Scrying Orb: Dungeon Streaming Prototype v21.1';};
+  finalizeV15Branding=function(){_v202FinalizeBrandingV21();const sub=document.querySelector('.hub-sub');if(sub&&sub.textContent.includes('Prototype Hub'))sub.textContent='Prototype Hub · v21.2';document.title='Scrying Orb: Dungeon Streaming Prototype v21.2';};
   finalizeV15Branding();
   if($('exportSaveButton'))$('exportSaveButton').onclick=v202DownloadSave;
 
@@ -7224,6 +7239,130 @@ Genres: ${lines}`;
     renderRanking:()=>renderRankingV15(),
     showBoard:(key)=>v21ShowBoard(key)
   };
+
+
+
+  // ===== v21.2: discovered-material shop, transient combat UI cleanup, and playtest fixes =====
+  const V212_SAVE_VERSION='21.2';
+
+  // A material only becomes purchasable after the player has personally acquired it at least once.
+  // This registry persists even after the player sells or submits every copy they currently own.
+  function v212NormalizeMaterialDiscovery(){
+    normalizeV19Profile();
+    const raw=profile.discoveredMaterials&&typeof profile.discoveredMaterials==='object'?profile.discoveredMaterials:{};
+    profile.discoveredMaterials={};
+    for(const [id,v] of Object.entries(raw))if(v&&V19_MATERIAL_DEFS[id])profile.discoveredMaterials[id]=true;
+    // Migration for existing saves: anything currently held has obviously been encountered already.
+    for(const [id,qty] of Object.entries(profile.inventory.materials||{}))if((Number(qty)||0)>0&&V19_MATERIAL_DEFS[id])profile.discoveredMaterials[id]=true;
+    // Submitted Local Dungeon Survey samples were also necessarily acquired even if they were consumed before v21.2.
+    const g=profile.guilds?.explorer||{},completed=g.mainAssignmentComplete?V19_ASSIGNMENT_STAGES.length:Math.max(0,Number(g.mainAssignmentStage)||0);
+    for(let i=0;i<Math.min(completed,V19_ASSIGNMENT_STAGES.length);i++)for(const req of V19_ASSIGNMENT_STAGES[i].requirements||[])if(V19_MATERIAL_DEFS[req.id])profile.discoveredMaterials[req.id]=true;
+  }
+  function v212DiscoverMaterial(id){
+    if(!V19_MATERIAL_DEFS[id])return false;
+    v212NormalizeMaterialDiscovery();
+    const was=!!profile.discoveredMaterials[id];
+    profile.discoveredMaterials[id]=true;
+    return !was;
+  }
+  function v212MaterialBuyPrice(id){
+    const d=V19_MATERIAL_DEFS[id];
+    if(!d)return 0;
+    return Math.max((d.sellValue||0)+1,Math.ceil((d.sellValue||0)*1.30));
+  }
+  function v212DiscoveredMaterialIds(){
+    v212NormalizeMaterialDiscovery();
+    return Object.keys(profile.discoveredMaterials).filter(id=>profile.discoveredMaterials[id]&&V19_MATERIAL_DEFS[id]).sort((a,b)=>V19_MATERIAL_DEFS[a].name.localeCompare(V19_MATERIAL_DEFS[b].name));
+  }
+  function v212MaterialSourceText(id){
+    const d=V19_MATERIAL_DEFS[id];
+    if(!d)return '';
+    const src=(d.sources||[]).slice().sort();
+    return src.length?`Known source${src.length===1?'':'s'}: ${src.join(', ')}`:'Source data unavailable';
+  }
+  function v212RenderMaterialShop(preserveScroll=false){
+    v212NormalizeMaterialDiscovery();
+    lastHubPanel='materialshop';updateHubHeader();
+    const panel=$('hubPanel'),shell=document.querySelector('.hub-shell'),oldTop=shell?.scrollTop||0,ids=v212DiscoveredMaterialIds(),total=Object.keys(V19_MATERIAL_DEFS).length;
+    panel.innerHTML=`<h2>Materials Shop</h2><p>This shop only stocks monster materials you have personally acquired before. Once a material is discovered, it stays in the catalogue even if you later sell or submit every copy.</p><p class="compact-meta">Purchase prices are 30% above the Explorer's Guild purchasing rate, rounded up to whole money. Undiscovered materials are never listed.</p><div class="v212-material-summary"><div class="slot-card"><b>Discovered</b><div>${ids.length} / ${total}</div></div><div class="slot-card"><b>Savings</b><div>${Number(profile.money||0).toLocaleString()} money</div></div></div>${ids.length?`<div class="v212-material-grid">${ids.map(id=>{const d=V19_MATERIAL_DEFS[id],price=v212MaterialBuyPrice(id),owned=profile.inventory.materials?.[id]||0;return `<div class="v212-material-card"><div class="title"><div><b>${escV14(d.name)}</b><div class="compact-meta">${escV14(d.rarity||'Material')}</div></div><span class="price">${price} money</span></div><div class="source">${escV14(v212MaterialSourceText(id))}<br>Guild purchasing rate: ${Number(d.sellValue||0).toLocaleString()} money each</div><div class="actions"><span class="owned">Owned ×${owned}</span><button class="small-btn" data-v212-buy-material="${id}" ${profile.money<price?'disabled':''}>Buy 1</button></div></div>`;}).join('')}</div>`:'<div class="compact-card"><b>No discovered monster materials yet.</b><div class="compact-meta">Defeat monsters and obtain at least one material first. The shop will never reveal or sell a material you have not encountered.</div></div>'}`;
+    panel.querySelectorAll('[data-v212-buy-material]').forEach(b=>b.onclick=()=>v212BuyMaterial(b.dataset.v212BuyMaterial));
+    refreshHubButtonsV14();
+    requestAnimationFrame(()=>{if(preserveScroll&&shell)shell.scrollTop=oldTop;});
+  }
+  function v212BuyMaterial(id){
+    v212NormalizeMaterialDiscovery();
+    if(!profile.discoveredMaterials[id]||!V19_MATERIAL_DEFS[id])return false;
+    const price=v212MaterialBuyPrice(id);
+    if(profile.money<price)return false;
+    profile.money-=price;
+    profile.inventory.materials[id]=(profile.inventory.materials[id]||0)+1;
+    saveProgress();updateHubHeader();v212RenderMaterialShop(true);return true;
+  }
+
+  const _v21NormalizeV19ProfileV212=normalizeV19Profile;
+  normalizeV19Profile=function(){_v21NormalizeV19ProfileV212();if(!profile.discoveredMaterials||typeof profile.discoveredMaterials!=='object')profile.discoveredMaterials={};for(const [id,qty] of Object.entries(profile.inventory.materials||{}))if((Number(qty)||0)>0&&V19_MATERIAL_DEFS[id])profile.discoveredMaterials[id]=true;};
+  const _v21LoadProgressV212=loadProgress;
+  loadProgress=function(){_v21LoadProgressV212();v212NormalizeMaterialDiscovery();};
+  const _v21FreshV212=prepareFreshV14Defaults;
+  prepareFreshV14Defaults=function(){_v21FreshV212();profile.discoveredMaterials={};};
+
+  // Any material obtained from a monster immediately and permanently enters the discovery catalogue.
+  const _v21GenerateLootV212=generateLoot;
+  generateLoot=function(enemy){
+    const drops=_v21GenerateLootV212(enemy);
+    for(const d of drops||[])if(d?.kind==='material'&&d.id)v212DiscoverMaterial(d.id);
+    return drops;
+  };
+
+  // Material Shop unlock follows Item Shop access, but its actual inventory is purely discovery-gated.
+  const _v21HubUnlockedV212=hubUnlockedV14;
+  hubUnlockedV14=function(kind){if(kind==='materialshop')return _v21HubUnlockedV212('itemshop');return _v21HubUnlockedV212(kind);};
+  const _v21RenderHubPanelV212=renderHubPanel;
+  renderHubPanel=function(kind){if(kind==='materialshop'){if(profile.onboarding?.completed&&!hubUnlockedV14('materialshop')){return _v21RenderHubPanelV212('guild_explorer');}showOnlyScreen('hub');v212RenderMaterialShop(false);return;}return _v21RenderHubPanelV212(kind);};
+
+  // The combat item popover is a fixed, top-level element. Older builds only hid it when an item was used.
+  // If it remained open during a screen transition it could sit over the dungeon map and intercept clicks.
+  function v212CloseItemMenu(){$('itemMenu')?.classList.remove('show');}
+  const _v21ShowOnlyScreenV212=showOnlyScreen;
+  showOnlyScreen=function(name){v212CloseItemMenu();return _v21ShowOnlyScreenV212(name);};
+  const _v21PlayerTurnV212=playerTurn;
+  playerTurn=async function(move){v212CloseItemMenu();return _v21PlayerTurnV212(move);};
+  document.addEventListener('click',e=>{const menu=$('itemMenu'),use=$('useItemButton');if(!menu?.classList.contains('show'))return;if(menu.contains(e.target)||use===e.target||use?.contains(e.target))return;v212CloseItemMenu();});
+
+  // Always clear the previous expedition recovery card before the next stream result is assembled.
+  // A defeat may create a fresh card again later in the wrapped endStream chain.
+  const _v21EndStreamV212=endStream;
+  endStream=async function(reason='retreat'){$('v20InsuranceResult')?.remove();v212CloseItemMenu();return _v21EndStreamV212(reason);};
+
+  // Clean legacy punctuation without creating lowercase sentence starts after a semicolon becomes a period.
+  v21CleanTextValue=function(s){
+    if(!s)return s;let out=String(s);if(out.trim()==='-')return out;
+    out=out.replace(/\s*\u2014\s*/g,': ');
+    out=out.replace(/;\s*([a-z])/g,(m,c)=>'. '+c.toUpperCase());
+    out=out.replace(/;\s*/g,'. ');
+    return out;
+  };
+  v21CleanTree();
+
+  // Save/export and branding version bump.
+  v202ExportObject=function(){saveProgress();let data={profile,channel,uidCounter};try{const raw=localStorage.getItem('dsc_v7_progress');if(raw)data=JSON.parse(raw);}catch(_){ }return {format:'Dungeon Streamer Save',save_version:V212_SAVE_VERSION,exported_at:new Date().toISOString(),data:JSON.parse(JSON.stringify(data)),settings:v202SaveSettings()};};
+  v202DownloadSave=function(){const data=v202ExportObject(),json=JSON.stringify(data,null,2),blob=new Blob([json],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a'),safe=(profile.playerName||'player').replace(/[^a-z0-9_-]+/gi,'_').replace(/^_+|_+$/g,'')||'player';a.href=url;a.download=`dungeon-streamer-${safe}-v21.2-save.json`;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),0);$('settingsPopup')?.classList.remove('show');};
+  const _v21FinalizeBrandingV212=finalizeV15Branding;
+  finalizeV15Branding=function(){_v21FinalizeBrandingV212();const sub=document.querySelector('.hub-sub');if(sub&&sub.textContent.includes('Prototype Hub'))sub.textContent='Prototype Hub · v21.2';document.title='Scrying Orb: Dungeon Streaming Prototype v21.2';};
+  finalizeV15Branding();if($('exportSaveButton'))$('exportSaveButton').onclick=v202DownloadSave;
+
+  window.__DSC_V212={
+    discovered:()=>v212DiscoveredMaterialIds(),
+    discover:(idOrName)=>{const id=V19_MATERIAL_DEFS[idOrName]?idOrName:Object.keys(V19_MATERIAL_DEFS).find(k=>V19_MATERIAL_DEFS[k].name===idOrName);if(!id)return false;v212DiscoverMaterial(id);saveProgress();return id;},
+    buyPrice:(idOrName)=>{const id=V19_MATERIAL_DEFS[idOrName]?idOrName:Object.keys(V19_MATERIAL_DEFS).find(k=>V19_MATERIAL_DEFS[k].name===idOrName);return id?v212MaterialBuyPrice(id):0;},
+    buy:(idOrName)=>{const id=V19_MATERIAL_DEFS[idOrName]?idOrName:Object.keys(V19_MATERIAL_DEFS).find(k=>V19_MATERIAL_DEFS[k].name===idOrName);return id?v212BuyMaterial(id):false;},
+    setOwned:(idOrName,qty=0)=>{const id=V19_MATERIAL_DEFS[idOrName]?idOrName:Object.keys(V19_MATERIAL_DEFS).find(k=>V19_MATERIAL_DEFS[k].name===idOrName);if(!id)return false;profile.inventory.materials[id]=Math.max(0,Number(qty)||0);saveProgress();return true;},
+    renderMaterialShop:()=>v212RenderMaterialShop(false),
+    closeItemMenu:()=>v212CloseItemMenu(),
+    itemMenuOpen:()=>$('itemMenu')?.classList.contains('show')||false,
+    cleanText:(s)=>v21CleanTextValue(s)
+  };
+
 
   initV14();
 })();
