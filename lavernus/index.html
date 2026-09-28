@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Lavernus | Simple VN Planner</title>
+<link rel="stylesheet" href="assets/lavernus-a96ed41a7490.css">
+</head>
+<body>
+<div class="topbar">
+<div class="brand"><span>LAVERNUS</span><small>Simple VN Planner</small></div>
+<div class="tabs">
+<button class="tab-btn active" data-view="map">Nodemap</button>
+<button class="tab-btn" data-view="scene">Scene</button>
+<button class="tab-btn" data-view="vars">Variables</button>
+</div>
+<div class="global-find" id="globalFind"><input id="globalNodeSearch" type="text" autocomplete="off" spellcheck="false" placeholder="Find node…"><span class="search-hotkey">Ctrl K</span><div class="node-suggestions" id="globalNodeSuggestions"></div></div>
+<div class="top-actions"><button class="btn" id="undoBtn" title="Undo">Undo</button><button class="btn" id="redoBtn" title="Redo">Redo</button><button class="btn" id="validateBtn" title="Check the graph for broken references and other problems">Validate</button></div>
+<div class="spacer"></div>
+<span class="status" id="saveStatus">Saved locally</span>
+<button class="btn" id="newBtn">New</button>
+<button class="btn" id="importBtn">Import .leabhar</button>
+<button class="btn" id="exportBtn">Export .leabhar</button>
+<input class="hidden" type="file" id="fileInput" accept=".leabhar,.json,application/json" />
+</div>
+<div class="app">
+<section class="view active" id="view-map">
+<div class="map-shell">
+<main class="map-pane" id="mapPane">
+<div class="map-stage" id="mapStage"><svg class="wires" id="wires"></svg><div class="nodes-layer" id="nodesLayer"></div></div>
+<div class="map-help"><span>Rows = shortest distance from Start. First child keeps its parent's column; siblings fan right. Cycles and backward links are allowed.</span><label class="choice-toggle"><input type="checkbox" id="showChoiceCards" checked> Choice cards</label></div>
+</main>
+<aside class="side" id="editor"></aside>
+</div>
+</section><section class="view" id="view-scene">
+<div class="scene-view">
+<div class="scene-bg" id="sceneBg"></div><div class="scene-shade"></div>
+<div class="scene-toolbar"><button class="btn" id="restartScene">Restart scene</button><button class="btn" id="jumpSelected">Play selected node</button><div class="runtime" id="runtimeVars"></div></div>
+<div class="scene-portrait" id="scenePortrait">PORTRAIT PLACEHOLDER</div>
+<div class="line-progress" id="lineProgress"></div>
+<div class="scene-ui"><div class="choices" id="sceneChoices"></div><div class="scene-name" id="sceneName">Narrator</div><div class="scene-dialogue" id="sceneDialogue">...</div></div>
+</div>
+</section><section class="view" id="view-vars">
+<div class="vars-wrap"><div class="vars-card">
+<h2>Variable Library</h2>
+<div class="note">Variables begin as the literal value <b>none</b>. Scene play uses a runtime copy, so testing choices does not overwrite their initial values.</div>
+<div class="vars-actions"><button class="btn primary" id="addVar">+ Variable</button><button class="btn" id="resetRuntime">Reset runtime values</button></div>
+<table class="vars-table"><thead><tr><th style="width:42%">Variable name</th><th>Initial value</th><th style="width:52px"></th></tr></thead><tbody id="varsBody"></tbody></table>
+</div></div>
+</section>
+</div>
+<div class="modal-backdrop hidden" id="validationModal">
+<div class="modal" role="dialog" aria-modal="true" aria-labelledby="validationTitle">
+<div class="modal-head"><h2 id="validationTitle">Graph Validation</h2><button class="icon-btn" id="closeValidation">Close</button></div>
+<div class="modal-body" id="validationBody"></div>
+</div>
+</div>
+<script src="assets/lavernus-cddaf3c8e11c.js"></script>
+</body>
+</html>
