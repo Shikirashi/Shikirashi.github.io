@@ -2,6 +2,10 @@
 
 Owner: ChatGPT/User for shot approvals; Codex in each source repo prepares reproducible drafts *only when that repo's active mailbox permits*. This file is the **cross-repo manifest** for `PORT-GAL-001`. No screenshots have been approved by creating this file.
 
+## Updated direction — all captures STATIC and Codex-first
+
+Codex should take the first 2–3 screenshots from authentic rendered scenes, **especially for 2D/UI-first projects**, then the user reviews and may recompose manually. **Do not require anyone to capture mid-action.** For 3D projects freeze/non-hostile-pose all figures, cameras and effects in an isolated opt-in stage; no live enemy pursuit, firing, timing or mission progression. For Ball Battalion place a frozen upward-traveling projectile in the air with a fixed vertical motion trail; it does **not** need to move for the screenshot. For Blades in Bloom and Dungeon Streamer prepare stable static gameplay/UI screens. Only picture actual assets and clearly mark prototype staging; keep normal gameplay unchanged.
+
 ## Capturing standard
 - Draft -> human review/manual reference -> final genuine rendered frame. 1 approved hero + 2 backups per included project.
 - **1280×720 native is acceptable**, especially for 2D/UI; 1600×900 or 1920×1080 if feasible. 16:9 preferred, don't stretch, upscale and claim extra detail or crop away important UI.
@@ -13,12 +17,12 @@ Owner: ChatGPT/User for shot approvals; Codex in each source repo prepares repro
 
 | Priority | Display title | Source repo / external source | Screenshot concept and draft status | Proposed final filename |
 | --- | --- | --- | --- | --- |
-| P0 | Ball Battalion (formerly Lane Ball Shooter) | `Shikirashi/lane-ball-shooter` — `.ai/TASKS/LBS-PHOTO-001.md` | Live landscape battle, colored ball in mid-ascent with narrow vertical trail, chain + lanes readable; capture not run | `ball-battalion_hero_01.png` |
-| P0 | Kartikaris (legacy Unity) | `Shikirashi/Kartikaris-Unity` — `Docs/PortfolioPhotoSession.md` | Actual Unity mech in detailed forest at a 3/4 angle. Source repository and project assets verified (Unity 6000.3.9f1); draft capture not yet performed | `kartikaris_hero_01.png` |
-| P0 | Witch Broom Dogfighting | `Shikirashi/witch-broom-dogfighting` — `.ai/queued/WBD-PHOTO-001.md` | Aerial pursuit with actual broom/rider/hostile, midflight cast and legible HUD; not captured | `witch-broom-dogfighting_hero_01.png` |
-| P1 | Ritual Phalanx | `Shikirashi/ritual-phalanx` — `.ai/TASKS/RP-PHOTO-001.md` | Shield/spear in single-player arena, harmless red pursuers (no false four-player claim); not captured | `ritual-phalanx_hero_01.png` |
-| P1 | Blades in Bloom (BiB) | `Shikirashi/AstraventusBladesInBloom` — `docs/portfolio/PHOTO_SESSION_TASK.md` | Real 2D combat duel/parry or approved gameplay UI; not captured | `blades-in-bloom_hero_01.png` |
-| P1 | Dungeon Streamer | `Shikirashi/DungeonStreamer` — `docs/PORTFOLIO_SCREENSHOT_TASK.md` | Actual v21.2 HTML prototype combat/dungeon + livestream chat, audience metrics; not captured | `dungeon-streamer_hero_01.png` |
+| P0 | Ball Battalion (formerly Lane Ball Shooter) | `Shikirashi/lane-ball-shooter` — `.ai/TASKS/LBS-PHOTO-001.md` | Static non-hostile landscape battle tableau: frozen colored projectile mid-ascent with fixed vertical trail, chain + lanes readable; Codex first screenshot pending | `ball-battalion_hero_01.png` |
+| P0 | Kartikaris (legacy Unity) | `Shikirashi/Kartikaris-Unity` — `Docs/PortfolioPhotoSession.md` | Static detailed Unity mech in dense forest at a 3/4 angle, no active hostile AI or artillery. Source verified (Unity 6000.3.9f1); Codex first draft pending | `kartikaris_hero_01.png` |
+| P0 | Witch Broom Dogfighting | `Shikirashi/witch-broom-dogfighting` — `.ai/queued/WBD-PHOTO-001.md` | Static non-hostile aerial formation with posed broom/rider/opposing brooms and optional frozen cast effect; Codex first capture pending | `witch-broom-dogfighting_hero_01.png` |
+| P1 | Ritual Phalanx | `Shikirashi/ritual-phalanx` — `.ai/TASKS/RP-PHOTO-001.md` | Stationary single-player soldier with shield/spear vs posed non-hostile red figures, no motion/AI (no false multiplayer claim); Codex first capture pending | `ritual-phalanx_hero_01.png` |
+| P1 | Blades in Bloom (BiB) | `Shikirashi/AstraventusBladesInBloom` — `docs/portfolio/PHOTO_SESSION_TASK.md` | Frozen non-hostile 2D combat duel/parry or stable gameplay UI; Codex first screenshot pending | `blades-in-bloom_hero_01.png` |
+| P1 | Dungeon Streamer | `Shikirashi/DungeonStreamer` — `docs/PORTFOLIO_SCREENSHOT_TASK.md` | Static v21.2 HTML prototype dungeon state + livestream chat, audience metrics; Codex first screenshot pending | `dungeon-streamer_hero_01.png` |
 
 ## Existing portfolio / external-only legacy captures (source repo NOT found in connected GitHub)
 
@@ -42,6 +46,7 @@ These are not blockers for the P0/P1 gallery. If the original game build or legi
 - **Dungeon Streamer** — A dungeon adventure prototype built around a live-streaming fantasy, with exploration/combat alongside streamer audience management. **Status:** existing HTML prototype, Godot migration underway.
 
 ## Approval checklist
+- [ ] Codex provided first real rendered screenshots, or reported graphics access blocker with manual static composition instructions
 - [ ] Project screenshot actually exists and is identifiable as game/tool (no fake composites)
 - [ ] Human approved hero composition
 - [ ] Image is sharp on mobile and desktop gallery (720p genuinely acceptable)
