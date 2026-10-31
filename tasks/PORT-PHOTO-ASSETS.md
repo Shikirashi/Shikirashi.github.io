@@ -14,12 +14,11 @@ Owner: ChatGPT/User for shot approvals; Codex in each source repo prepares repro
 | Priority | Display title | Source repo / external source | Screenshot concept and draft status | Proposed final filename |
 | --- | --- | --- | --- | --- |
 | P0 | Ball Battalion (formerly Lane Ball Shooter) | `Shikirashi/lane-ball-shooter` — `.ai/TASKS/LBS-PHOTO-001.md` | Live landscape battle, colored ball in mid-ascent with narrow vertical trail, chain + lanes readable; capture not run | `ball-battalion_hero_01.png` |
-| P0 | Kartikaris (legacy Unity) | **OLDER UNITY SOURCE MISSING FROM CONNECTED REPOS**; newer `Shikirashi/Kartikaris-Godot` has `.ai/TASKS/KGD-PHOTO-001.md` planning/handoff | **Actual Unity mech** in detailed forest at 3/4 angle; blocked on finding older Unity project | `kartikaris_hero_01.png` |
+| P0 | Kartikaris (legacy Unity) | `Shikirashi/Kartikaris-Unity` — `Docs/PortfolioPhotoSession.md` | Actual Unity mech in detailed forest at a 3/4 angle. Source repository and project assets verified (Unity 6000.3.9f1); draft capture not yet performed | `kartikaris_hero_01.png` |
 | P0 | Witch Broom Dogfighting | `Shikirashi/witch-broom-dogfighting` — `.ai/queued/WBD-PHOTO-001.md` | Aerial pursuit with actual broom/rider/hostile, midflight cast and legible HUD; not captured | `witch-broom-dogfighting_hero_01.png` |
 | P1 | Ritual Phalanx | `Shikirashi/ritual-phalanx` — `.ai/TASKS/RP-PHOTO-001.md` | Shield/spear in single-player arena, harmless red pursuers (no false four-player claim); not captured | `ritual-phalanx_hero_01.png` |
 | P1 | Blades in Bloom (BiB) | `Shikirashi/AstraventusBladesInBloom` — `docs/portfolio/PHOTO_SESSION_TASK.md` | Real 2D combat duel/parry or approved gameplay UI; not captured | `blades-in-bloom_hero_01.png` |
 | P1 | Dungeon Streamer | `Shikirashi/DungeonStreamer` — `docs/PORTFOLIO_SCREENSHOT_TASK.md` | Actual v21.2 HTML prototype combat/dungeon + livestream chat, audience metrics; not captured | `dungeon-streamer_hero_01.png` |
-| Optional tool | Lavernus | `Shikirashi/lavernus` — `docs/PORTFOLIO_SCREENSHOT_TASK.md` | Real VN nodemap with branching choice route; only in Tools section if approved | `lavernus_hero_01.png` |
 
 ## Existing portfolio / external-only legacy captures (source repo NOT found in connected GitHub)
 
@@ -41,7 +40,6 @@ These are not blockers for the P0/P1 gallery. If the original game build or legi
 - **Ritual Phalanx** — A single-player combat-systems prototype for a proposed cooperative tactical action game, testing physical spear and shield interactions, positioning and knockback. **Status:** prototype, co-op not yet implemented.
 - **Blades in Bloom** — A systems-driven 2D RPG prototype with side-view sword combat and reactive AI, built to support quests, dialogue and a larger simulated world. **Status:** in development.
 - **Dungeon Streamer** — A dungeon adventure prototype built around a live-streaming fantasy, with exploration/combat alongside streamer audience management. **Status:** existing HTML prototype, Godot migration underway.
-- **Lavernus** — A visual-novel dialogue planner for constructing linked conversation nodes and branching choice routes. **Status:** browser-based tool.
 
 ## Approval checklist
 - [ ] Project screenshot actually exists and is identifiable as game/tool (no fake composites)
