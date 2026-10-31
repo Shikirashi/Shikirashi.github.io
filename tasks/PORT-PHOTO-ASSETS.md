@@ -2,6 +2,18 @@
 
 Owner: ChatGPT/User for shot approvals; Codex in each source repo prepares reproducible drafts *only when that repo's active mailbox permits*. This file is the **cross-repo manifest** for `PORT-GAL-001`. No screenshots have been approved by creating this file.
 
+
+## Mandatory Git-tracked screenshot review handoff — updated 1 November 2026
+
+**The user's approved workflow has changed:** Codex must **push the screenshot images themselves** with the scoped photo-session commit so ChatGPT can inspect the genuine output via GitHub without manual file uploads. Do not leave *all* images Git-ignored. Screenshots remain **DRAFT/UNAPPROVED** until the user reviews them.
+
+1. Keep large original renders in their existing local capture folder, ignored if appropriate. For each requested candidate, create a **small, visually faithful review copy** inside a tracked repo directory (suggest `docs/portfolio/review/`, or `docs/portfolio/review/<task-id>/` if necessary). Prefer **JPG or WebP at real 1280×720–1920×1080 resolution, quality approximately 85–92**; PNG is fine when small (especially flat-color 2D). Retain aspect ratio and actual gameplay pixels. No AI upscaling, filters, synthetic content, drawn labels, or replacements.
+2. Commit/push the **2–4 chosen preview binaries plus scripts/docs** in the same repo and branch. They must appear on GitHub at normal clickable blob/raw URLs, not just an ignored local path or a Markdown filename. Do NOT commit hundreds of frames, videos, caches, game build binaries, high-resolution raw archives, or unrelated work. If repo policy or storage limits make the PNG too large, use a compressed review derivative, not git-lfs-only inaccessible images.
+3. Codex's responsibility for image QA is **mechanical only**: confirm file exists, can be decoded, sensible dimensions/aspect ratio, no zero-byte/blank capture, expected filenames, clean commit, and GitHub-visible tracked path. **Do not spend agent usage studying screenshots, interpreting artistic quality, comparing composition, scoring visuals, or selecting a hero. ChatGPT and the user perform subjective image review directly from pushed files.**
+4. Report source render path, pushed preview path, native/review dimensions and commit SHA. Never mark a screenshot "approved" or deploy it on the portfolio site until the user explicitly chooses it. Only publish game shots safe for a public repository (no secrets/personal data/proprietary material).
+5. When adding review screenshots later, overwrite or remove obsolete **review derivatives** only after preserving the underlying local originals and recording the change; do not rewrite gameplay. Preserve existing active mailbox restrictions — a queued task does not become active merely because this handoff rule is updated.
+
+
 ## Updated direction — all captures STATIC and Codex-first
 
 Codex should take the first 2–3 screenshots from authentic rendered scenes, **especially for 2D/UI-first projects**, then the user reviews and may recompose manually. **Do not require anyone to capture mid-action.** For 3D projects freeze/non-hostile-pose all figures, cameras and effects in an isolated opt-in stage; no live enemy pursuit, firing, timing or mission progression. For Ball Battalion place a frozen upward-traveling projectile in the air with a fixed vertical motion trail; it does **not** need to move for the screenshot. For Blades in Bloom and Dungeon Streamer prepare stable static gameplay/UI screens. Only picture actual assets and clearly mark prototype staging; keep normal gameplay unchanged.
