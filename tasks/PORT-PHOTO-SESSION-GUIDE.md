@@ -4,77 +4,73 @@
 
 ## Rules for every screenshot
 - Use real game/tool rendering; no AI-generated imitation.
-- Codex: make 2–3 draft candidates if a real graphical renderer is available, document scene/controls/transforms and capture commands. User chooses hero or manually supplies composition/reference. Only then reproduce/capture final.
+- Codex must take the FIRST 2–3 real rendered screenshots when graphical access is available, including for 2D/UI-first games. Stage everything as a stable, non-hostile, non-timed scene before capturing. User can then approve/reframe without chasing live motion.
 - At least crisp native **1280×720**, preferably 1600×900/1920×1080 if UI framing holds. 16:9 where practical; no 4K goal or fake upscaling.
 - 1 approved hero + 2 backups, source version, honest implementation status, relevant license/rights check.
-- No huge raw video files or debug/editor overlays; screenshot-only states and tools should not alter normal gameplay.
-- **Mailbox rule:** LBS, Kartikaris-Godot, RP and WBD already have active implementation tasks. Their photo tasks are queued. Before running Codex against them, ask ChatGPT to activate that repo's queued photo task once its current active task can be paused/closed. The archived/queued file alone does NOT authorize Codex to execute against a different active `.ai/TASK.md`.
+- No huge raw video files or debug/editor overlays; screenshot-only states and tools should not alter normal gameplay. Keep projectiles, enemies, characters, effects and timing frozen in the optional photo fixture while rendering remains available.
+- **Mailbox rule:** LBS, RP and WBD already have active implementation tasks. Their photo tasks remain queued and require activation by ChatGPT. Kartikaris-Unity follows its separate AGENTS.md / Docs/PROJECT_STATE.md workflow; use its task under Docs/. Do not start queued tasks just because this guide exists.
 
 ## 1 — Ball Battalion / Shikirashi/lane-ball-shooter
-**Manual session:** Use current Godot/Web gameplay and aim for tactically readable conveyor and defenders. Capture while a ball is visibly moving upward, keeping full UI readable and an action moment rather than victory/menu. Existing renderer previews documented in README include `./scripts/capture_p036_monochrome.sh`.
+**Manual session:** No mid-flight timing. Use a completely stationary 2D photo fixture: conveyor, shooter, colored ascending projectile already positioned half way up with a fixed vertical trail, defenders and enemies all frozen/non-hostile. You can inspect and crop it at leisure.
 
-**Codex prompt — after LBS-PHOTO-001 activation:**
+**Codex prompt — only after LBS-PHOTO-001 activation:**
 ```text
-Work ONLY in Shikirashi/lane-ball-shooter on its tracked master branch. First inspect git status and pull safely, then read AGENTS.md, .ai/PROTOCOL.md, .ai/TASK_LEDGER.md, .ai/TASK.md and the now-activated LBS-PHOTO-001 task. Capture 2-3 genuine in-engine landscape gameplay candidates: clearly visible four lanes and conveyor, shooter, one colored ball mid-flight upwards with a short localized VERTICAL motion trail, no global blur or debug overlays. Reuse/extend existing screenshot test/capture tooling, keep any new scene/state seeded and screenshot-only, and do NOT change production shooting speeds/controls, Web/Android builds, haptics, game balance or deployment. Render at native 1280x720 minimum, preferably 1600x900/1920x1080 if UI framing remains correct. If no graphical display, provide reliable launch/staging instructions rather than fake captures. Stop for my visual review before selecting the final hero. Report commands, source commit, candidate paths and rendering limits.
+In Shikirashi/lane-ball-shooter (master), follow AGENTS.md and the active mailbox LBS-PHOTO-001, not the old active P040. Make a reproducible opt-in STATIC portfolio shot using the actual 2D Godot 4.7.2 gameplay assets: conveyor and lanes, fixed player shooter, one colored projectile held half way up with a stationary localized vertical streak, and stationary non-hostile defenders/enemies. NO live shooting, enemy AI, timers, moving balls or frame timing. Make the game/photo preview indefinitely stable so I can arrange proportions. Codex should render and save 2–3 draft 16:9 screenshots FIRST using current real graphical capture tooling; 1280x720 is adequate, 1600x900 optional. If unable to render, give manual setup instructions and mark screenshot blocked. Do not alter normal gameplay, balance, Web/Android release or production visuals. Save exact positions and images for human approval.
 ```
 
-## 2 — Kartikaris legacy Unity (not found among connected source repositories)
-**Manual session:** Find local old Unity project with the detailed mech and forest; inspect `ProjectSettings/ProjectVersion.txt` first. Open with matching Unity release (without upgrading original), compose mech 3/4 view, forest depth and sunlight. Screenshot through Unity Game view or isolated high-resolution capture camera; save scene and camera/FOV parameters. Newer `Kartikaris-Godot` only contains a cuboid placeholder.
+## 2 — Kartikaris legacy Unity / Shikirashi/Kartikaris-Unity
+**Confirmed source:** `Shikirashi/Kartikaris-Unity` on `main`, Unity **6000.3.9f1**, `Assets/Scenes/Kartikaris_MapTest.unity`, mech model, existing procedural forest. Task: `Docs/PortfolioPhotoSession.md`. Do not use the Godot greybox.
 
-**Codex prompt — only after old Unity project is located/access granted:**
+**Manual session:** After Codex captures draft compositions, take as long as needed to position the mech, external camera and forest scene. The photo scene must have all hostile AI/movement, projectiles and gameplay time progression disabled. Preserve the original cockpit and gameplay scenes.
+
+**Codex prompt:**
 ```text
-Kartikaris LEGACY UNITY PHOTO SESSION. First verify this folder really contains the older Unity project with detailed mech and forest; read ProjectSettings/ProjectVersion.txt and show its exact Unity version. DO NOT use Shikirashi/Kartikaris-Godot for the final screenshot; it is a different newer greybox project. Do not automatically upgrade the Unity source or overwrite original scenes. Using the old Unity scene's existing mech and forest models, prepare 2-3 portfolio framings showing the mech as the foreground focal point from a readable 3/4 view, with forests and terrain filling the background. If helpful, create an isolated screenshot-only scene or camera that does not touch production. User will manually approve/adjust framing. Save camera transform, FOV, lighting and mech placement; capture native 1280x720+ at 16:9, preferably 1600x900/1920x1080. Report exact paths and any blockers honestly. Reference handoff ticket: Shikirashi/Kartikaris-Godot/.ai/TASKS/KGD-PHOTO-001.md.
+In Shikirashi/Kartikaris-Unity on main, read AGENTS.md, Docs/PROJECT_STATE.md and Docs/PortfolioPhotoSession.md. Use ONLY Unity 6000.3.9f1 and the authentic detailed Kartikaris mech plus generated 25,000-tree forest. Create an isolated opt-in STATIC, NON-HOSTILE external camera photo setup; freeze mech and enemy movement and stop artillery, player actions and all automatic state changes. Pose a readable mech at a 3/4 angle amid real forest and landscape. Take 2–3 real Unity rendered screenshots FIRST. I will choose/adjust a composition manually with no time pressure. Capture at native 1280x720 or higher if practical; avoid upscaling. Preserve main scene, project assets and original controls; follow project-state/report rules for code changes. Never upgrade editor or claim screenshots were made if no graphics access.
 ```
 
 ## 3 — Ritual Phalanx / Shikirashi/ritual-phalanx
-**Manual session:** Launch `godot --path .`. Key 2 is isometric, 3 is third-person, Q braces the shield, E bashes, 5 spawns a group of harmless red pursuers; capture a clear shield/spear pose in front of a few pursuers. Current prototype has one player, not multiplayer.
+**Manual session:** Frame a braced shield/spear soldier among **stationary harmless red figures**, with no pursuers moving toward you. Existing prototype is single-player; do not imply multiplayer has been implemented.
 
 **Codex prompt — after RP-PHOTO-001 activation:**
 ```text
-Work ONLY in Shikirashi/ritual-phalanx, branch main. Follow AGENTS.md and the active mailbox RP-PHOTO-001 before any implementation. Use the existing single-player Godot 4.7.2 greybox arena, actual soldier/shield/spear, dummies and harmless red pursuers. Make opt-in stable photo staging of one braced soldier facing several approaching pursuers, with visible spear and shield, plus two alternative shots (bash and wide isometric). DO NOT portray four player characters as actual co-op, and do not implement magic/manafauna/enemy attacks or change physical combat. Supply camera transform/FOV and prop transforms so I can manually improve framing. Capture native 16:9 1280x720+ in real renderer, preferably 1600x900, or explain capture blocker and give manual steps. Stop for hero selection before announcing final. Preserve all current tests/gameplay and active task boundaries.
+In Shikirashi/ritual-phalanx on main, follow AGENTS.md and active RP-PHOTO-001. Prepare a STATIC opt-in photo fixture with the real Godot primitive soldier, shield, spear, courtyard, and 2–4 red pursuers posed as non-hostile motionless figures. Disable all AI/movement/bash physics and progression for the fixture but keep rendering and camera controllable. Codex must take 2–3 screenshots FIRST: braced confrontation, fixed shield bash pose, wide isometric composition. No need to time attacks or flee enemies. Record camera/actor/pose transforms for my later manual adjustments. 1280x720 native acceptable, prefer 1600x900 only if convenient. Preserve existing combat and all normal scene behavior; don't claim implemented multiplayer, attacks or advanced creature art.
 ```
 
 ## 4 — Witch Broom Dogfighting / Shikirashi/witch-broom-dogfighting
-**Manual session:** In the actual Godot prototype use the rider/broom and flight controls. Roll/bank into a readable chase, get an enemy broom in frame, RMB target, LMB cast Firebolt or Chaser. Keep targeting reticle but hide debug telemetry if unnecessary.
+**Manual session:** Pose broom, rider, stationary opponents and a static projectile/trail midair; the flight itself does not progress. Orbit the camera freely without live combat, timers or hostility.
 
 **Codex prompt — after WBD-PHOTO-001 activation:**
 ```text
-Work ONLY in Shikirashi/witch-broom-dogfighting, master. Follow AGENTS.md and the activated WBD-PHOTO-001 (currently queued at .ai/queued/WBD-PHOTO-001.md). Keep default sandbox and active P050 mini-strike work intact. Use actual rider/broom primitive models, existing sky/terrain, opposing broom AI, targeting cues and live Firebolt/Chaser effects; prepare 2-3 opt-in aerial photo frames that instantly communicate witch-on-broom dogfighting (over-shoulder pursuit, banked action, projectile/lock-on). Never introduce false polished character models, alter AI/damage/projectile physics or claim finished visuals. Save camera/player/opponent transforms, chosen spell and capture frame; provide real rendered 16:9 1280x720+ candidates or manual capture commands if no graphical environment. Stop for human selection, verify existing regression when capture helper changes code.
+In Shikirashi/witch-broom-dogfighting (master), read AGENTS.md and the activated WBD-PHOTO-001. Stage a NON-HOSTILE STATIC flying tableau with existing primitive rider/broom, stationary opposing brooms, horizon/terrain, fixed lock-on indicator and a frozen Firebolt/Chaser trail if supported. All hostile AI, aircraft motion, gameplay timers, firing and damage must be disabled for this opt-in fixture only. Codex should FIRST take 2–3 genuine Godot-rendered drafts; I can then orbit/adjust all figures for as long as needed and reshoot. No need for real-time chase or timed spell casting. Keep normal flight, networking, physics, mission P050 and gameplay unchanged. 1280x720 native is enough; record composition and truthfully report graphical limitations.
 ```
 
 ## 5 — Blades in Bloom / Shikirashi/AstraventusBladesInBloom
-**Manual session:** Take normal 2D combat screenshots; choose a clear duel with meaningful sword/parry/clash feedback and legible UI. Alternative: actual current NPC/exploration interaction. Keep existing balance untouched.
+**Manual session:** Use a stable 2D combat or dialogue screen. For combat, freeze figures in a recognizable parry/clash pose and disable hostility and time progression in a capture-only fixture.
 
 **Codex prompt:**
 ```text
-Work in Shikirashi/AstraventusBladesInBloom, reading AGENTS.md, PROJECT_STATE.md and docs/portfolio/PHOTO_SESSION_TASK.md. This is a portfolio-capture-only session, not permission to modify the frozen Natural combat baseline. Find and launch the existing real 2D combat sandbox; create three original screenshots that show an interesting fight with correct sword stances/weapon visuals and readable HUD, plus an exploration/NPC alternative if appropriate. No fabricated RPG features, AI training changes or combat rebalance. Native 1280x720+ screenshots are sufficient; I will approve/replace the composition manually. Report exact launch/capture and source revision; do not alter unrelated active development.
+In Shikirashi/AstraventusBladesInBloom, read AGENTS.md, PROJECT_STATE.md and docs/portfolio/PHOTO_SESSION_TASK.md. Take FIRST 2–3 real 2D Godot rendered screenshots. Use static non-hostile staging: freeze combatants and fixed clash FX in a credible composition, or select a permanently stable real dialogue/exploration screen. No timed attack input or chasing AI. Do not modify frozen combat baseline, AI training, player balance or Web logic. Native 1280x720 is fine. Let me review and reframe in the actual project; report precisely how shots were generated.
 ```
 
 ## 6 — Dungeon Streamer / Shikirashi/DungeonStreamer
-**Manual session:** Open the existing v21.2 HTML prototype in a browser, not the still-migrating Godot shell, unless current port is ready. Choose dungeon combat/planning with livestream chat and audience UI simultaneously visible.
+**Manual session:** Compose an authentic v21.2 HTML prototype screen with dungeon controls, livestream chat and audience statistics in a stable state. No action timing or active hostile combat is necessary.
 
 **Codex prompt:**
 ```text
-Work in Shikirashi/DungeonStreamer. Read AGENTS.md, docs/00_SCOPE_AND_PRINCIPLES.md and docs/PORTFOLIO_SCREENSHOT_TASK.md. Respect the v21.2 HTML prototype reference as authoritative and do NOT alter frozen HTML or bypass migration parity rules. Take 2-3 real browser screenshots of its existing gameplay/dungeon action alongside the streamer chat, viewer statistics and interface, with all critical UI readable. Use a real 1280x720, 1600x900 or 1920x1080 viewport as fits the layout. Do not claim the unfinished Godot port implements these screens. Let me choose the hero, and report browser commands, actual screenshot dimensions and state.
+In Shikirashi/DungeonStreamer, follow AGENTS.md and docs/PORTFOLIO_SCREENSHOT_TASK.md. Open the real frozen v21.2 HTML prototype in a browser with a stable non-hostile stage or paused display that shows dungeon interaction plus livestream UI. Codex takes 2–3 genuine screenshot candidates FIRST before asking me for manual review. Avoid advancing timers, fighting enemies, triggering timed transitions or changing the authoritative HTML reference. 1280x720 native or 1600x900 if readable. Do not misrepresent the unfinished Godot migration. Save screenshot dimensions, source and reproducibility steps.
 ```
 
-## 7 — Lavernus / Shikirashi/lavernus (OPTIONAL TOOL)
-**Manual session:** Arrange an interesting actual visual-novel dialog nodemap with a multi-branch choice. Hide browser DevTools. Avoid exposing private source or draft story content.
 
-**Codex prompt:**
-```text
-Work in Shikirashi/lavernus. Read README.md and docs/PORTFOLIO_SCREENSHOT_TASK.md, and preserve the policy that source is private while only built dist/ is published. Create or load a benign sample .leabhar narrative with several nodes and clearly branching routes and one readable choice card. Use the running app to prepare a native 1280x720+ screenshot with nodemap composition. No private story text or code disclosure. Ask for my approval before calling an image final; do not rebuild/deploy anything in this photo session.
-```
 
-## 8 — Legacy browser / published games (no connected source repos)
-These should be **human-first** captures rather than Codex changes to a guessed repository.
+## 7 — Legacy browser / published games (no connected source repos)
+These are legacy games without verified connected source repositories. Prefer Codex's **first screenshot** from genuine running public builds if browser automation is available, otherwise capture manually. Use stable menu/gameplay UI states and never ask the user to time action frames.
 - **HoloGacha:** if the site's hosted game loads, screenshot representative RPG/gacha gameplay.
 - **Wash Your Hands:** if a legit old build is available, take an actual FPS screen with its distinctive mechanic.
 - **Cocok Gambar, Happi, Jatiware, HoloYeet:** launch existing published builds and capture a representative screen; otherwise retain approved old image with an honest label.
 - Site-repo assistant should organize images and metadata under `tasks/PORT-PHOTO-ASSETS.md` but **cannot conjure unavailable source code**.
 
-## 9 — Static gallery / Shikirashi/Shikirashi.github.io
+## 8 — Static gallery / Shikirashi/Shikirashi.github.io
 Only after human approves screenshots. **Codex prompt:**
 ```text
-Work ONLY in Shikirashi/Shikirashi.github.io on master. Read tasks/PORT-GAL-001.md, tasks/PORT-PHOTO-ASSETS.md, index.html and assets/css/style.css. Add a clearly visible top-level Gallery navigation link and a simple responsive static gallery page/section with screenshot, title, one-to-three-sentence blurb and factual status/platform for every approved entry. All text must be visible WITHOUT hover or clicking. Preserve existing homepage filter cards, deployed Web game folders, functional APK and legacy external links; never publish private source. Do not replace missing screenshots with generated placeholders and do not claim a gallery is live until you verify GitHub Pages. Validate desktop and mobile, accessibility, alt text, image optimization and absolute/relative URLs. Stop at human visual QA with exact test evidence.
+Work ONLY in Shikirashi/Shikirashi.github.io on master. Read tasks/PORT-GAL-001.md, tasks/PORT-PHOTO-ASSETS.md, index.html and assets/css/style.css. Lavernus is a PRIVATE personal tool and must NOT appear in the portfolio gallery. Add a clearly visible top-level Gallery navigation link and a simple responsive static gallery page/section with screenshot, title, one-to-three-sentence blurb and factual status/platform for every approved entry. All text must be visible WITHOUT hover or clicking. Preserve existing homepage filter cards, deployed Web game folders, functional APK and legacy external links; never publish private source. Do not replace missing screenshots with generated placeholders and do not claim a gallery is live until you verify GitHub Pages. Validate desktop and mobile, accessibility, alt text, image optimization and absolute/relative URLs. Stop at human visual QA with exact test evidence.
 ```
