@@ -7,18 +7,18 @@ Owner: ChatGPT/User for shot approvals; Codex in each source repo prepares repro
 Codex should take the first 2–3 screenshots from authentic rendered scenes, **especially for 2D/UI-first projects**, then the user reviews and may recompose manually. **Do not require anyone to capture mid-action.** For 3D projects freeze/non-hostile-pose all figures, cameras and effects in an isolated opt-in stage; no live enemy pursuit, firing, timing or mission progression. For Ball Battalion place a frozen upward-traveling projectile in the air with a fixed vertical motion trail; it does **not** need to move for the screenshot. For Blades in Bloom and Dungeon Streamer prepare stable static gameplay/UI screens. Only picture actual assets and clearly mark prototype staging; keep normal gameplay unchanged.
 
 ## Capturing standard
-- Draft -> human review/manual reference -> final genuine rendered frame. 1 approved hero + 2 backups per included project.
+- Draft -> human review/manual reference -> final genuine rendered frame. 1 approved hero + 2 backups by default, but Kartikaris deliberately has TWO approved, visibly displayed images.
 - **1280×720 native is acceptable**, especially for 2D/UI; 1600×900 or 1920×1080 if feasible. 16:9 preferred, don't stretch, upscale and claim extra detail or crop away important UI.
 - Screenshot from actual running game/tool, ideally 1 frame that conveys the distinctive mechanic. For 3D, save model/camera transforms and screenshot-only stage separately. For 2D/UI use real gameplay states without staging by default.
 - Keep source code, unreleased proprietary art, credentials, personal data and unlicensed fan art out of the public gallery; only publish assets with appropriate rights.
 - Fill actual approval/date and approved image file below before PORT-GAL-001 is deployed. Store web-optimized assets under `assets/img/gallery/` with useful alt text; **never fabricate missing images**.
 
-## Game hero shots (all PENDING human approval)
+## Game hero shots (approval per project noted below)
 
 | Priority | Display title | Source repo / external source | Screenshot concept and draft status | Proposed final filename |
 | --- | --- | --- | --- | --- |
 | P0 | Ball Battalion (formerly Lane Ball Shooter) | `Shikirashi/lane-ball-shooter` — `.ai/TASKS/LBS-PHOTO-001.md` | Static non-hostile landscape battle tableau: frozen colored projectile mid-ascent with fixed vertical trail, chain + lanes readable; Codex first screenshot pending | `ball-battalion_hero_01.png` |
-| P0 | Kartikaris (legacy Unity) | `Shikirashi/Kartikaris-Unity` — `Docs/PortfolioPhotoSession.md` | Codex captured three real native 1600×900 Unity drafts at source commit `04b93ba`. Human prefers `kartikaris_alt_02.png` composition, but extreme vertical cannon dominates silhouette. Folded/travel plus genuine deployed pose variation requested under `Docs/PortfolioPhotoSession.md`; final hero NOT approved | `kartikaris_hero_01.png` |
+| P0 | Kartikaris (legacy Unity) | `Shikirashi/Kartikaris-Unity` — `Docs/PortfolioPhotoSession.md` | **TWO SHOTS APPROVED for gallery** from real Unity 1600×900 capture: `kartikaris_alt2_unfolded_02.png` (upright deployed cannon, first user-selected shot) AND `kartikaris_alt2_folded_02.png` (folded travel cannon, second user-selected shot). Both must display together with captions. Optional third 30° above horizontal deployed cannon shot requested; not captured/approved. Binary source images currently local ignored, not uploaded to website yet. | `kartikaris_alt2_unfolded_02.png` + `kartikaris_alt2_folded_02.png` |
 | P0 | Witch Broom Dogfighting | `Shikirashi/witch-broom-dogfighting` — `.ai/queued/WBD-PHOTO-001.md` | Static non-hostile aerial formation with posed broom/rider/opposing brooms and optional frozen cast effect; Codex first capture pending | `witch-broom-dogfighting_hero_01.png` |
 | P1 | Ritual Phalanx | `Shikirashi/ritual-phalanx` — `.ai/TASKS/RP-PHOTO-001.md` | Stationary single-player soldier with shield/spear vs posed non-hostile red figures, no motion/AI (no false multiplayer claim); Codex first capture pending | `ritual-phalanx_hero_01.png` |
 | P1 | Blades in Bloom (BiB) | `Shikirashi/AstraventusBladesInBloom` — `docs/portfolio/PHOTO_SESSION_TASK.md` | Frozen non-hostile 2D combat duel/parry or stable gameplay UI; Codex first screenshot pending | `blades-in-bloom_hero_01.png` |
@@ -58,4 +58,4 @@ These are not blockers for the P0/P1 gallery. If the original game build or legi
 ## Note on portfolio site status
 The existing `index.html` uses image hover overlays for existing portfolio cards. `PORT-GAL-001` must add a separate obvious **static Gallery** without breaking old cards, Web build folders, APK links or public deployments.
 
-**No artwork or screenshot was generated, copied, photographed, or published as part of planning tasks.**
+**Update:** Kartikaris has genuine source-game screenshots reviewed and two approved by the user; the binary captures are not yet committed to or published on the portfolio website. Other projects remain pending.
