@@ -1,0 +1,95 @@
+/* Projects uses the same MyPortfolio template, fonts, header, contact area and footer as index.html.
+   Only the project content replacing the existing home card grid is styled here. */
+.projects-title {
+  margin: 0 0 0.65rem;
+  font-size: 36px;
+}
+.projects-introduction {
+  margin: 0;
+  font-size: 15px;
+  max-width: 640px;
+  color: #606c75;
+}
+.projects-entry {
+  padding: 34px 0 36px;
+  border-top: 1px solid #dedede;
+}
+.projects-entry h3 {
+  margin: 0 0 10px;
+  font-size: 27px;
+}
+.projects-entry p {
+  margin-bottom: 13px;
+  max-width: 760px;
+  line-height: 1.7;
+}
+.projects-more a {
+  color: #0d1e2d;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.projects-more a:hover { color: #2478a8; }
+.projects-photo-row { margin-top: 18px; }
+.projects-photo-row figure { margin-bottom: 18px; }
+.projects-photo-row img {
+  width: 100%;
+  height: auto;
+  display: block;
+  background: #111;
+}
+.projects-motion-video {
+  width: 100%;
+  height: auto;
+  display: block;
+  background: #111;
+  aspect-ratio: 16 / 9;
+  object-fit: contain;
+}
+.projects-image-pending {
+  min-height: 160px;
+  aspect-ratio: 16 / 9;
+  border: 1px dashed #b9bec2;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  padding: 18px;
+  color: #6d767d;
+  background: #f7f8f8;
+}
+.projects-image-pending span { font-size: 12px; }
+.projects-image-pending strong { font-size: 17px; font-family: "Raleway", sans-serif; font-weight: 500; color: #34424c; }
+.projects-more {
+  padding: 35px 0 10px;
+  border-top: 1px solid #dedede;
+}
+.projects-more h3 { font-size: 22px; }
+.projects-more p { line-height: 1.7; }
+.projects-in-progress { font-size: 13px; color: #6d767d; }
+@media (max-width: 767px) {
+  .projects-entry { padding: 26px 0; }
+  .projects-entry h3 { font-size: 24px; }
+  .projects-title { font-size: 30px; }
+  .projects-photo-row { margin-top: 12px; }
+}
+
+/* Two in-page filters: same behavior as the original category controls, but between complete sections. */
+#projects-panel[hidden], #games-panel[hidden] { display: none !important; }
+.filters [role="tab"] { cursor: pointer; }
+.filters [role="tab"]:focus-visible { outline: 2px solid #3da9fc; outline-offset: 4px; }
+
+/* Preview copy audit: black typography throughout the site; retain layout and media. */
+body,
+body :is(h1, h2, h3, h4, h5, h6, p, a, span, small, strong, em, b, li, label, blockquote, figcaption),
+body .filters a,
+body .projects-entry p,
+body .projects-entry h3,
+body .projects-more a,
+body .projects-more a:hover,
+body .projects-more p,
+body .projects-introduction,
+body .projects-in-progress,
+body footer,
+body footer a {
+  color: #000 !important;
+}

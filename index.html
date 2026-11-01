@@ -13,6 +13,7 @@
   <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
   <link href="assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
   <link href="assets/css/style.css" rel="stylesheet">
+  <link href="assets/css/projects.css" rel="stylesheet">
 
   <!-- Global site tag (gtag.js) - Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-2QKS2R7YY0"></script>
@@ -34,17 +35,106 @@
           <div class="col-md-12 col-lg-6 mb-4 mb-lg-0" data-aos="fade-up">
             <h2>Muhammad Naufal Faza</h2>
             <p class="mb-0">Game Developer</p>
-            <a href="./cv.html" target="_blank">CV</a>
+            <a href="./cv.html" target="_blank" rel="noopener noreferrer">CV</a>
           </div>
           <div class="col-md-12 col-lg-6 text-start text-lg-end" data-aos="fade-up" data-aos-delay="100">
-            <div id="filters" class="filters">
-              <a href="#" data-filter="*" class="active">Games</a>
-              <a href="#" data-filter=".web">Web</a>
-              <a href="#" data-filter=".mobile">Mobile</a>
-              <a href="#" data-filter=".desktop">Desktop</a>
-            </div>
+            <nav class="filters" role="tablist" aria-label="Portfolio sections">
+              <a href="#" id="tab-projects" class="active" role="tab" data-section="projects" aria-selected="true" aria-controls="projects-panel">Projects</a>
+              <a href="#" id="tab-games" role="tab" data-section="games" aria-selected="false" aria-controls="games-panel" tabindex="-1">Games</a>
+            </nav>
           </div>
         </div>
+        <div id="projects-panel" role="tabpanel" aria-labelledby="tab-projects">
+        <div class="row mb-4">
+          <div class="col-lg-9">
+            <h1 class="projects-title">Projects</h1>
+          </div>
+        </div>
+
+        <div class="projects-list">
+          <article class="projects-entry" aria-labelledby="kartikaris-heading">
+            <h3 id="kartikaris-heading">Astraventus: Kartikaris</h3>
+            <p>A Unity-based information warfare simulator prototype exploring radar systems and artillery combat. Set in a procedurally populated forest, it features a walking mech with an artillery cannon that can fold for travel or deploy for aiming during gameplay.</p>
+            <div class="row gx-3 projects-photo-row">
+              <figure class="col-md-6">
+                <img class="img-fluid" loading="lazy" width="1600" height="900" src="assets/img/projects/kartikaris_folded.webp" alt="Kartikaris mech in a procedural forest with the artillery cannon folded for travel">
+              </figure>
+              <figure class="col-md-6">
+                <img class="img-fluid" loading="lazy" width="1600" height="900" src="assets/img/projects/kartikaris_deployed_30deg.webp" alt="Kartikaris mech with artillery cannon deployed and aimed thirty degrees above horizontal">
+              </figure>
+            </div>
+          </article>
+
+          <article class="projects-entry" aria-labelledby="bib-heading">
+            <h3 id="bib-heading">Astraventus: Blades in Bloom</h3>
+            <p>A Godot RPG prototype featuring cell-based overworld exploration and a combat system inspired by historical swordsmanship. An exploration into story-driven game development, combining RPG systems with more deliberate, stance-based swordplay.</p>
+            <div class="row gx-3 projects-photo-row">
+              <figure class="col-md-6">
+                <img class="img-fluid" loading="lazy" width="1920" height="1080" src="assets/img/projects/bib_overworld_market_draft.png" alt="Blades in Bloom village market map with streets, buildings, NPC markers and exploration panels">
+              </figure>
+              <figure class="col-md-6">
+                <video class="projects-motion-video" data-project-motion muted loop playsinline controls preload="metadata" width="1280" height="720" poster="assets/img/projects/bib_combat_draft.png" aria-label="Blades in Bloom real AI-versus-AI swordplay with historical sword-stance names and a colored guide for the left fighter">
+                  <source src="assets/video/bib_swordplay_stances_left_approved.mp4" type="video/mp4">
+                  Your browser does not support HTML5 video.
+                </video>
+              </figure>
+            </div>
+          </article>
+
+          <article class="projects-entry" aria-labelledby="dungeon-heading">
+            <h3 id="dungeon-heading">Dungeon Streamer</h3>
+            <p>A dungeon-crawling adventure where you play as an adventurer livestreaming your expeditions. Fight monsters through turn-based combat while managing your audience, with viewer statistics and a live chat accompanying your adventures.</p>
+            <div class="row projects-photo-row">
+              <figure class="col-lg-10">
+                <img class="img-fluid" loading="lazy" width="1600" height="900" src="assets/img/projects/dungeon_streamer_livestream_draft.png" alt="Dungeon Streamer combat screen with viewer stats on the left, battle controls in the center, and audience chat on the right">
+              </figure>
+            </div>
+          </article>
+
+          <article class="projects-entry" aria-labelledby="wbd-heading">
+            <h3 id="wbd-heading">Astraventus: Machine Maidens</h3>
+            <p>An aerial combat prototype featuring ritual machines and witches riding flying brooms. Built around high-speed dogfights, with both PvP and PvE combat in mind.</p>
+            <div class="row projects-photo-row">
+              <figure class="col-lg-10">
+                <img class="img-fluid" loading="lazy" width="1600" height="900" src="assets/img/projects/wbd_massive_mid_03_approved.png" alt="Approved Witch Broom Dogfighting prototype image showing blue and red primitive broom aircraft, static opposing spells, a shield and large layered clouds over green terrain">
+              </figure>
+            </div>
+          </article>
+
+          <article class="projects-entry" aria-labelledby="rp-heading">
+            <h3 id="rp-heading">Spears and Shields and Hordes of Enemies</h3>
+            <p>A single-player combat prototype exploring physics-based spear and shield combat against hordes of enemies. Focused on positioning, defensive formations, and the physical interactions between weapons, shields, and enemies.</p>
+            <div class="row projects-photo-row">
+              <figure class="col-lg-10">
+                <img class="img-fluid" loading="lazy" width="1600" height="900" src="assets/img/projects/ritual_phalanx_f_tight_high_bash_approved.png" alt="Ritual Phalanx prototype screenshot showing a blue spear-and-shield character facing several red practice figures">
+              </figure>
+            </div>
+          </article>
+
+          <article class="projects-entry" aria-labelledby="ball-heading">
+            <h3 id="ball-heading">Ball Battalion</h3>
+            <p>A lane-defense game where matching colored balls commands defenders of the same color to attack enemies advancing along their lanes. Combining ball-matching puzzles with defensive strategy.</p>
+            <div class="row projects-photo-row">
+              <figure class="col-lg-8">
+                <img class="img-fluid" loading="lazy" width="1600" height="900" src="https://raw.githubusercontent.com/Shikirashi/lane-ball-shooter/1e7c1557e8d89e39012adc6bd66e58613351b275/docs/portfolio/review/lbs_photo_001/ball_battalion_photo_001_c_large_clean_01.png" alt="Approved Ball Battalion Godot screenshot with colored conveyor balls, defenders, four lanes and a larger green projectile traveling upward, with no defender status labels">
+              </figure>
+            </div>
+          </article>
+
+          <div class="projects-more">
+            <h3>Earlier games</h3>
+            <p>Also available: <a href="https://shikirashi.github.io/hologacha/" target="_blank" rel="noopener noreferrer">HoloGacha</a>,
+              <a href="https://gamejolt.com/games/washyourhandsthx/482786" target="_blank" rel="noopener noreferrer">Wash Your Hands</a>,
+              <a href="https://shikirashi.itch.io/cocok-gambar-web-build" target="_blank" rel="noopener noreferrer">Cocok Gambar</a>,
+              <a href="https://shikirashi.itch.io/jatiware" target="_blank" rel="noopener noreferrer">Jatiware</a>,
+              <a href="https://shikirashi.itch.io/happi" target="_blank" rel="noopener noreferrer">Happi</a>, and
+              <a href="https://shikirashi.itch.io/holoyeet" target="_blank" rel="noopener noreferrer">HoloYeet</a>.
+            </p>
+          </div>
+        </div>
+        </div>
+
+        <div id="games-panel" role="tabpanel" aria-labelledby="tab-games" hidden>
         <div id="portfolio-grid" class="row no-gutter" data-aos="fade-up" data-aos-delay="200">
           <div class="item web col-sm-6 col-md-4 col-lg-4 mb-4">
             <a href="https://shikirashi.github.io/hologacha/" target="_blank" class="item-wrap fancybox">
@@ -111,6 +201,7 @@
             </a>
           </div>
         </div>
+        </div>
       </div>
     </section>
 
@@ -167,6 +258,7 @@
 
   <!-- Template Main JS File -->
   <script src="assets/js/main.js"></script>
+  <script src="assets/js/section-tabs.js?v=1"></script>
 
 </body>
 
