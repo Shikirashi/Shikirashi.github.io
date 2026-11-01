@@ -49,33 +49,52 @@
   })
 
   /**
-   * Porfolio isotope and filter
+   * Projects/Games switcher. Both panels live in the same document.
+   * Hash state is bookmarkable and supports the browser Back button.
    */
-  window.addEventListener('load', () => {
-    let portfolioContainer = select('#portfolio-grid');
-    if (portfolioContainer) {
-      let portfolioIsotope = new Isotope(portfolioContainer, {
-        itemSelector: '.item',
+  window.addEventListener('DOMContentLoaded', () => {
+    const tabs = [...document.querySelectorAll('[data-portfolio-tab]')];
+    const panels = {
+      projects: document.getElementById('projects-panel'),
+      games: document.getElementById('games-panel')
+    };
+    if (!tabs.length || !panels.projects || !panels.games) return;
+
+    function showTab(key, updateUrl = false) {
+      const selected = key === 'games' ? 'games' : 'projects';
+      for (const name of ['projects', 'games']) {
+        panels[name].hidden = name !== selected;
+      }
+      tabs.forEach(tab => {
+        const active = tab.dataset.portfolioTab === selected;
+        tab.classList.toggle('active', active);
+        tab.setAttribute('aria-selected', String(active));
+        tab.tabIndex = active ? 0 : -1;
       });
-
-      let portfolioFilters = select('#filters a[data-filter]', true);
-
-      on('click', '#filters a[data-filter]', function(e) {
-        e.preventDefault();
-        portfolioFilters.forEach(function(el) {
-          el.classList.remove('active');
-        });
-        this.classList.add('active');
-
-        portfolioIsotope.arrange({
-          filter: this.getAttribute('data-filter')
-        });
-        portfolioIsotope.on('arrangeComplete', function() {
-          AOS.refresh()
-        });
-      }, true);
+      document.title = (selected === 'games' ? 'Games' : 'Projects') + ' · Muhammad Naufal Faza';
+      if (updateUrl && window.location.hash !== '#' + selected) {
+        window.history.pushState({ portfolioTab: selected }, '', '#' + selected);
+      }
+      if (window.AOS && typeof window.AOS.refresh === 'function') {
+        window.requestAnimationFrame(() => window.AOS.refresh());
+      }
     }
-
+    tabs.forEach(tab => {
+      tab.addEventListener('click', event => {
+        event.preventDefault();
+        showTab(tab.dataset.portfolioTab, true);
+      });
+      tab.addEventListener('keydown', event => {
+        if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) return;
+        event.preventDefault();
+        const next = event.key === 'Home' ? 0 : event.key === 'End' ? 1 : 1 - tabs.indexOf(tab);
+        tabs[next].focus();
+        showTab(tabs[next].dataset.portfolioTab, true);
+      });
+    });
+    window.addEventListener('popstate', () => showTab(window.location.hash === '#games' ? 'games' : 'projects'));
+    window.addEventListener('hashchange', () => showTab(window.location.hash === '#games' ? 'games' : 'projects'));
+    showTab(window.location.hash === '#games' ? 'games' : 'projects');
   });
 
   /**
