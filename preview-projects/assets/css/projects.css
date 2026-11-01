@@ -77,3 +77,19 @@
 #projects-panel[hidden], #games-panel[hidden] { display: none !important; }
 .filters [role="tab"] { cursor: pointer; }
 .filters [role="tab"]:focus-visible { outline: 2px solid #3da9fc; outline-offset: 4px; }
+
+/* Preview copy audit: black typography throughout the site; retain layout and media. */
+body,
+body :is(h1, h2, h3, h4, h5, h6, p, a, span, small, strong, em, b, li, label, blockquote, figcaption),
+body .filters a,
+body .projects-entry p,
+body .projects-entry h3,
+body .projects-more a,
+body .projects-more a:hover,
+body .projects-more p,
+body .projects-introduction,
+body .projects-in-progress,
+body footer,
+body footer a {
+  color: #000 !important;
+}
