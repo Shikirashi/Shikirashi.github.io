@@ -110,3 +110,11 @@ body footer a {
   width: 100%;
   height: auto;
 }
+
+/* Play and download links for the CV-sourced earlier game entries. */
+#projects-panel .projects-entry .projects-game-link {
+  display: inline-block;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  font-weight: 600;
+}
