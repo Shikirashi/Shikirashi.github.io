@@ -93,3 +93,20 @@ body footer,
 body footer a {
   color: #000 !important;
 }
+
+/* The Games gallery uses dark hover overlays; keep captions legible despite
+   the portfolio-wide black text rule above. */
+#games-panel .item .item-wrap .work-info,
+#games-panel .item .item-wrap .work-info h3,
+#games-panel .item .item-wrap .work-info span,
+#games-panel .item .item-wrap .apk-download-label {
+  color: #fff !important;
+}
+
+/* Let Bootstrap lay out the hidden-by-default Games gallery in normal flow.
+   The legacy Isotope layout must not size/position cards while hidden. */
+#games-grid .item .item-wrap img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
