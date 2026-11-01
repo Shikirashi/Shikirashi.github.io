@@ -37,6 +37,14 @@
   display: block;
   background: #111;
 }
+.projects-motion-video {
+  width: 100%;
+  height: auto;
+  display: block;
+  background: #111;
+  aspect-ratio: 16 / 9;
+  object-fit: contain;
+}
 .projects-image-pending {
   min-height: 160px;
   aspect-ratio: 16 / 9;

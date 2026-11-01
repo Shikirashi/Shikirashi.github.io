@@ -8,11 +8,25 @@
       games: document.getElementById('games-panel')
     };
     if (tabs.length !== 2 || !panels.projects || !panels.games) return;
+    const projectVideos = Array.from(panels.projects.querySelectorAll('video[data-project-motion]'));
+    const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    function syncProjectVideo(section) {
+      projectVideos.forEach(function (video) {
+        if (section === 'projects' && !reduceMotion && !document.hidden) {
+          const request = video.play();
+          if (request && typeof request.catch === 'function') request.catch(function () {});
+        } else {
+          video.pause();
+        }
+      });
+    }
 
     function selectSection(section) {
       if (section !== 'projects' && section !== 'games') return;
       panels.projects.hidden = section !== 'projects';
       panels.games.hidden = section !== 'games';
+      syncProjectVideo(section);
 
       tabs.forEach(function (tab) {
         const isCurrent = tab.dataset.section === section;
@@ -42,6 +56,9 @@
         tabs[next].focus();
         selectSection(tabs[next].dataset.section);
       });
+    });
+    document.addEventListener('visibilitychange', function () {
+      syncProjectVideo(panels.projects.hidden ? 'games' : 'projects');
     });
     // Default to the original Games grid. Older #projects bookmarks still open that section.
     selectSection(window.location.hash === '#projects' ? 'projects' : 'games');
