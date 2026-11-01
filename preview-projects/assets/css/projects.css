@@ -65,7 +65,7 @@
   .projects-photo-row { margin-top: 12px; }
 }
 
-/* Switch the two sections within the same page; no navigation or reload. */
+/* Two in-page filters: same behavior as the original category controls, but between complete sections. */
 #projects-panel[hidden], #games-panel[hidden] { display: none !important; }
 .filters [role="tab"] { cursor: pointer; }
 .filters [role="tab"]:focus-visible { outline: 2px solid #3da9fc; outline-offset: 4px; }
